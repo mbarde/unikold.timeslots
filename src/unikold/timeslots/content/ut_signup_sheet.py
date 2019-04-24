@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import date
+from plone import api
 from plone.app.textfield import RichText
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.content import Container
@@ -139,5 +141,76 @@ class IUTSignupSheet(model.Schema):
 
 @implementer(IUTSignupSheet)
 class UTSignupSheet(Container):
-    """
-    """
+
+    def countSlots(self):
+        brains = api.content.find(context=self, portal_type='UTTimeSlot')
+        return len(brains)
+
+    def countSlotsByUsername(self, username=False, review_state=False):
+        if not username:
+            username = self.getCurrentUsername()
+
+        if review_state:
+            brains = api.content.find(
+                context=self, portal_type='UTPerson',
+                id=username, review_state=review_state)
+        else:
+            brains = api.content.find(
+                context=self, portal_type='TimeslotPerson',
+                id=username)
+
+        return len(brains)
+
+    def getCurrentUsername(self):
+        return api.user.get_current().getUserName()
+
+    # Return a string containig the person's email-address as a sentence
+    def getContactInfoAsSentence(self):
+        return self.contactInfo.replace('@', ' at ')
+
+    def getDays(self, onlyIncludeUpcomingDays=True):
+        brains = api.content.find(
+            context=self, portal_type='UTDay', depth=1,
+            sort_on='date', sort_order='ascending')
+        if len(brains) == 0:
+            return []
+        else:
+            indexOfFirstUsefulObject = 0
+
+            if onlyIncludeUpcomingDays:
+                today = date.today()
+                day = brains[indexOfFirstUsefulObject].getObject()
+                while indexOfFirstUsefulObject < len(brains) and day.date < today:
+                    indexOfFirstUsefulObject += 1
+
+            return [brains[i].getObject() for i in range(indexOfFirstUsefulObject, len(brains))]
+
+    # Returns tuple with three elements:
+    # [0] -> dictionary where key is month and value is list of days in this month
+    # [1] -> sorted list of keys (to make sure that March is displayed before April etc.)
+    # [2] -> dictionary containing the translation objects of the month
+    def getDaysGroupedByMonth(self):
+        days = self.getDays()
+        result = dict()
+        mTrans = dict()
+
+        for day in days:
+            # use integer coded month as key since it is easier to sort automatically
+            # february 2019: 201902
+            # december 2018: 201812
+            monthStr = str(day.date.month)
+            if len(monthStr) < 2:
+                monthStr = '0' + monthStr
+            key = str(day.date.year) + monthStr
+
+            if key in result:
+                result[key].append(day)
+            else:
+                result[key] = [day]
+                # but for translation use month code (like 'Mar')
+                mTrans[key] = _(day.date.strftime('%b'))
+
+        keys = result.keys()
+        keys.sort()
+
+        return (result, keys, mTrans)
