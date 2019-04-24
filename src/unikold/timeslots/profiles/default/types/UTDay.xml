@@ -1,38 +1,37 @@
 <?xml version="1.0"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    name="UTSignupSheet"
+    name="UTDay"
     meta_type="Dexterity FTI"
     i18n:domain="unikold.timeslots">
 
   <!-- Basic properties -->
   <property
       i18n:translate=""
-      name="title">UTSignupSheet</property>
+      name="title">UTDay</property>
   <property
       i18n:translate=""
-      name="description">Signup sheet with timeslot support</property>
+      name="description">Day for unikold.timeslots</property>
 
   <property name="allow_discussion">False</property>
-  <property name="factory">UTSignupSheet</property>
+  <property name="factory">UTDay</property>
   <property name="icon_expr"></property>
   <property name="link_target"></property>
 
   <!-- Hierarchy control -->
-  <property name="global_allow">True</property>
+  <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
-    <element value="UTDay" />
-          <!--
+  <!--
     <element value="Document" />
     <element value="File" />
   -->
   </property>
   <!-- Schema, class and security -->
-  <property name="add_permission">unikold.timeslots.AddUTSignupSheet</property>
-  <property name="klass">unikold.timeslots.content.ut_signup_sheet.UTSignupSheet</property>
+  <property name="add_permission">unikold.timeslots.AddUTDay</property>
+  <property name="klass">unikold.timeslots.content.ut_day.UTDay</property>
   <property name="model_file"></property>
   <property name="model_source"></property>
-  <property name="schema">unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet</property>
+  <property name="schema">unikold.timeslots.content.ut_day.IUTDay</property>
 
   <!-- Enabled behaviors -->
   <property name="behaviors" purge="false">
@@ -54,7 +53,7 @@
   </property>
 
   <!-- View information -->
-  <property name="add_view_expr">string:${folder_url}/++add++UTSignupSheet</property>
+  <property name="add_view_expr">string:${folder_url}/++add++UTDay</property>
   <property name="default_view">view</property>
   <property name="default_view_fallback">False</property>
   <property name="immediate_view">view</property>
