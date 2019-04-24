@@ -84,7 +84,8 @@ class IUTSignupSheet(model.Schema):
         description=_(u"Following placeholders can be used:<br/>$$name$$ -> Full name of user<br/>$$title$$ -> Title of the signup sheet<br/>$$url$$ -> URL of the signup sheet<br/>$$slot$$ -> Date and time of slot (name of slot if date and time hid)<br/>$$data$$ -> Additional data (see 'additional form')"),  # noqa: E501
         fields=['emailConfirmationSubject', 'emailConfirmationContent',
                 'emailWaitForConfirmationSubject', 'emailWaitForConfirmationContent',
-                'emailWaitinglistSubject', 'emailWaitinglistContent']
+                'emailWaitinglistSubject', 'emailWaitinglistContent',
+                'emailCancelSubject', 'emailCancelContent']
     )
 
     # confirmation email
