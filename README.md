@@ -6,28 +6,7 @@ Dexterity based re-implementation of https://github.com/collective/uwosh.timeslo
 Features
 --------
 
-- Can be bullet points
-
-
-Examples
---------
-
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
-
-
-Documentation
--------------
-
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
+- coming up
 
 
 Installation
@@ -54,11 +33,22 @@ Contribute
 - Documentation: https://docs.plone.org/foo/bar
 
 
-Support
--------
+Development
+----------
 
-If you are having issues, please let us know.
-We have a mailing list located at: project@example.com
+Setup in project folder:
+
+```
+virtualenv --clear -p python2.7 venv
+source venv/bin/activate
+pip install -r requirements.txt
+buildout bootstrap
+bin/buildout -n -c buildout.cfg code-analysis:return-status-codes=True code-analysis:flake8-max-line-length=100
+```
+
+Run tests: `bin/test`
+
+Run static code analysis (flake8): `bin/code-analysis`
 
 
 License

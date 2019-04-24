@@ -222,35 +222,37 @@
     </div>
     </tal:hide-date-time-view>
 
-    <div class="field" tal:condition="context/getAskForPersonTitle">
+    <!-- TODO: Person title?
+    <div class="field" tal:condition="context/askForPersonTitle">
       <label for="selectPersonTitle" i18n:translate="">Title of the person</label>
       <span class="required" title="required" i18n:attributes="title timeslot_label_required">&nbsp;</span><br/>
       <select id="selectPersonTitle" name="selectPersonTitle">
         <option tal:repeat="option context/getPersonTitleVocabulary" tal:content="option"></option>
       </select>
     </div>
+    -->
     <div class="field">
       <label for="inputPrename" i18n:translate="Prename">Your prename</label>
       <span class="required" title="required" i18n:attributes="title timeslot_label_required">&nbsp;</span><br/>
-      <input id="inputPrename" name="inputPrename" type="text" i18n:attributes="placeholder Prename" tal:attributes="value context/getCurrentUserPrename"/>
+      <input id="inputPrename" name="inputPrename" type="text" i18n:attributes="placeholder Prename" />
     </div>
     <div class="field">
       <label for="inputSurname" i18n:translate="Surname">Your surname</label>
       <span class="required" title="required" i18n:attributes="title timeslot_label_required">&nbsp;</span><br/>
-      <input id="inputSurname" name="inputSurname" type="text" i18n:attributes="placeholder Surname" tal:attributes="value context/getCurrentUserSurname"/>
+      <input id="inputSurname" name="inputSurname" type="text" i18n:attributes="placeholder Surname" />
     </div>
     <div class="field">
       <label for="inputEmail" i18n:translate="Your email address">Your email address</label>
       <span class="required" title="required" i18n:attributes="title timeslot_label_required">&nbsp;</span><br/>
-       <input id="inputEmail" name="inputEmail" type="email" placeholder="E-Mail" tal:attributes="value context/getCurrentUserEmail"/>
+       <input id="inputEmail" name="inputEmail" type="email" placeholder="E-Mail" />
       <input type="hidden" name="isExternal" value="1"/>
     </div>
 
-    <tal:block tal:replace="structure view/render_extra_form"/>
+    <tal:block tal:replace="structure view/renderExtraForm"/>
 
     <div tal:condition="python: (isSignupAllowed and not prohibitAnotherSignup)"
-         tal:define="dataUsageDeclaration context/getDataUsageDeclaration | nothing;
-                     consentRequired context/getDataUsageDeclarationConsentRequired | nothing;">
+         tal:define="dataUsageDeclaration context/dataUsageDeclaration | nothing;
+                     consentRequired context/dataUsageDeclarationConsentRequired | nothing;">
 
       <div class="panel-group" id="data-usage-accordion" tal:condition="dataUsageDeclaration">
         <div class="panel panel-default">
@@ -264,7 +266,7 @@
             </h4>
           </div>
           <div id="data-usage-body" class="panel-collapse collapse">
-            <div class="panel-body" tal:content="structure python: context.getDataUsageDeclaration().replace('\n','<br />\n')" />
+            <div class="panel-body" tal:content="structure python: context.dataUsageDeclaration().replace('\n','<br />\n')" />
           </div>
         </div>
       </div>
