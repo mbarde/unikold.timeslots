@@ -4,4 +4,5 @@
   <object meta_type="Dexterity FTI" name="UTSignupSheet"/>
   <object meta_type="Dexterity FTI" name="UTDay"/>
   <object meta_type="Dexterity FTI" name="UTTimeslot"/>
+  <object meta_type="Dexterity FTI" name="UTPerson"/>
 </object>
