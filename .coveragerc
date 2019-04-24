@@ -1,0 +1,6 @@
+[report]
+include =
+    src/unikold/*
+omit =
+    */test*
+    */upgrades/*

@@ -1,0 +1,3 @@
+=================unikold.timeslots
+=================
+User documentation
