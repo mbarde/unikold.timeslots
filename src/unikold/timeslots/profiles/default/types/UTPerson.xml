@@ -1,43 +1,38 @@
 <?xml version="1.0"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    name="UTTimeslot"
+    name="UTPerson"
     meta_type="Dexterity FTI"
     i18n:domain="unikold.timeslots">
 
   <!-- Basic properties -->
   <property
       i18n:translate=""
-      name="title">UTTimeslot</property>
+      name="title">UTPerson</property>
   <property
       i18n:translate=""
-      name="description">Timeslot for unikold.timeslots</property>
+      name="description">Person for unikold.timeslots</property>
 
   <property name="allow_discussion">False</property>
-  <property name="factory">UTTimeslot</property>
+  <property name="factory">UTPerson</property>
   <property name="icon_expr"></property>
   <property name="link_target"></property>
 
   <!-- Hierarchy control -->
   <property name="global_allow">False</property>
-  <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-    <element value="UTPerson" />
-          </property>
   <!-- Schema, class and security -->
-  <property name="add_permission">unikold.timeslots.AddUTTimeslot</property>
-  <property name="klass">unikold.timeslots.content.ut_timeslot.UTTimeslot</property>
+  <property name="add_permission">unikold.timeslots.AddUTPerson</property>
+  <property name="klass">unikold.timeslots.content.ut_person.UTPerson</property>
   <property name="model_file"></property>
   <property name="model_source"></property>
-  <property name="schema">unikold.timeslots.content.ut_timeslot.IUTTimeslot</property>
+  <property name="schema">unikold.timeslots.content.ut_person.IUTPerson</property>
 
   <!-- Enabled behaviors -->
   <property name="behaviors" purge="false">
-    <element value="plone.app.dexterity.behaviors.metadata.IPublication"/>
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 
   <!-- View information -->
-  <property name="add_view_expr">string:${folder_url}/++add++UTTimeslot</property>
+  <property name="add_view_expr">string:${folder_url}/++add++UTPerson</property>
   <property name="default_view">view</property>
   <property name="default_view_fallback">False</property>
   <property name="immediate_view">view</property>
