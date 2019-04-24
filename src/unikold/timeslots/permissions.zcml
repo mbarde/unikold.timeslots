@@ -7,6 +7,12 @@
   <!-- -*- extra stuff goes here -*- -->
 
     <permission
+        id="unikold.timeslots.AddUTTimeslot"
+        title="unikold.timeslots: Add UTTimeslot"
+    />
+
+        
+    <permission
         id="unikold.timeslots.AddUTDay"
         title="unikold.timeslots: Add UTDay"
     />
