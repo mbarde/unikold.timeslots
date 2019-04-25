@@ -6,16 +6,16 @@
 <body>
   <div metal:fill-slot="main">
     <tal:main-macro metal:define-macro="main">
-      <h2><span tal:content="string:${context/Title}"></span> - <span i18n:translate="timeslot_label_signUpResults">Sign Up Results</span></h2>
+      <h2><span tal:content="string:${context/Title}"></span> - <span i18n:translate="">Sign Up Results</span></h2>
 
   <dl tal:condition="python: view.areAnyRequiredFieldsEmpty() or not view.isAtLeastOneSlotSelected()" class="portalMessage error">
-  <dt i18n:translate="timeslot_message_noTimeSlotSelected">Failure</dt>
+  <dt i18n:translate="">Failure</dt>
   <dd>
     <span tal:condition="not:view/isAtLeastOneSlotSelected">
-      <p i18n:translate="timeslot_message_selectMin1Slot">You need to select at least one slot.</p>
+      <p i18n:translate="">You need to select at least one slot.</p>
     </span>
     <div tal:condition="view/areAnyRequiredFieldsEmpty">
-      <p i18n:translate="timeslot_label_notCompletedFollowingFields">You did not complete the following fields:</p>
+      <p i18n:translate="">You did not complete the following fields:</p>
       <ul>
         <li tal:repeat="field view/getListOfEmptyRequiredFields">
           <strong tal:content="field" />
@@ -29,12 +29,12 @@
 
     <tal:block tal:condition="python: result['status'] == 'signedup'">
       <dl class="portalMessage info">
-        <dt i18n:translate="timeslot_message_success">Success</dt>
+        <dt i18n:translate="">Success</dt>
         <dd>
-        <p><span i18n:translate="timeslot_message_successfullySigendUp">You have been successfully signed up for:</span><br />
+        <p><span i18n:translate="">You have been successfully signed up for:</span><br />
            <span tal:content="result/slotLabel" /></p>
         <p tal:condition="view/isEmailValid">
-          <span i18n:translate="timeslot_message_confirmationEmailSent">A confirmation email has been sent to you</span> (<span tal:replace="view/email"></span>).
+          <span i18n:translate="">A confirmation email has been sent to you</span> (<span tal:replace="view/email"></span>).
         </p>
         </dd>
       </dl>
@@ -42,31 +42,31 @@
 
     <tal:block tal:condition="python: result['status'] == 'unconfirmed'">
       <dl class="portalMessage info">
-        <dt i18n:translate="timeslot_message_success">Success</dt>
+        <dt i18n:translate="">Success</dt>
         <dd>
-        <p><span i18n:translate="timeslot_message_added2Unconfirmed">Your preliminary signup has been received:</span><br />
+        <p><span i18n:translate="">Your preliminary signup has been received:</span><br />
           <span tal:content="result/slotLabel" /></p>
-        <p tal:condition="view/isEmailValid" i18n:translate="timeslot_message_emailsNowAndWhenConfirmation">You will receive a confirmation email now and a second one when your signup has been confirmed (or rejected).</p>
+        <p tal:condition="view/isEmailValid" i18n:translate="">You will receive a confirmation email now and a second one when your signup has been confirmed (or rejected).</p>
         </dd>
       </dl>
     </tal:block>
 
     <tal:block tal:condition="python: result['status'] == 'waiting'">
       <dl class="portalMessage info">
-        <dt i18n:translate="timeslot_message_success">Success</dt>
+        <dt i18n:translate="">Success</dt>
         <dd>
-        <p><span i18n:translate="timeslot_message_added2WaitingList">You have been successfully added to the waiting list for:</span><br />
+        <p><span i18n:translate="">You have been successfully added to the waiting list for:</span><br />
           <span tal:content="result/slotLabel" /></p>
-        <p tal:condition="view/isEmailValid" i18n:translate="timeslot_message_emailsNowAndWhenOpening">You will receive a confirmation email now and second one when a spot opens up.</p>
+        <p tal:condition="view/isEmailValid" i18n:translate="">You will receive a confirmation email now and second one when a spot opens up.</p>
         </dd>
       </dl>
     </tal:block>
 
     <tal:block tal:condition="python: result['status'] == 'error'">
       <dl class="portalMessage error">
-        <dt i18n:translate="timeslot_message_failure">Failure</dt>
+        <dt i18n:translate="">Failure</dt>
         <dd>
-        <p i18n:translate="timeslot_message_unable2Register">The system was unable to register you.</p>
+        <p i18n:translate="">The system was unable to register you.</p>
         <p tal:content="result/error" />
         </dd>
       </dl>
@@ -78,19 +78,19 @@
           onclick="window.history.back();"
           class="btn btn-default">
     <span class="fa fa-chevron-circle-left"></span>
-    <span i18n:translate="timeslot_label_return2SignupSheet">Return to the signup sheet</span>
+    <span i18n:translate="">Return to the signup sheet</span>
   </button>
   <a tal:condition="not: view/hasAtLeastOneError"
      tal:attributes="href string:${context/absolute_url};"
      class="btn btn-default">
     <span class="fa fa-chevron-circle-left"></span>
-    <span i18n:translate="timeslot_label_return2SignupSheet">Return to the signup sheet</span>
+    <span i18n:translate="">Return to the signup sheet</span>
   </a>
   <a  tal:condition="context/isCurrentUserLoggedIn"
       tal:attributes="href string:${context/absolute_url}/@@show-reservations"
      class="btn btn-default">
       <i class="fa fa-calendar" aria-hidden="true"></i>
-      <span i18n:translate="timeslot_label_viewReservations">View My Reservations</span>
+      <span i18n:translate="">View My Reservations</span>
   </a>
 
     </tal:main-macro>

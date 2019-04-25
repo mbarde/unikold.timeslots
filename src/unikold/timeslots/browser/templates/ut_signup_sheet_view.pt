@@ -21,13 +21,13 @@
         </td>
         <td tal:condition="not: hideAvailability">
           <span tal:content="timeSlot/getNumberOfAvailableSlots" />
-          <span tal:condition="timeSlot/allowWaitingList"> + <span i18n:translate="timeslot_label_waitingList">Waiting List</span></span>
+          <span tal:condition="timeSlot/allowWaitingList"> + <span i18n:translate="">Waiting List</span></span>
         </td>
         <td align="center" tal:define="state timeSlot/getCurrentUserSignUpState; full timeSlot/isFull">
           <tal:block tal:condition="python: state in ['unconfirmed', 'signedup', 'signedoff']">
             <em><strong >
                 &rarr;
-                <span i18n:translate="timeslot_label_yourSlot">Your Slot</span>
+                <span i18n:translate="">Your Slot</span>
                 <span tal:condition="python: state == 'unconfirmed'">
                   (<span i18n:translate="unconfirmed"/>)
                 </span>
@@ -51,10 +51,10 @@
                 <input tal:condition="python: not isSingleTimeSlot and not allowSignupForMultipleSlots" type="radio" name="slotSelection"
                        tal:attributes="value timeSlot/getIDLabel" />
               </tal:block>
-              <span tal:condition="full" i18n:translate="timeslot_label_full">Full</span>
+              <span tal:condition="full" i18n:translate="">Full</span>
             </tal:block>
             <span tal:condition="timeSlot/expired"
-              i18n:translate="timeslot_expired"
+              i18n:translate=""
               i18n:attributes="title timeslot_expired_title">(expired)</span>
           </tal:block>
         </td>
@@ -78,7 +78,7 @@
       tal:attributes="href string:${context/absolute_url}/@@show-reservations"
       class="btn btn-default">
       <i class="fa fa-calendar" aria-hidden="true"></i>
-      <span i18n:translate="timeslot_label_viewReservations">View My Reservations</span>
+      <span i18n:translate="">View My Reservations</span>
   </a>
 
   <h2 tal:content="context/Title" />
@@ -90,9 +90,9 @@
 
   <dl class="portalMessage error" tal:condition="not: isSignupAllowed">
     <dt>
-    <span i18n:translate="timeslot_label_toSignUpYouNeed">To signup for a slot you have to</span>
+    <span i18n:translate="">To signup for a slot you have to</span>
     <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view"
-    i18n:translate="timeslot_label_login">login</a>
+    i18n:translate="">Login</a>
     </dt>
   </dl>
 
@@ -107,7 +107,7 @@
 
     <tal:block tal:condition="context/contactInfo">
     <span
-          i18n:translate="timeslot_label_questionsThenContact">If you have any questions please contact:</span>
+          i18n:translate="">If you have any questions please contact:</span>
     <a  tal:attributes="href python: 'mailto:' + context.contactInfo"
         tal:content="python: context.getContactInfoAsSentence()">mailto</a>
     <br /><br />
@@ -145,7 +145,7 @@
               tal:attributes="id python: 'tab-' + str(mIndex);
                               class class">
 
-    <h3 tal:condition="not:days" i18n:translate="timeslot_label_noUpcomingDays">There are no upcoming days for this signup sheet.</h3>
+    <h3 tal:condition="not:days" i18n:translate="">There are no upcoming days for this signup sheet.</h3>
 
     <h3 i18n:translate="month"></h3>
 
@@ -163,7 +163,7 @@
             </h4>
             <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/edit">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-              <span i18n:translate="timeslot_label_edit">Edit</span>
+              <span i18n:translate="">Edit</span>
             </a>
             <br style="clear:both"/>
           </div>
@@ -174,16 +174,16 @@
             <thead>
               <tr>
                 <th tal:condition="view/showEditLinks"></th>
-                <th tal:condition="showSlotNames" i18n:translate="timeslot_label_slotNames">Name</th>
-                <th i18n:translate="timeslot_label_time">Time</th>
-                <th tal:condition="not: hideAvailability" i18n:translate="timeslot_label_available">Available</th>
-                <th i18n:translate="timeslot_label_select">Select</th>
+                <th tal:condition="showSlotNames" i18n:translate="">Name</th>
+                <th i18n:translate="">Time</th>
+                <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
+                <th i18n:translate="">Select</th>
               </tr>
             </thead>
 
             <tal:block tal:define="timeSlots day/getTimeSlots">
             <tr tal:condition="not:timeSlots">
-              <td colspan="4" i18n:translate="timeslot_label_noSlotsForThisDayYet">No slots have been made available for this day yet.</td>
+              <td colspan="4" i18n:translate="">No slots have been made available for this day yet.</td>
             </tr>
             <div metal:use-macro="template/macros/macro-timeslots"></div>
             </tal:block>
@@ -206,9 +206,9 @@
         <thead>
             <tr>
                 <th tal:condition="view/showEditLinks"></th>
-                <th tal:condition="showSlotNames" i18n:translate="timeslot_label_slotNames">Name</th>
-                <th tal:condition="not: hideAvailability" i18n:translate="timeslot_label_available">Available</th>
-                <th i18n:translate="timeslot_label_select">Select</th>
+                <th tal:condition="showSlotNames" i18n:translate="">Name</th>
+                <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
+                <th i18n:translate="">Select</th>
             </tr>
         </thead>
         <tbody>

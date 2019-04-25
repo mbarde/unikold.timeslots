@@ -10,14 +10,14 @@
       <h2 tal:content="context/Title" />
 
       <div style="border: 1px solid #CCCCCC; padding: 10px">
-  <p i18n:translate="timeslot_label_cancelling">To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
+  <p i18n:translate="">To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
   <form id="formCancelTimeslots" method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 
     <table class="plain">
 
       <tal:block tal:define="slots python: context.getSlotsByUsername(False, ['signedup', 'unconfirmed', 'signedoff'])">
         <tr>
-          <th colspan="2" i18n:translate="timeslot_label_signedUp4Following">You signed up for the following slots:</th>
+          <th colspan="2" i18n:translate="">You signed up for the following slots:</th>
         </tr>
         <tr tal:repeat="slot slots">
           <tal:block tal:define="label slot/getLabel;
@@ -37,13 +37,13 @@
           </tal:block>
         </tr>
         <tr tal:condition="python: len(slots) == 0">
-          <td colspan="2" i18n:translate="timeslot_label_notSignedUp4AnySlot">None</td>
+          <td colspan="2" i18n:translate="">None</td>
         </tr>
       </tal:block>
 
       <tal:block tal:define="slots python: context.getSlotsByUsername(False, 'waiting')">
         <tr>
-          <th colspan="2" i18n:translate="timeslot_label_onTheWaitingList4">You are on a waiting list for the following slots:</th>
+          <th colspan="2" i18n:translate="">You are on a waiting list for the following slots:</th>
         </tr>
         <tr tal:repeat="slot slots">
           <tal:block tal:define="label slot/getLabel">
@@ -54,7 +54,7 @@
           </tal:block>
         </tr>
         <tr tal:condition="python: len(slots) == 0">
-          <td colspan="2" i18n:translate="timeslot_label_notWaiting4AnySlot">None</td>
+          <td colspan="2" i18n:translate="">None</td>
         </tr>
       </tal:block>
 
@@ -63,14 +63,14 @@
 
     <button class="btn btn-danger" type="submit" name="cancelSlots" id="btnCancelReservations" style="display:none">
       <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
-      <span i18n:translate="timeslot_label_cancelSelectedSlots">Cancel Selected Slots</span>
+      <span i18n:translate="">Cancel Selected Slots</span>
     </button>
     <img id="submitSpinner" style="display:none" src="spinner.gif"/>
   </form>
 
       <a tal:attributes="href string:${context/absolute_url};" class="btn btn-default">
           <span class="fa fa-chevron-circle-left"></span>
-          <span i18n:translate="timeslot_label_return2SignupSheet">Return to the signup sheet</span>
+          <span i18n:translate="">Return to the signup sheet</span>
       </a>
 
       </div>
