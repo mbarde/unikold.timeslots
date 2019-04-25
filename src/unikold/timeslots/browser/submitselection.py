@@ -101,7 +101,7 @@ class SubmitSelection(BrowserView):
             ('email', 'Your email address')
         ]
         for (name, label) in fields:
-            if len(getattr(self, name)):
+            if len(getattr(self, name)) < 1:
                 emptyRequiredFields.append(
                     translate(_(label), target_language=self.currentLanguage))
 
@@ -113,7 +113,6 @@ class SubmitSelection(BrowserView):
 
     def getSlotAndSignUserUpForIt(self, slotIDLabel):
         status = 'error'
-
         error = ''
 
         allowSignupForMultipleSlots = self.context.allowSignupForMultipleSlots
@@ -160,16 +159,17 @@ class SubmitSelection(BrowserView):
         self.results.append(result)
 
     def createPersonObject(self, container):
-        data = {
-            'personTitle': self.personTitle,
-            'email': self.email,
-            'prename': self.prename,
-            'surname': self.surname
-        }
-        title = '{0} {1}'.format(self.prename, self.surname)
-        newPerson = api.content.create(
-            container=container, type='UTPerson',
-            id=self.email, title=title, **data)
+        # do not use api.content.create() since we bypass security here
+        # to avoid permitting any permissions for anonymous
+        portal_types = api.portal.get_tool('portal_types')
+        type_info = portal_types.getTypeInfo('UTPerson')
+        newPerson = type_info._constructInstance(container, self.email)
+
+        newPerson.personTitle = self.personTitle
+        newPerson.email = self.email
+        newPerson.title = '{0} {1}'.format(self.prename, self.surname)
+        newPerson.prename = self.prename
+        newPerson.surname = self.surname
 
         # also store names of extra fields to be able to read them out even
         # if extra field form changes (used in timeslotperson_view)
