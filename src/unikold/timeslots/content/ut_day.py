@@ -32,3 +32,17 @@ class UTDay(Container):
         timeSlots = sorted(timeSlots, key=lambda slot: slot.startTime)
 
         return timeSlots
+
+    def getTimeSlot(self, timeslotId, checkExpirationDate=False):
+        brains = api.content.find(
+            context=self, portal_type='UTTimeslot', depth=1, id=timeslotId)
+        if len(brains) == 0:
+            raise ValueError(_('The TimeSlot {0} was not found.'.format(timeslotId)))
+
+        if checkExpirationDate:
+            now = DateTime()
+            if (not brains[0].expires > now):
+                raise ValueError(_('The TimeSlot {0} was not found.'.format(timeslotId)))
+
+        timeSlot = brains[0].getObject()
+        return timeSlot

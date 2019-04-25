@@ -86,7 +86,7 @@
     <span class="fa fa-chevron-circle-left"></span>
     <span i18n:translate="timeslot_label_return2SignupSheet">Return to the signup sheet</span>
   </a>
-  <a  tal:condition="view/isCurrentUserLoggedIn"
+  <a  tal:condition="context/isCurrentUserLoggedIn"
       tal:attributes="href string:${context/absolute_url}/@@show-reservations"
      class="btn btn-default">
       <i class="fa fa-calendar" aria-hidden="true"></i>

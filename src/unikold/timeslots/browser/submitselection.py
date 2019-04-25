@@ -105,7 +105,7 @@ class SubmitSelection(BrowserView):
                 emptyRequiredFields.append(
                     translate(_(label), target_language=self.currentLanguage))
 
-        if self.context.getAskForPersonTitle() and len(self.personTitle) < 1:
+        if self.context.askForPersonTitle and len(self.personTitle) < 1:
             emptyRequiredFields.append(
                 translate(_('Title of the person'), target_language=self.currentLanguage))
 
@@ -116,14 +116,14 @@ class SubmitSelection(BrowserView):
 
         error = ''
 
-        allowSignupForMultipleSlots = self.context.getAllowSignupForMultipleSlots()
+        allowSignupForMultipleSlots = self.context.allowSignupForMultipleSlots
 
         (date, time) = slotIDLabel.split(' @ ')
         day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time, True)
         slotTitleLabel = timeSlot.getLabel()
-        allowWaitingList = timeSlot.getAllowWaitingList()
-        numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
+        allowWaitingList = timeSlot.allowWaitingList
+        numberOfAvailableSpots = timeSlot.getNumberOfAvailableSlots()
 
         if (not allowSignupForMultipleSlots) and self.context.countSlotsByUsername(self.email) > 0:
             error = _('You are already signed up for a slot in this signup sheet.')
@@ -135,7 +135,7 @@ class SubmitSelection(BrowserView):
             person = self.createPersonObject(timeSlot)
 
             if numberOfAvailableSpots > 0:
-                if self.context.getSignupsRequireConfirmation():
+                if self.context.signupsRequireConfirmation:
                     if self.isEmailValid():
                         self.sendWaitForConfirmationEmail(self.context, slotTitleLabel, person)
                         status = 'unconfirmed'

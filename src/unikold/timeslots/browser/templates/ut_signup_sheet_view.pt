@@ -20,7 +20,7 @@
           <span tal:content="timeSlot/getTimeRange" />
         </td>
         <td tal:condition="not: hideAvailability">
-          <span tal:content="timeSlot/getNumberOfAvailableSpots" />
+          <span tal:content="timeSlot/getNumberOfAvailableSlots" />
           <span tal:condition="timeSlot/allowWaitingList"> + <span i18n:translate="timeslot_label_waitingList">Waiting List</span></span>
         </td>
         <td align="center" tal:define="state timeSlot/getCurrentUserSignUpState; full timeSlot/isFull">
@@ -62,7 +62,7 @@
     </metal:block>
 
     <tal:main-macro metal:define-macro="main"
-                    tal:define="isUserLogged view/isCurrentUserLoggedIn;
+                    tal:define="isUserLogged context/isCurrentUserLoggedIn;
                                 allowSignupForExternals context/allowSignupForExternals;
                                 allowSignupForMultipleSlots context/allowSignupForMultipleSlots;
                                 hideAvailability context/hideAvailability;
@@ -277,9 +277,9 @@
         </label>
       </div>
 
-      <button class="btn btn-primary" type="submit" name="form.button.submit" value="Submit" id="submitFormSlots">
-      <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-      <span i18n:translate="timeslot_label_chooseTimeslotSubmit"></span>
+      <button class="btn btn-primary" type="submit" name="form.button.submit" id="submitFormSlots">
+        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+        <span i18n:translate="">Submit</span>
       </button>
       <img id="submitSpinner" style="display:none" src="spinner.gif"/>
       <input type="hidden" name="form.submitted" value="1" />

@@ -162,12 +162,21 @@ class UTSignupSheet(Container):
 
         return len(brains)
 
+    def isCurrentUserLoggedIn(self):
+        return not api.user.is_anonymous()
+
     def getCurrentUsername(self):
         return api.user.get_current().getUserName()
 
     # Return a string containig the person's email-address as a sentence
     def getContactInfoAsSentence(self):
         return self.contactInfo.replace('@', ' at ')
+
+    def getDay(self, dayId):
+        brains = api.content.find(context=self, portal_type='UTDay', id=dayId)
+        if len(brains) == 0:
+            raise ValueError(_('The date {0} was not found.'.format(dayId)))
+        return brains[0].getObject()
 
     def getDays(self, onlyIncludeUpcomingDays=True):
         brains = api.content.find(
@@ -216,3 +225,9 @@ class UTSignupSheet(Container):
 
     def getPersonTitleVocabulary(self):
         return getPersonTitleVocabulary()
+
+    def getExtraFields(self):
+        return []
+
+    def getExtraFieldsVocabulary(self):
+        return []

@@ -41,6 +41,14 @@ class IUTTimeslot(model.Schema):
 @implementer(IUTTimeslot)
 class UTTimeslot(Container):
 
+    def getLabel(self):
+        parentDay = self.aq_parent
+        signupSheet = parentDay.aq_parent
+        if signupSheet.hideDateTime:
+            return self.getName()
+        else:
+            return '{0} @ {1}'.format(parentDay.Title(), self.Title())
+
     def getIDLabel(self):
         parentDay = self.aq_parent
         return '{0} @ {1}'.format(parentDay.id, self.id)
@@ -48,7 +56,7 @@ class UTTimeslot(Container):
     def getTimeRange(self):
         return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
 
-    def getNumberOfAvailableSpots(self):
+    def getNumberOfAvailableSlots(self):
         brains = api.content.find(
             context=self, portal_type='UTPerson', review_state='signedup')
 
@@ -66,5 +74,11 @@ class UTTimeslot(Container):
         return brains[0].getObject().getReviewState()
 
     def isFull(self):
-        return (self.getNumberOfAvailableSpots() == 0
+        return (self.getNumberOfAvailableSlots() == 0
                 and not self.allowWaitingList)
+
+    def isUserSignedUpForThisSlot(self, username):
+        brains = api.content.find(
+            context=self, portal_type='UTPerson',
+            review_state='signedup', id=username)
+        return len(brains) != 0

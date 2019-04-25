@@ -9,9 +9,6 @@ class UTSignupSheetView(DefaultView):
         self.context = context
         self.request = request
 
-    def isCurrentUserLoggedIn(self):
-        return not api.user.is_anonymous()
-
     def showEditLinks(self):
         return api.user.has_permission('unikold.timeslots: Manage Schedule')
 
