@@ -71,17 +71,55 @@ class UTPersonIntegrationTest(unittest.TestCase):
             ),
         )
 
+    def test_notifications(self):
+        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+
+        # build full `stack`: [Signup Sheet] -> [Day] -> [Timeslot] -> [Person]
+        signupsheet = api.content.create(
+            container=self.portal,
+            type='UTSignupSheet',
+            id='ut_signup_sheet',
+            **{
+                'contactInfo': 'manager@test.com',
+                'notifyContactInfo': True
+            }
+        )
+        day = api.content.create(
+            container=signupsheet,
+            type='UTDay',
+            id='ut_day',
+        )
+        timeslot = api.content.create(
+            container=day,
+            type='UTTimeslot',
+            id='ut_timeslot',
+        )
+        obj = api.content.create(
+            container=timeslot,
+            type='UTPerson',
+            id='ut_person',
+            **{
+                'email': 'user@test.com',
+                'prename': 'Peter',
+                'surname': 'Lustig'
+            }
+        )
+
+        self.assertEqual(len(self.portal.MailHost.messages), 0)
         actualState = api.content.get_state(obj)
         self.assertEqual('unconfirmed', actualState)
         api.content.transition(obj=obj, transition='signoff')
+        self.assertEqual(len(self.portal.MailHost.messages), 1)
 
         actualState = api.content.get_state(obj)
         self.assertEqual('signedoff', actualState)
         api.content.transition(obj=obj, transition='putOnWaitingList')
+        self.assertEqual(len(self.portal.MailHost.messages), 3)
 
         actualState = api.content.get_state(obj)
         self.assertEqual('waiting', actualState)
         api.content.transition(obj=obj, transition='signup')
+        self.assertEqual(len(self.portal.MailHost.messages), 5)
 
         actualState = api.content.get_state(obj)
         self.assertEqual('signedup', actualState)

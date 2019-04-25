@@ -66,4 +66,13 @@
       handler=".content.ut_timeslot.autoSetID"
     />
 
+  <!-- send out emails on workflow actions for persons
+       (use Products.DCWorkflow.interfaces.IAfterTransitionEvent
+        to be able to access previous wf state) -->
+  <subscriber
+    for=".content.ut_person.IUTPerson
+         Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+    handler=".subscribers.sendNotification"
+  />
+
 </configure>

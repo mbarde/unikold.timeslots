@@ -38,5 +38,6 @@ class IUTPerson(model.Schema):
 
 @implementer(IUTPerson)
 class UTPerson(Item):
-    """
-    """
+
+    def getExtraInfoAsString(self):
+        return ''
