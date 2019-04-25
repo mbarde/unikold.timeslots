@@ -71,6 +71,21 @@ class UTPersonIntegrationTest(unittest.TestCase):
             ),
         )
 
+        actualState = api.content.get_state(obj)
+        self.assertEqual('unconfirmed', actualState)
+        api.content.transition(obj=obj, transition='signoff')
+
+        actualState = api.content.get_state(obj)
+        self.assertEqual('signedoff', actualState)
+        api.content.transition(obj=obj, transition='putOnWaitingList')
+
+        actualState = api.content.get_state(obj)
+        self.assertEqual('waiting', actualState)
+        api.content.transition(obj=obj, transition='signup')
+
+        actualState = api.content.get_state(obj)
+        self.assertEqual('signedup', actualState)
+
     def test_ct_ut_person_globally_not_addable(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
         fti = queryUtility(IDexterityFTI, name='UTPerson')

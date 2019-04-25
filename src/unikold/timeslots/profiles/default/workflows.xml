@@ -2,12 +2,16 @@
 <object name="portal_workflow" meta_type="Plone Workflow Tool">
   <property
     name="title">Contains workflow definitions for your portal</property>
+  <object name="ut_person_workflow" meta_type="Workflow"/>
   <bindings>
     <type type_id="UTDay">
       <bound-workflow workflow_id="one_state_workflow"/>
     </type>
     <type type_id="UTTimeslot">
       <bound-workflow workflow_id="one_state_workflow"/>
+    </type>
+    <type type_id="UTPerson">
+      <bound-workflow workflow_id="ut_person_workflow"/>
     </type>
   </bindings>
 </object>
