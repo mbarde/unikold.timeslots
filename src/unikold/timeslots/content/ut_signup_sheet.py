@@ -6,6 +6,7 @@ from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import getPersonTitleVocabulary
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import implementer
@@ -212,3 +213,6 @@ class UTSignupSheet(Container):
         keys.sort()
 
         return (result, keys, mTrans)
+
+    def getPersonTitleVocabulary(self):
+        return getPersonTitleVocabulary()

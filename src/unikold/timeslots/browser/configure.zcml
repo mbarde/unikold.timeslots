@@ -26,7 +26,6 @@
       permission="zope2.View"
       />
 
-  <!-- direct view should only be available for managers -->
   <browser:page
       name="view"
       for="unikold.timeslots.content.ut_day.IUTDay"
@@ -35,13 +34,20 @@
       permission="cmf.ManagePortal"
       />
 
-  <!-- direct view should only be available for managers -->
   <browser:page
       name="view"
       for="unikold.timeslots.content.ut_timeslot.IUTTimeslot"
       class=".views.UTTimeslotView"
       template="templates/ut_timeslot_view.pt"
       permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+      name="submit-user-selection"
+      class=".submitselection.SubmitSelection"
+      attribute="submitUserSelection"
+      permission="zope2.View"
       />
 
 </configure>
