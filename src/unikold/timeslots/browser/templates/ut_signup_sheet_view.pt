@@ -70,7 +70,7 @@
                                 isSignupAllowed python: allowSignupForExternals or isUserLogged;
                                 showSlotNames context/showSlotNames;
                                 userAlreadySubmitted python: context.countSlotsByUsername() > 0;
-                                prohibitAnotherSignup python: (userAlreadySubmitted and not context.getAllowSignupForMultipleSlots());
+                                prohibitAnotherSignup python: (userAlreadySubmitted and not context.allowSignupForMultipleSlots);
                                 isSingleTimeSlot python: context.countSlots() == 1;"
                                 >
 
@@ -243,7 +243,7 @@
     <div class="field">
       <label for="inputEmail" i18n:translate="Your email address">Your email address</label>
       <span class="required" title="required" i18n:attributes="title timeslot_label_required">&nbsp;</span><br/>
-       <input id="inputEmail" name="inputEmail" type="email" placeholder="E-Mail" />
+       <input id="inputEmail" class="form-control" name="inputEmail" type="email" placeholder="E-Mail" />
       <input type="hidden" name="isExternal" value="1"/>
     </div>
 

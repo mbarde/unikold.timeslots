@@ -71,7 +71,8 @@ class UTTimeslot(Container):
         if len(brains) == 0:
             return False
 
-        return brains[0].getObject().getReviewState()
+        obj = brains[0].getObject()
+        return api.content.get_state(obj)
 
     def isFull(self):
         return (self.getNumberOfAvailableSlots() == 0
