@@ -281,8 +281,6 @@
         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
         <span i18n:translate="">Submit</span>
       </button>
-      <img id="submitSpinner" style="display:none" src="spinner.gif"/>
-      <input type="hidden" name="form.submitted" value="1" />
     </div>
 
     </form>

@@ -50,4 +50,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+      name="show-reservations"
+      template="templates/showreservations.pt"
+      class=".views.ShowReservationsView"
+      permission="zope2.View"
+      />
+
 </configure>

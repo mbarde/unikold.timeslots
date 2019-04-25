@@ -161,6 +161,32 @@ class UTSignupSheet(Container):
 
         return len(brains)
 
+    def getSlotsByUsername(self, username=False, review_state=False):
+        if api.user.is_anonymous():
+            return []
+
+        if not username:
+            username = self.getCurrentUsername()
+
+        if not review_state:
+            review_state = ''
+
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', id=username,
+            review_state=review_state, path=self.getPath())
+
+        slots = []
+        today = date.today()
+        for brain in brains:
+            person = brain.unrestrictedTraverse(brain.getPath())
+
+            timeSlot = person.aq_parent
+            day = timeSlot.aq_parent
+            if day.date >= today:
+                slots.append(timeSlot)
+
+        return slots
+
     def isCurrentUserLoggedIn(self):
         return not api.user.is_anonymous()
 
