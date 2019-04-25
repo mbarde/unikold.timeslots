@@ -143,7 +143,7 @@ class IUTSignupSheet(model.Schema):
 class UTSignupSheet(Container):
 
     def countSlots(self):
-        brains = api.content.find(context=self, portal_type='UTTimeSlot')
+        brains = api.content.find(context=self, portal_type='UTTimeslot')
         return len(brains)
 
     def countSlotsByUsername(self, username=False, review_state=False):
@@ -170,20 +170,18 @@ class UTSignupSheet(Container):
 
     def getDays(self, onlyIncludeUpcomingDays=True):
         brains = api.content.find(
-            context=self, portal_type='UTDay', depth=1,
-            sort_on='date', sort_order='ascending')
+            context=self, portal_type='UTDay', depth=1)
         if len(brains) == 0:
             return []
-        else:
-            indexOfFirstUsefulObject = 0
 
-            if onlyIncludeUpcomingDays:
-                today = date.today()
-                day = brains[indexOfFirstUsefulObject].getObject()
-                while indexOfFirstUsefulObject < len(brains) and day.date < today:
-                    indexOfFirstUsefulObject += 1
+        results = []
+        today = date.today()
+        for brain in brains:
+            day = brain.getObject()
+            if not onlyIncludeUpcomingDays or day.date >= today:
+                results.append(day)
 
-            return [brains[i].getObject() for i in range(indexOfFirstUsefulObject, len(brains))]
+        return results
 
     # Returns tuple with three elements:
     # [0] -> dictionary where key is month and value is list of days in this month

@@ -17,3 +17,11 @@ class UTSignupSheetView(DefaultView):
 
     def renderExtraForm(self):
         return ''
+
+
+class UTDayView(DefaultView):
+    pass
+
+
+class UTTimeslotView(DefaultView):
+    pass

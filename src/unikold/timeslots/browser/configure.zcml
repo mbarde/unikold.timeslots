@@ -26,4 +26,22 @@
       permission="zope2.View"
       />
 
+  <!-- direct view should only be available for managers -->
+  <browser:page
+      name="view"
+      for="unikold.timeslots.content.ut_day.IUTDay"
+      class=".views.UTDayView"
+      template="templates/ut_day_view.pt"
+      permission="cmf.ManagePortal"
+      />
+
+  <!-- direct view should only be available for managers -->
+  <browser:page
+      name="view"
+      for="unikold.timeslots.content.ut_timeslot.IUTTimeslot"
+      class=".views.UTTimeslotView"
+      template="templates/ut_timeslot_view.pt"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

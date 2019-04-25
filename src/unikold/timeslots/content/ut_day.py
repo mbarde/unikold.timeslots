@@ -20,7 +20,7 @@ class IUTDay(model.Schema):
 class UTDay(Container):
 
     def getTimeSlots(self):
-        brains = api.content.find(context=self, portal_type='UTTimeSlot', depth=1)
+        brains = api.content.find(context=self, portal_type='UTTimeslot', depth=1)
 
         timeSlots = []
         now = DateTime()
@@ -29,6 +29,6 @@ class UTDay(Container):
             obj.expired = (not brain.expires > now)
             timeSlots.append(obj)
 
-        timeSlots = sorted(timeSlots, key=lambda slot: int(slot.startTime))
+        timeSlots = sorted(timeSlots, key=lambda slot: slot.startTime)
 
         return timeSlots

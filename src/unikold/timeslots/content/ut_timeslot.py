@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from plone import api
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from unikold.timeslots import _
@@ -39,5 +40,31 @@ class IUTTimeslot(model.Schema):
 
 @implementer(IUTTimeslot)
 class UTTimeslot(Container):
-    """
-    """
+
+    def getIDLabel(self):
+        parentDay = self.aq_parent
+        return '{0} @ {1}'.format(parentDay.id, self.id)
+
+    def getTimeRange(self):
+        return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
+
+    def getNumberOfAvailableSpots(self):
+        brains = api.content.find(
+            context=self, portal_type='UTPerson', review_state='signedup')
+
+        numberOfPeopleSignedUp = len(brains)
+        return max(0, self.maxCapacity - numberOfPeopleSignedUp)
+
+    def getCurrentUserSignUpState(self):
+        username = api.user.get_current().getUserName()
+        brains = api.content.find(
+            context=self, portal_type='UTPerson', id=username)
+
+        if len(brains) == 0:
+            return False
+
+        return brains[0].getObject().getReviewState()
+
+    def isFull(self):
+        return (self.getNumberOfAvailableSpots() == 0
+                and not self.allowWaitingList)

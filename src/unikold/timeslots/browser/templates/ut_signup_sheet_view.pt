@@ -20,7 +20,7 @@
           <span tal:content="timeSlot/getTimeRange" />
         </td>
         <td tal:condition="not: hideAvailability">
-          <span tal:content="timeSlot/numberOfAvailableSpots" />
+          <span tal:content="timeSlot/getNumberOfAvailableSpots" />
           <span tal:condition="timeSlot/allowWaitingList"> + <span i18n:translate="timeslot_label_waitingList">Waiting List</span></span>
         </td>
         <td align="center" tal:define="state timeSlot/getCurrentUserSignUpState; full timeSlot/isFull">
