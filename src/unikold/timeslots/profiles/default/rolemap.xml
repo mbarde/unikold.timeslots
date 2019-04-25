@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <rolemap>
   <permissions>
-  <!-- -*- extra stuff goes here -*- -->
 
     <permission name="unikold.timeslots: Add UTPerson" acquire="True">
       <role name="Manager"/>
@@ -10,7 +9,6 @@
       <role name="Contributor"/>
     </permission>
 
-        
     <permission name="unikold.timeslots: Add UTTimeslot" acquire="True">
       <role name="Manager"/>
       <role name="Site Administrator"/>
@@ -18,7 +16,6 @@
       <role name="Contributor"/>
     </permission>
 
-        
     <permission name="unikold.timeslots: Add UTDay" acquire="True">
       <role name="Manager"/>
       <role name="Site Administrator"/>
@@ -26,7 +23,6 @@
       <role name="Contributor"/>
     </permission>
 
-        
     <permission name="unikold.timeslots: Add UTSignupSheet" acquire="True">
       <role name="Manager"/>
       <role name="Site Administrator"/>
@@ -34,6 +30,5 @@
       <role name="Contributor"/>
     </permission>
 
-        
   </permissions>
 </rolemap>

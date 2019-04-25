@@ -58,6 +58,7 @@ def autoSetID(day, event):
     title = day.date.strftime('%d.%m.%Y')
     normalizer = getUtility(IIDNormalizer)
     newId = normalizer.normalize(title)
-    day.title = title
-    api.content.rename(obj=day, new_id=newId, safe_id=True)
-    day.reindexObject()
+    if title != day.title or newId != day.id:
+        day.title = title
+        api.content.rename(obj=day, new_id=newId, safe_id=True)
+        day.reindexObject()

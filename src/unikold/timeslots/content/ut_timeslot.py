@@ -59,9 +59,7 @@ class UTTimeslot(Container):
         return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
 
     def getNumberOfAvailableSlots(self):
-        brains = api.content.find(
-            context=self, portal_type='UTPerson', review_state='signedup')
-
+        brains = self.getFolderContents()
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
@@ -94,6 +92,7 @@ def autoSetID(timeslot, event):
     title = timeslot.getTimeRange()
     normalizer = getUtility(IIDNormalizer)
     newId = normalizer.normalize(title)
-    timeslot.title = title
-    api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
-    timeslot.reindexObject()
+    if title != timeslot.title or newId != timeslot.id:
+        timeslot.title = title
+        api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
+        timeslot.reindexObject()

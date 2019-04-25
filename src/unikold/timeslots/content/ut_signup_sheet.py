@@ -152,13 +152,12 @@ class UTSignupSheet(Container):
             username = self.getCurrentUsername()
 
         if review_state:
-            brains = api.content.find(
-                context=self, portal_type='UTPerson',
-                id=username, review_state=review_state)
+            brains = self.portal_catalog.unrestrictedSearchResults(
+                portal_type='UTPerson', id=username,
+                review_state=review_state, path=self.getPath())
         else:
-            brains = api.content.find(
-                context=self, portal_type='TimeslotPerson',
-                id=username)
+            brains = self.portal_catalog.unrestrictedSearchResults(
+                portal_type='UTPerson', id=username, path=self.getPath())
 
         return len(brains)
 
@@ -231,3 +230,7 @@ class UTSignupSheet(Container):
 
     def getExtraFieldsVocabulary(self):
         return []
+
+    def getPath(self):
+        path = self.getPhysicalPath()
+        return '/'.join(path)
