@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from plone import api
 from plone.dexterity.content import Container
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.supermodel import model
 from unikold.timeslots import _
 from zope import schema
+from zope.component import getUtility
 from zope.interface import implementer
 
 
@@ -82,3 +84,16 @@ class UTTimeslot(Container):
             context=self, portal_type='UTPerson',
             review_state='signedup', id=username)
         return len(brains) != 0
+
+
+# set id & title on creation and change
+def autoSetID(timeslot, event):
+    if timeslot.startTime is None or timeslot.endTime is None:
+        return
+
+    title = timeslot.getTimeRange()
+    normalizer = getUtility(IIDNormalizer)
+    newId = normalizer.normalize(title)
+    timeslot.title = title
+    api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
+    timeslot.reindexObject()

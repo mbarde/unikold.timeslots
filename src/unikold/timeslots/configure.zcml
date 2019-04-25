@@ -42,6 +42,28 @@
       name="unikold.timeslots-hiddenprofiles"
       />
 
-  <!-- -*- extra stuff goes here -*- -->
+  <!-- set day id & title manually on creation and change -->
+  <subscriber
+      for=".content.ut_day.IUTDay
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".content.ut_day.autoSetID"
+    />
+  <subscriber
+      for=".content.ut_day.IUTDay
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".content.ut_day.autoSetID"
+    />
+
+  <!-- set timeslot id & title manually on creation and change -->
+  <subscriber
+      for=".content.ut_timeslot.IUTTimeslot
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".content.ut_timeslot.autoSetID"
+    />
+  <subscriber
+      for=".content.ut_timeslot.IUTTimeslot
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".content.ut_timeslot.autoSetID"
+    />
 
 </configure>

@@ -2,9 +2,11 @@
 from DateTime import DateTime
 from plone import api
 from plone.dexterity.content import Container
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.supermodel import model
 from unikold.timeslots import _
 from zope import schema
+from zope.component import getUtility
 from zope.interface import implementer
 
 
@@ -46,3 +48,16 @@ class UTDay(Container):
 
         timeSlot = brains[0].getObject()
         return timeSlot
+
+
+# set id & title on creation and change
+def autoSetID(day, event):
+    if not hasattr(day, 'date') or day.date is None:
+        return
+
+    title = day.date.strftime('%d.%m.%Y')
+    normalizer = getUtility(IIDNormalizer)
+    newId = normalizer.normalize(title)
+    day.title = title
+    api.content.rename(obj=day, new_id=newId, safe_id=True)
+    day.reindexObject()
