@@ -15,7 +15,12 @@ class HiddenProfiles(object):
 
 
 def post_install(context):
-    # which types to display in navigation?
+    setup_types_in_navigation()
+    setup_types_searchable()
+
+
+# which types to display in navigation?
+def setup_types_in_navigation():
     typesInNav = list(api.portal.get_registry_record('plone.displayed_types'))
 
     whitelist = ['UTSignupSheet']
@@ -29,6 +34,13 @@ def post_install(context):
             typesInNav.remove(typeName)
 
     api.portal.set_registry_record('plone.displayed_types', tuple(typesInNav))
+
+
+# which types to exclude from search?
+def setup_types_searchable():
+    blacklist = set(api.portal.get_registry_record('plone.types_not_searched'))
+    blacklist.update(['UTDay', 'UTTimeslot', 'UTPerson'])
+    api.portal.set_registry_record('plone.types_not_searched', tuple(blacklist))
 
 
 def uninstall(context):
