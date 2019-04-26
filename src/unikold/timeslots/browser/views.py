@@ -3,6 +3,7 @@ from plone import api
 from plone.dexterity.browser.view import DefaultView
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
+from unikold.timeslots import _
 
 import re
 
@@ -66,3 +67,17 @@ class UTDayView(DefaultView):
 
 class UTTimeslotView(DefaultView):
     pass
+
+
+class UTPersonView(DefaultView):
+
+    def getCurrentState(self):
+        state = api.content.get_state(self.context)
+        if state == 'signedup':
+            return (_(u'Signed Up'), 'bg-success')
+        elif state == 'unconfirmed':
+            return (_(u'Waiting for confirmation'), 'bg-warning')
+        elif state == 'signedoff':
+            return (_(u'Signed off'), 'bg-danger')
+        elif state == 'waiting':
+            return (_(u'Waiting List'), 'bg-info')

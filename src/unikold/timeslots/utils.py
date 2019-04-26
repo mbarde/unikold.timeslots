@@ -21,16 +21,22 @@ def replaceCustomMailPlaceholders(text, personName, signupSheetTitle,
 def getAllExtraFields(signupSheet):
     result = []
 
-    formObj = signupSheet.extraFieldsForm.to_object
-    if formObj:
-        schema = get_schema(formObj)
-        for fieldName in schema:
-            widget = schema.get(fieldName)
-            item = {}
-            item['name'] = fieldName
-            item['label'] = widget.title
-            item['description'] = widget.description
-            item['required'] = widget.required
-            result.append(item)
+    extraFormReference = signupSheet.extraFieldsForm
+    if extraFormReference is None:
+        return result
+
+    formObj = extraFormReference.to_object
+    if formObj is None:
+        return result
+
+    schema = get_schema(formObj)
+    for fieldName in schema:
+        widget = schema.get(fieldName)
+        item = {}
+        item['name'] = fieldName
+        item['label'] = widget.title
+        item['description'] = widget.description
+        item['required'] = widget.required
+        result.append(item)
 
     return result
