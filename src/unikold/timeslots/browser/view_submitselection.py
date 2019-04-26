@@ -50,8 +50,8 @@ class SubmitSelection(BrowserView):
         return self.resultTemplate()
 
     def getUserInput(self):
-        for (field, unused) in self.extra_fields():
-            value = self.request.get(field, '')
+        for (fieldName, label) in self.extra_fields():
+            value = self.request.get('form.widgets.' + fieldName, '')
 
             # if value is a list/tuple (i.e. multiple select field)
             # we need to convert it to string before storing
@@ -60,7 +60,7 @@ class SubmitSelection(BrowserView):
             else:
                 value = str(value)
 
-            setattr(self, field, value)
+            setattr(self, fieldName, value)
 
         self.selectedSlots = self.request.get('slotSelection', None)
 
@@ -174,9 +174,9 @@ class SubmitSelection(BrowserView):
         # also store names of extra fields to be able to read them out even
         # if extra field form changes (used in timeslotperson_view)
         extraFieldNames = []
-        for (field, unused) in self.extra_fields():
-            setattr(newPerson, field, getattr(self, field))
-            extraFieldNames.append(field)
+        for (fieldName, label) in self.extra_fields():
+            setattr(newPerson, fieldName, getattr(self, fieldName))
+            extraFieldNames.append(fieldName)
         setattr(newPerson, 'extraFieldNames', extraFieldNames)
         newPerson.reindexObject()
 

@@ -4,6 +4,8 @@ from plone.dexterity.browser.view import DefaultView
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
 
+import re
+
 
 class UTSignupSheetView(DefaultView):
 
@@ -20,7 +22,25 @@ class UTSignupSheetView(DefaultView):
         return api.user.has_permission('unikold.timeslots: Manage Schedule')
 
     def renderExtraForm(self):
-        return ''
+        portal = api.portal.get()
+
+        form = self.context.extraFieldsForm
+        if form is None:
+            return ''
+        formObj = form.to_object
+
+        formPath = '/'.join(formObj.getPhysicalPath())
+        formView = portal.restrictedTraverse(formPath + '/@@embedded')
+
+        # remove form opening and closing tag, submit button and h-tags with content
+        # (since we want to embed input fields into existing form)
+        # also replace class 'blurrable' since this toggles inline_validation.js
+        # which does not work here
+        formHTML = formView()
+        toRemove = ['<form.*?>', '</form.*?>', '<.*name="form_submit".*?>',
+                    '<h[1-9]>.*</h[1-9]>', 'blurrable']
+        formHTML = re.sub('|'.join(toRemove), '', formHTML)
+        return formHTML
 
 
 class ShowReservationsView(BrowserView):

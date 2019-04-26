@@ -6,6 +6,7 @@ from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import getAllExtraFields
 from unikold.timeslots.utils import getPersonTitleVocabulary
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
@@ -252,10 +253,14 @@ class UTSignupSheet(Container):
         return getPersonTitleVocabulary()
 
     def getExtraFields(self):
-        return []
+        return getAllExtraFields(self)
 
     def getExtraFieldsVocabulary(self):
-        return []
+        extra_fields = getAllExtraFields(self)
+        vocab = []
+        for field in extra_fields:
+            vocab.append((field['name'], field['label']))
+        return vocab
 
     def getPath(self):
         path = self.getPhysicalPath()

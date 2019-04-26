@@ -54,6 +54,7 @@ setup(
             # plone_coredev tests as of 2016-04-01.
             'plone.testing>=5.0.0',
             'plone.app.contenttypes',
+            'collective.easyform',
             'plone.app.robotframework[debug]',
         ],
     },
