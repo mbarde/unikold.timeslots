@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from DateTime import DateTime
 from plone import api
 from plone.dexterity.content import Container
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -83,6 +84,10 @@ class UTTimeslot(Container):
             context=self, portal_type='UTPerson',
             review_state='signedup', id=username)
         return len(brains) != 0
+
+    def isRegistrationExpired(self):
+        now = DateTime()
+        return (self.expires <= now)
 
 
 # set id & title on creation and change

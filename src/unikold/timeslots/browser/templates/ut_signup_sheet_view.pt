@@ -43,7 +43,7 @@
           </tal:block>
 
           <tal:block tal:condition="not:state">
-            <tal:block tal:condition="not:timeSlot/expired">
+            <tal:block tal:condition="not:timeSlot/isRegistrationExpired">
               <tal:block tal:condition="not:full">
                 <input tal:condition="isSingleTimeSlot" type="radio" name="slotSelection"
                        tal:attributes="value timeSlot/getIDLabel" checked />
@@ -54,7 +54,7 @@
               </tal:block>
               <span tal:condition="full" i18n:translate="">Full</span>
             </tal:block>
-            <span tal:condition="timeSlot/expired"
+            <span tal:condition="timeSlot/isRegistrationExpired"
               i18n:translate="" i18n:attributes="title" title="Registration expired"
             >(expired)</span>
           </tal:block>

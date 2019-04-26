@@ -25,11 +25,8 @@ class UTDay(Container):
         brains = api.content.find(context=self, portal_type='UTTimeslot', depth=1)
 
         timeSlots = []
-        now = DateTime()
         for brain in brains:
-            obj = brain.getObject()
-            obj.expired = (not brain.expires > now)
-            timeSlots.append(obj)
+            timeSlots.append(brain.getObject())
 
         timeSlots = sorted(timeSlots, key=lambda slot: slot.startTime)
 
