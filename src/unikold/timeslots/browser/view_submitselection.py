@@ -16,7 +16,7 @@ from zope.i18n import translate
 
 class SubmitSelection(BrowserView):
 
-    resultTemplate = ZopeTwoPageTemplateFile('templates/submitselection.pt')
+    resultTemplate = ZopeTwoPageTemplateFile('templates/view_submitselection.pt')
 
     def __init__(self, context, request):
         self.context = context

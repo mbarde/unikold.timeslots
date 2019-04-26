@@ -27,7 +27,8 @@
               <span tal:condition="python: state == 'unconfirmed'">
                 (<span i18n:translate="unconfirmed"/>)
               </span>
-              <span tal:condition="python: state == 'signedoff'" i18n:attributes="title signedoff_title" >
+              <span tal:condition="python: state == 'signedoff'"
+                    i18n:attributes="title" title="Your registration has been canceled">
                 ( <i class="fa fa-exclamation-triangle"></i> <span i18n:translate="signedoff"/> )
               </span>
             </td>

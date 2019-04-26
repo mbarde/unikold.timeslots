@@ -53,7 +53,7 @@
   <browser:page
       for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
       name="show-reservations"
-      template="templates/showreservations.pt"
+      template="templates/view_showreservations.pt"
       class=".views.ShowReservationsView"
       permission="zope2.View"
       />
