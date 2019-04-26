@@ -45,7 +45,7 @@
   <browser:page
       for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
       name="submit-user-selection"
-      class=".submitselection.SubmitSelection"
+      class=".view_submitselection.SubmitSelection"
       attribute="submitUserSelection"
       permission="zope2.View"
       />
@@ -55,6 +55,14 @@
       name="show-reservations"
       template="templates/showreservations.pt"
       class=".views.ShowReservationsView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+      name="cancel-reservation"
+      class=".view_cancelreservation.CancelReservation"
+      attribute="cancelReservation"
       permission="zope2.View"
       />
 

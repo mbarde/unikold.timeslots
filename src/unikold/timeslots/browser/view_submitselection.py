@@ -122,7 +122,7 @@ class SubmitSelection(BrowserView):
         timeSlot = day.getTimeSlot(time, True)
         slotTitleLabel = timeSlot.getLabel()
         allowWaitingList = timeSlot.allowWaitingList
-        numberOfAvailableSpots = timeSlot.getNumberOfAvailableSlots()
+        numberOfAvailableSlots = timeSlot.getNumberOfAvailableSlots()
 
         if (not allowSignupForMultipleSlots) and self.context.countSlotsByUsername(self.email) > 0:
             error = _('You are already signed up for a slot in this signup sheet.')
@@ -130,16 +130,16 @@ class SubmitSelection(BrowserView):
         elif timeSlot.isUserSignedUpForThisSlot(self.email):
             error = _('You are already signed up for this slot.')
 
-        elif allowWaitingList or numberOfAvailableSpots > 0:
+        elif allowWaitingList or numberOfAvailableSlots > 0:
             person = self.createPersonObject(timeSlot)
 
-            if numberOfAvailableSpots > 0:
+            if numberOfAvailableSlots > 0:
                 if self.context.signupsRequireConfirmation:
                     if self.isEmailValid():
                         self.sendWaitForConfirmationEmail(self.context, slotTitleLabel, person)
                         status = 'unconfirmed'
                 else:
-                    # sign up user directly if there are available spots and
+                    # sign up user directly if there are available slots and
                     # no confirmation by the manager is required
                     self.signupPerson(person)
                     status = 'signedup'

@@ -236,10 +236,10 @@ def attemptToFillEmptySpot(obj):
     signupSheet = day.aq_parent
 
     if signupSheet.enableAutoMovingUpFromWaitingList:
-        # to make sure timeslot.getNumberOfAvailableSpots() returns current value
+        # to make sure timeslot.getNumberOfAvailableSlots() returns current value
         obj.reindexObject()
 
-        if timeSlot.getNumberOfAvailableSpots() > 0:
+        if timeSlot.getNumberOfAvailableSlots() > 0:
             portal_catalog = api.portal.get_tool('portal_catalog')
             query = {'portal_type': 'TimeslotPerson', 'review_state': 'waiting',
                      'sort_on': 'Date', 'sort_order': 'ascending'}
