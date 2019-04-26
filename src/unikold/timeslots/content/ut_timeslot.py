@@ -60,7 +60,8 @@ class UTTimeslot(Container):
         return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
 
     def getNumberOfAvailableSlots(self):
-        brains = self.getFolderContents()
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', review_state='signedup', path=self.getPath())
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
@@ -88,6 +89,9 @@ class UTTimeslot(Container):
     def isRegistrationExpired(self):
         now = DateTime()
         return (self.expires <= now)
+
+    def getPath(self):
+        return '/'.join(self.getPhysicalPath())
 
 
 # set id & title on creation and change
