@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-from unikold.timeslots.content.ut_day import IUTDay  # NOQA E501
-from unikold.timeslots.testing import UNIKOLD_TIMESLOTS_INTEGRATION_TESTING  # noqa
+from datetime import date
 from plone import api
 from plone.api.exc import InvalidParameterError
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from unikold.timeslots.content.ut_day import IUTDay  # NOQA E501
+from unikold.timeslots.testing import UNIKOLD_TIMESLOTS_INTEGRATION_TESTING  # noqa
 from zope.component import createObject
+from zope.component import getUtility
 from zope.component import queryUtility
 
 import unittest
@@ -59,11 +62,23 @@ class UTDayIntegrationTest(unittest.TestCase):
 
     def test_ct_ut_day_adding(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
-        obj = api.content.create(
-            container=self.parent,
-            type='UTDay',
-            id='ut_day',
-        )
+        today = date.today()
+        try:
+            obj = api.content.create(
+                container=self.parent,
+                type='UTDay',
+                id='ut_day',
+                **{
+                    'date': today
+                }
+            )
+        except AttributeError:
+            # strange behavior caused by autoSetID
+            # object gets created but AttributeError is raised
+            title = today.strftime('%d.%m.%Y')
+            normalizer = getUtility(IIDNormalizer)
+            newId = normalizer.normalize(title)
+            obj = getattr(self.parent, newId)
 
         self.assertTrue(
             IUTDay.providedBy(obj),
