@@ -59,6 +59,11 @@ class UTTimeslot(Container):
     def getTimeRange(self):
         return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
 
+    def getPersons(self):
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', path=self.getPath())
+        return map(lambda x: x.getObject(), brains)
+
     def getNumberOfAvailableSlots(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
             portal_type='UTPerson', review_state='signedup', path=self.getPath())

@@ -12,6 +12,10 @@
             <i class="fa fa-pencil-square-o" aria-hidden="true"
               i18n:attributes="title" title="Edit"></i>
           </a>
+          <a tal:attributes="href string:${timeSlot/absolute_url}/view">
+            <i class="fa fa-eye" aria-hidden="true"
+              i18n:attributes="title" title="View"></i>
+          </a>
         </td>
         <td tal:condition="showSlotNames">
           <strong><span tal:content="timeSlot/name" /></strong>
