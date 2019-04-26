@@ -224,27 +224,31 @@
     </tal:hide-date-time-view>
 
     <div class="field" tal:condition="context/askForPersonTitle">
-      <label for="selectPersonTitle" i18n:translate="">Title of the person</label>
-      <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span><br/>
+      <label for="selectPersonTitle" i18n:translate="">Title of the person
+        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
+      </label><br/>
       <select id="selectPersonTitle" name="selectPersonTitle">
-        <option tal:repeat="option context/getPersonTitleVocabulary" tal:content="option"></option>
+        <option tal:repeat="option context/getPersonTitleVocabulary" tal:content="option/value"></option>
       </select>
     </div>
 
     <div class="field">
-      <label for="inputPrename" i18n:translate="Prename">Your prename</label>
-      <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span><br/>
+      <label for="inputPrename" i18n:translate="Prename">Your prename
+        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
+      </label><br/>
       <input id="inputPrename" name="inputPrename" type="text" i18n:attributes="placeholder Prename" />
     </div>
     <div class="field">
-      <label for="inputSurname" i18n:translate="Surname">Your surname</label>
-      <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span><br/>
+      <label for="inputSurname" i18n:translate="Surname">Your surname
+        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
+      </label><br/>
       <input id="inputSurname" name="inputSurname" type="text" i18n:attributes="placeholder Surname" />
     </div>
     <div class="field">
-      <label for="inputEmail" i18n:translate="Your email address">Your email address</label>
-      <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span><br/>
-       <input id="inputEmail" class="form-control" name="inputEmail" type="email" placeholder="E-Mail" />
+      <label for="inputEmail" i18n:translate="Your email address">Your email address
+        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
+      </label><br/>
+      <input id="inputEmail" class="form-control" name="inputEmail" type="email" placeholder="E-Mail" />
       <input type="hidden" name="isExternal" value="1"/>
     </div>
 
