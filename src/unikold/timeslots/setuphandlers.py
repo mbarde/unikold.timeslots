@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from plone import api
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
 
@@ -14,8 +15,20 @@ class HiddenProfiles(object):
 
 
 def post_install(context):
-    """Post install script"""
-    # Do something at the end of the installation of this package.
+    # which types to display in navigation?
+    typesInNav = list(api.portal.get_registry_record('plone.displayed_types'))
+
+    whitelist = ['UTSignupSheet']
+    for typeName in whitelist:
+        if typeName not in typesInNav:
+            typesInNav.append(typeName)
+
+    blacklist = ['UTDay', 'UTTimeslot', 'UTPerson']
+    for typeName in blacklist:
+        if typeName in typesInNav:
+            typesInNav.remove(typeName)
+
+    api.portal.set_registry_record('plone.displayed_types', tuple(typesInNav))
 
 
 def uninstall(context):
