@@ -7,6 +7,7 @@ from unikold.timeslots.utils import replaceCustomMailPlaceholders
 from zope.i18n import translate
 
 
+# send notification to user and manager (if `notifyContactInfo` is set)
 def sendSignupNotificationEmail(person):
     isEmail = validation.validatorFor('isEmail')
 
@@ -90,6 +91,7 @@ def sendSignupNotificationEmail(person):
                               subject=subject, body=message)
 
 
+# send notification to user and manager (if `notifyContactInfo` is set)
 def sendWaitingListConfirmationEmail(person):
     isEmail = validation.validatorFor('isEmail')
 
@@ -169,6 +171,7 @@ def sendWaitingListConfirmationEmail(person):
                               subject=subject, body=message)
 
 
+# send notification to user
 def sendSignOffNotification(person):
     isEmail = validation.validatorFor('isEmail')
     timeSlot = person.aq_parent
