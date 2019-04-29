@@ -170,6 +170,10 @@
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
               <span i18n:translate="">Edit</span>
             </a>
+            <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/view">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              <span i18n:translate="">View</span>
+            </a>
             <br style="clear:both"/>
           </div>
 
