@@ -75,14 +75,14 @@ class UTTimeslot(Container):
     def getCurrentUserSignUpState(self):
         curUser = api.user.get_current()
         personId = ploneUserToPersonId(curUser)
-        brains = api.content.find(
-            context=self, portal_type='UTPerson', id=personId)
 
-        if len(brains) == 0:
+        # no need to make use of unrestrictedSearchResults since owner
+        # should be allowed to access his own person object
+        if not hasattr(self, personId):
             return False
 
-        obj = brains[0].getObject()
-        return api.content.get_state(obj)
+        person = getattr(self, personId)
+        return api.content.get_state(person)
 
     def isFull(self):
         return (self.getNumberOfAvailableSlots() == 0
@@ -90,9 +90,9 @@ class UTTimeslot(Container):
 
     def isUserSignedUpForThisSlot(self, email):
         personId = emailToPersonId(email)
-        brains = api.content.find(
-            context=self, portal_type='UTPerson',
-            review_state='signedup', id=personId)
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', review_state='signedup',
+            id=personId, path=self.getPath())
         return len(brains) != 0
 
     def isRegistrationExpired(self):

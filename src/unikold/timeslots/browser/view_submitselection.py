@@ -6,6 +6,7 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.validation import validation
 from unikold.timeslots import _
+from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getPersonTitleVocabulary
 from unikold.timeslots.utils import replaceCustomMailPlaceholders
 from z3c.caching.purge import Purge
@@ -163,7 +164,8 @@ class SubmitSelection(BrowserView):
         # to avoid permitting any permissions for anonymous
         portal_types = api.portal.get_tool('portal_types')
         type_info = portal_types.getTypeInfo('UTPerson')
-        newPerson = type_info._constructInstance(container, self.email)
+        personId = emailToPersonId(self.email)
+        newPerson = type_info._constructInstance(container, personId)
 
         newPerson.personTitle = self.personTitle
         newPerson.email = self.email

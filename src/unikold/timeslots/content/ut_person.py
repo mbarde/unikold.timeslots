@@ -64,6 +64,8 @@ class UTPerson(Item):
 
 # set id & title on creation and modification
 def autoSetID(person, event):
+    if not api.user.has_permission('cmf.ModifyPortalContent', obj=person):
+        return
     title = '{0} {1}'.format(person.prename, person.surname)
     newId = emailToPersonId(person.email)
     if title != person.title or newId != person.id:

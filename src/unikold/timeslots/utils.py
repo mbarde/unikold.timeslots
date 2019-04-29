@@ -53,7 +53,7 @@ def emailToPersonId(email):
 
 # plone user to personId
 def ploneUserToPersonId(user):
-    if api.portal.set_registry_record('plone.use_email_as_login'):
+    if api.portal.get_registry_record('plone.use_email_as_login'):
         # case: email = username
         email = user.getUserName()
     else:

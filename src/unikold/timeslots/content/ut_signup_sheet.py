@@ -151,32 +151,28 @@ class UTSignupSheet(Container):
         brains = api.content.find(context=self, portal_type='UTTimeslot')
         return len(brains)
 
-    def countSlotsByEmail(self, email, review_state=False):
-        personId = emailToPersonId(email)
-
-        if review_state:
+    def getSlotsBrainsByPersonId(self, personId, reviewState):
+        if reviewState:
             brains = self.portal_catalog.unrestrictedSearchResults(
                 portal_type='UTPerson', id=personId,
-                review_state=review_state, path=self.getPath())
+                review_state=reviewState, path=self.getPath())
         else:
             brains = self.portal_catalog.unrestrictedSearchResults(
                 portal_type='UTPerson', id=personId, path=self.getPath())
+        return brains
 
+    def countSlotsByEmail(self, email, reviewState=False):
+        personId = emailToPersonId(email)
+        brains = self.getSlotsBrainsByPersonId(personId, reviewState)
         return len(brains)
 
-    def getSlotsOfCurrentUser(self, review_state=False):
+    def getSlotsOfCurrentUser(self, reviewState=False):
         if api.user.is_anonymous():
             return []
 
         user = api.user.get_current()
         personId = ploneUserToPersonId(user)
-
-        if not review_state:
-            review_state = ''
-
-        brains = self.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', id=personId,
-            review_state=review_state, path=self.getPath())
+        brains = self.getSlotsBrainsByPersonId(personId, reviewState)
 
         slots = []
         today = date.today()

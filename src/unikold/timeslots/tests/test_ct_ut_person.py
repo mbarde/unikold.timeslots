@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 from unikold.timeslots.content.ut_person import IUTPerson  # NOQA E501
 from unikold.timeslots.testing import UNIKOLD_TIMESLOTS_INTEGRATION_TESTING  # noqa
 from plone import api
+from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.dexterity.interfaces import IDexterityFTI
 from unikold.timeslots.utils import emailToPersonId
 from zope.component import createObject
+from zope.component import getUtility
 from zope.component import queryUtility
 
 import unittest
@@ -38,9 +42,15 @@ class UTPersonIntegrationTest(unittest.TestCase):
 
         self.emailManager = 'manager@plone.org'
         self.users = [
-            {'email': 'peter@lustig.org', 'prename': 'Peter', 'surname': 'Lustig'},
-            {'email': 'rick@c137.org', 'prename': 'Rick', 'surname': 'Sanchez'}
+            {'username': 'plustig', 'email': 'peter@lustig.org',
+             'prename': 'Peter', 'surname': 'Lustig'},
+            {'username': 'rsanchez', 'email': 'rick@c137.org',
+             'prename': 'Rick', 'surname': 'Sanchez'}
         ]
+
+        for user in self.users:
+            api.user.create(
+                email=user['email'], username=user['username'])
 
     def test_ct_ut_person_schema(self):
         fti = queryUtility(IDexterityFTI, name='UTPerson')
@@ -144,6 +154,19 @@ class UTPersonIntegrationTest(unittest.TestCase):
         self.assertWfState('signedoff', person)
         self.assertWfState('signedup', person2)
 
+        self.assertEqual(signupsheet.getSlotsOfCurrentUser(), [])
+        self.assertEqual(timeslot.getCurrentUserSignUpState(), False)
+
+        login(self.portal, self.users[0]['username'])
+        self.assertEqual(len(signupsheet.getSlotsOfCurrentUser()), 1)
+        self.assertEqual(timeslot.getCurrentUserSignUpState(), 'signedoff')
+        self.assertFalse(timeslot.isUserSignedUpForThisSlot(self.users[0]['email']))
+
+        login(self.portal, self.users[1]['username'])
+        self.assertEqual(len(signupsheet.getSlotsOfCurrentUser()), 1)
+        self.assertEqual(timeslot.getCurrentUserSignUpState(), 'signedup')
+        self.assertTrue(timeslot.isUserSignedUpForThisSlot(self.users[1]['email']))
+
     def test_ct_ut_person_globally_not_addable(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
         fti = queryUtility(IDexterityFTI, name='UTPerson')
@@ -181,11 +204,24 @@ class UTPersonIntegrationTest(unittest.TestCase):
                 'notifyContactInfo': True
             }
         )
-        day = api.content.create(
-            container=signupsheet,
-            type='UTDay',
-            id='ut_day',
-        )
+        today = date.today()
+        try:
+            day = api.content.create(
+                container=signupsheet,
+                type='UTDay',
+                id='ut_day',
+                **{
+                    'date': today
+                }
+            )
+        except AttributeError:
+            # strange behavior caused by autoSetID
+            # object is created but AttributeError is raised
+            title = today.strftime('%d.%m.%Y')
+            normalizer = getUtility(IIDNormalizer)
+            newId = normalizer.normalize(title)
+            day = getattr(signupsheet, newId)
+
         timeslot = api.content.create(
             container=day,
             type='UTTimeslot',
