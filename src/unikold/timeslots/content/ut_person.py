@@ -68,6 +68,11 @@ def autoSetID(person, event):
     # only managers are allowed to create / modify persons via forms
     if not api.user.has_permission('cmf.ModifyPortalContent', obj=person):
         return
+    if person.email is None \
+       or person.prename is None \
+       or person.surname is None:
+        return
+
     title = u'{0} {1}'.format(person.prename, person.surname)
     newId = emailToPersonId(person.email)
     if title != person.title or newId != person.id:
