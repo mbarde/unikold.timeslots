@@ -35,8 +35,11 @@ class UTPersonIntegrationTest(unittest.TestCase):
         )
         self.parent = self.portal[parent_id]
 
-        self.emailUser = 'user@plone.org'
         self.emailManager = 'manager@plone.org'
+        self.users = [
+            {'email': 'peter@lustig.org', 'prename': 'Peter', 'surname': 'Lustig'},
+            {'email': 'rick@c137.org', 'prename': 'Rick', 'surname': 'Sanchez'}
+        ]
 
     def test_ct_ut_person_schema(self):
         fti = queryUtility(IDexterityFTI, name='UTPerson')
@@ -76,70 +79,70 @@ class UTPersonIntegrationTest(unittest.TestCase):
 
     def test_notifications(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
-
-        # build full `stack`: [Signup Sheet] -> [Day] -> [Timeslot] -> [Person]
-        signupsheet = api.content.create(
-            container=self.portal,
-            type='UTSignupSheet',
-            id='ut_signup_sheet',
-            **{
-                'contactInfo': self.emailManager,
-                'notifyContactInfo': True
-            }
-        )
-        day = api.content.create(
-            container=signupsheet,
-            type='UTDay',
-            id='ut_day',
-        )
-        timeslot = api.content.create(
-            container=day,
-            type='UTTimeslot',
-            id='ut_timeslot',
-        )
-        obj = api.content.create(
-            container=timeslot,
-            type='UTPerson',
-            id='ut_person',
-            **{
-                'email': self.emailUser,
-                'prename': 'Peter',
-                'surname': 'Lustig'
-            }
-        )
+        (signupsheet, day, timeslot, person) = self.createFullStack()
 
         self.assertEqual(len(self.portal.MailHost.messages), 0)
-        actualState = api.content.get_state(obj)
-        self.assertEqual('unconfirmed', actualState)
-        api.content.transition(obj=obj, transition='signoff')
-        self.assertNewMailContains(self.emailUser, ['Cancellation', 'Notification'])
+        self.assertWfState('unconfirmed', person)
+        api.content.transition(obj=person, transition='signoff')
+        self.assertNewMailContains(self.users[0]['email'], ['Cancellation', 'Notification'])
+        self.assertEqual(timeslot.getNumberOfAvailableSlots(), 1)
 
-        actualState = api.content.get_state(obj)
-        self.assertEqual('signedoff', actualState)
-        api.content.transition(obj=obj, transition='putOnWaitingList')
+        self.assertWfState('signedoff', person)
+        api.content.transition(obj=person, transition='putOnWaitingList')
         self.assertEqual(len(self.portal.MailHost.messages), 2)
         self.assertNewMailContains(
-            self.emailUser, ['Waiting', 'List', 'Confirmation'],
+            self.users[0]['email'], ['Waiting', 'List', 'Confirmation'],
             self.portal.MailHost.messages[0])
         self.assertNewMailContains(
             self.emailManager, ['Waiting', 'List', 'Notification'],
             self.portal.MailHost.messages[1])
         self.portal.MailHost.messages = []
+        self.assertEqual(timeslot.getNumberOfAvailableSlots(), 1)
 
-        actualState = api.content.get_state(obj)
-        self.assertEqual('waiting', actualState)
-        api.content.transition(obj=obj, transition='signup')
+        self.assertWfState('waiting', person)
+        api.content.transition(obj=person, transition='signup')
         self.assertEqual(len(self.portal.MailHost.messages), 2)
         self.assertNewMailContains(
-            self.emailUser, ['Registration', 'Confirmation'],
+            self.users[0]['email'], ['Registration', 'Confirmation'],
             self.portal.MailHost.messages[0])
         self.assertNewMailContains(
             self.emailManager, ['Registration', 'Notification'],
             self.portal.MailHost.messages[1])
         self.portal.MailHost.messages = []
+        self.assertEqual(timeslot.getNumberOfAvailableSlots(), 0)
 
-        actualState = api.content.get_state(obj)
-        self.assertEqual('signedup', actualState)
+        self.assertWfState('signedup', person)
+
+    def test_waiting_list(self):
+        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        (signupsheet, day, timeslot, person) = self.createFullStack()
+        self.assertTrue(signupsheet.enableAutoMovingUpFromWaitingList)
+        self.assertEqual(timeslot.maxCapacity, 1)
+
+        person2 = api.content.create(
+            container=timeslot,
+            type='UTPerson',
+            id='ut_person',
+            safe_id=True,
+            **{
+                'email': self.users[1]['email'],
+                'prename': self.users[1]['prename'],
+                'surname': self.users[1]['surname']
+            }
+        )
+
+        api.content.transition(obj=person, transition='signup')
+        api.content.transition(obj=person2, transition='putOnWaitingList')
+        self.assertEqual(timeslot.getNumberOfAvailableSlots(), 0)
+
+        self.assertWfState('signedup', person)
+        self.assertWfState('waiting', person2)
+
+        #  signedup person gets signed off -> person from waiting list
+        #                                     should become signed up
+        api.content.transition(obj=person, transition='signoff')
+        self.assertWfState('signedoff', person)
+        self.assertWfState('signedup', person2)
 
     def test_ct_ut_person_globally_not_addable(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
@@ -163,3 +166,43 @@ class UTPersonIntegrationTest(unittest.TestCase):
 
         if clearAll:
             self.portal.MailHost.messages = []
+
+    # create full `stack`: [Signup Sheet] -> [Day] -> [Timeslot] -> [Person]
+    def createFullStack(self, container=False):
+        if container is False:
+            container = self.portal
+
+        signupsheet = api.content.create(
+            container=container,
+            type='UTSignupSheet',
+            id='ut_signup_sheet',
+            **{
+                'contactInfo': self.emailManager,
+                'notifyContactInfo': True
+            }
+        )
+        day = api.content.create(
+            container=signupsheet,
+            type='UTDay',
+            id='ut_day',
+        )
+        timeslot = api.content.create(
+            container=day,
+            type='UTTimeslot',
+            id='ut_timeslot'
+        )
+        person = api.content.create(
+            container=timeslot,
+            type='UTPerson',
+            id='ut_person',
+            **{
+                'email': self.users[0]['email'],
+                'prename': self.users[0]['prename'],
+                'surname': self.users[0]['surname']
+            }
+        )
+        return (signupsheet, day, timeslot, person)
+
+    def assertWfState(self, state, object):
+        actualState = api.content.get_state(object)
+        self.assertEqual(state, actualState)

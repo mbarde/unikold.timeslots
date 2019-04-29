@@ -74,7 +74,7 @@ class UTDayIntegrationTest(unittest.TestCase):
             )
         except AttributeError:
             # strange behavior caused by autoSetID
-            # object gets created but AttributeError is raised
+            # object is created but AttributeError is raised
             title = today.strftime('%d.%m.%Y')
             normalizer = getUtility(IIDNormalizer)
             newId = normalizer.normalize(title)
@@ -86,6 +86,8 @@ class UTDayIntegrationTest(unittest.TestCase):
                 obj.id,
             ),
         )
+
+        self.assertEqual(obj.getTimeSlots(), [])
 
     def test_ct_ut_day_globally_not_addable(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])

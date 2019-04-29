@@ -35,7 +35,8 @@ class IUTSignupSheet(model.Schema):
 
     signupsRequireConfirmation = schema.Bool(
         title=_(u'Manager has to confirm signups'),
-        description=_(u'Signups have to be confirmed by the manager (can also be rejected).')
+        description=_(u'Signups have to be confirmed by the manager (can also be rejected).'),
+        default=False
     )
 
     allowSignupForExternals = schema.Bool(

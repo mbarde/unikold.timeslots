@@ -59,11 +59,18 @@ class UTTimeslotIntegrationTest(unittest.TestCase):
 
     def test_ct_ut_timeslot_adding(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        maxCapacity = 42
         obj = api.content.create(
             container=self.parent,
             type='UTTimeslot',
             id='ut_timeslot',
+            **{
+                'maxCapacity': maxCapacity
+            }
         )
+
+        self.assertEqual(obj.getNumberOfAvailableSlots(), maxCapacity)
+        self.assertFalse(obj.isFull())
 
         self.assertTrue(
             IUTTimeslot.providedBy(obj),

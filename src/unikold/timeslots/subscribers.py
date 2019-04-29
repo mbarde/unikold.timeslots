@@ -241,7 +241,7 @@ def attemptToFillEmptySpot(obj):
 
         if timeSlot.getNumberOfAvailableSlots() > 0:
             portal_catalog = api.portal.get_tool('portal_catalog')
-            query = {'portal_type': 'TimeslotPerson', 'review_state': 'waiting',
+            query = {'portal_type': 'UTPerson', 'review_state': 'waiting',
                      'sort_on': 'Date', 'sort_order': 'ascending'}
             brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.getPath())
             if len(brains) > 0:
