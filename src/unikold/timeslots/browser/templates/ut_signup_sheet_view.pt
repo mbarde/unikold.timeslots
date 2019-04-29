@@ -136,7 +136,7 @@
             <a tal:attributes="href python: '#tab-' + str(index)"
                 data-toggle="tab">
                 <span tal:replace="python: monthTranslations[month]"></span>
-                <span tal:replace="python: str( mDays[month][0].date.year() )"></span>
+                <span tal:replace="python: str( mDays[month][0].date.year )"></span>
             </a>
         </li>
         </tal:block>
