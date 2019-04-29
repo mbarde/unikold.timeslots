@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from plone import api
 from plone.dexterity.content import Item
+from plone.locking.interfaces import ILockable
 from plone.supermodel import model
 from unikold.timeslots import _
 from unikold.timeslots.utils import emailToPersonId
@@ -64,11 +65,18 @@ class UTPerson(Item):
 
 # set id & title on creation and modification
 def autoSetID(person, event):
+    # only managers are allowed to create / modify persons via forms
     if not api.user.has_permission('cmf.ModifyPortalContent', obj=person):
         return
-    title = '{0} {1}'.format(person.prename, person.surname)
+    title = u'{0} {1}'.format(person.prename, person.surname)
     newId = emailToPersonId(person.email)
     if title != person.title or newId != person.id:
+        lockable = ILockable(person)
+        if lockable.locked():
+            if not lockable.can_safely_unlock():
+                # can not modify locked object
+                return
+            lockable.unlock()
         person.title = title
         api.content.rename(obj=person, new_id=newId, safe_id=True)
         person.reindexObject()

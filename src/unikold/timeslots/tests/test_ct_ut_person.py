@@ -230,19 +230,16 @@ class UTPersonIntegrationTest(unittest.TestCase):
         person = self.createPerson(timeslot, self.users[0])
         return (signupsheet, day, timeslot, person)
 
+    # emulate behavior when user is created via sign up form
     def createPerson(self, container, data):
-        try:
-            obj = api.content.create(
-                container=container,
-                type='UTPerson',
-                id=data['email'],
-                **data
-            )
-        except AttributeError:
-            # strange behavior caused by autoSetID
-            # object is created but AttributeError is raised
-            obj = getattr(container, emailToPersonId(data['email']))
-
+        obj = api.content.create(
+            container=container,
+            type='UTPerson',
+            id=emailToPersonId(data['email']),
+            **data
+        )
+        obj.title = u'{0} {1}'.format(obj.prename, obj.surname)
+        obj.reindexObject()
         return obj
 
     def assertWfState(self, state, object):

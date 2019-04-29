@@ -3,6 +3,7 @@ from DateTime import DateTime
 from plone import api
 from plone.dexterity.content import Container
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.locking.interfaces import ILockable
 from plone.supermodel import model
 from unikold.timeslots import _
 from unikold.timeslots.utils import emailToPersonId
@@ -52,14 +53,14 @@ class UTTimeslot(Container):
         if signupSheet.hideDateTime:
             return self.getName()
         else:
-            return '{0} @ {1}'.format(parentDay.Title(), self.Title())
+            return u'{0} @ {1}'.format(parentDay.Title(), self.Title())
 
     def getIDLabel(self):
         parentDay = self.aq_parent
-        return '{0} @ {1}'.format(parentDay.id, self.id)
+        return u'{0} @ {1}'.format(parentDay.id, self.id)
 
     def getTimeRange(self):
-        return '{0} - {1}'.format(str(self.startTime), str(self.endTime))
+        return u'{0} - {1}'.format(str(self.startTime), str(self.endTime))
 
     def getPersons(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
@@ -112,6 +113,12 @@ def autoSetID(timeslot, event):
     normalizer = getUtility(IIDNormalizer)
     newId = normalizer.normalize(title)
     if title != timeslot.title or newId != timeslot.id:
+        lockable = ILockable(timeslot)
+        if lockable.locked():
+            if not lockable.can_safely_unlock():
+                # can not modify locked object
+                return
+            lockable.unlock()
         timeslot.title = title
         api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
         timeslot.reindexObject()

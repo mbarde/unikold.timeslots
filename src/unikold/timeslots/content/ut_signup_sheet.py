@@ -202,7 +202,7 @@ class UTSignupSheet(Container):
     def getDay(self, dayId):
         brains = api.content.find(context=self, portal_type='UTDay', id=dayId)
         if len(brains) == 0:
-            raise ValueError(_('The date {0} was not found.'.format(dayId)))
+            raise ValueError(_(u'The date {0} was not found.'.format(dayId)))
         return brains[0].getObject()
 
     def getDays(self, onlyIncludeUpcomingDays=True):

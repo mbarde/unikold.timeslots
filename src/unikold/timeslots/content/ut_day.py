@@ -3,6 +3,7 @@ from DateTime import DateTime
 from plone import api
 from plone.dexterity.content import Container
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.locking.interfaces import ILockable
 from plone.supermodel import model
 from unikold.timeslots import _
 from zope import schema
@@ -36,12 +37,12 @@ class UTDay(Container):
         brains = api.content.find(
             context=self, portal_type='UTTimeslot', depth=1, id=timeslotId)
         if len(brains) == 0:
-            raise ValueError(_('The TimeSlot {0} was not found.'.format(timeslotId)))
+            raise ValueError(_(u'The TimeSlot {0} was not found.'.format(timeslotId)))
 
         if checkExpirationDate:
             now = DateTime()
             if (not brains[0].expires > now):
-                raise ValueError(_('The TimeSlot {0} was not found.'.format(timeslotId)))
+                raise ValueError(_(u'The TimeSlot {0} was not found.'.format(timeslotId)))
 
         timeSlot = brains[0].getObject()
         return timeSlot
@@ -56,6 +57,12 @@ def autoSetID(day, event):
     normalizer = getUtility(IIDNormalizer)
     newId = normalizer.normalize(title)
     if title != day.title or newId != day.id:
+        lockable = ILockable(day)
+        if lockable.locked():
+            if not lockable.can_safely_unlock():
+                # can not modify locked object
+                return
+            lockable.unlock()
         day.title = title
         api.content.rename(obj=day, new_id=newId, safe_id=True)
         day.reindexObject()

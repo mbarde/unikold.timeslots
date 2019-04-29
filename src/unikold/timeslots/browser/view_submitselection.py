@@ -169,7 +169,7 @@ class SubmitSelection(BrowserView):
 
         newPerson.personTitle = self.personTitle
         newPerson.email = self.email
-        newPerson.title = '{0} {1}'.format(self.prename, self.surname)
+        newPerson.title = u'{0} {1}'.format(self.prename, self.surname)
         newPerson.prename = self.prename
         newPerson.surname = self.surname
 
@@ -207,7 +207,7 @@ class SubmitSelection(BrowserView):
         for (fieldStr, fieldTrans) in self.extra_fields():
             value = getattr(self, fieldStr, '')
             if len(value) > 0:
-                extraInfoStr += '{0}: {1}\n'.format(
+                extraInfoStr += u'{0}: {1}\n'.format(
                     translate(fieldTrans, target_language=lang), value)
 
         # mail to person who signed up to waiting list
@@ -217,7 +217,7 @@ class SubmitSelection(BrowserView):
 
         subject = signupSheet.getEmailWaitForConfirmationSubject()
         if len(subject) == 0:
-            subject = '{0} - {1}'.format(
+            subject = u'{0} - {1}'.format(
                 signupSheet.Title(),
                 translate(_('Wait For Confirmation'), target_language=lang))
         else:
@@ -255,7 +255,7 @@ class SubmitSelection(BrowserView):
             toEmail = contactInfo
             fromEmail = signupSheet.getContactInfo()
 
-            subject = '{0} - {1}'.format(
+            subject = u'{0} - {1}'.format(
                 signupSheet.Title(),
                 translate(_('Wait For Confirmation'), target_language=lang))
 
