@@ -51,7 +51,7 @@ class CancelReservation(BrowserView):
         message += translate(_(u'E-Mail'), target_language=lang) + ': ' + email + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'
+            message += translate(_(u'Additional information'), target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 
         api.portal.send_email(recipient=toEmail, sender=fromEmail,

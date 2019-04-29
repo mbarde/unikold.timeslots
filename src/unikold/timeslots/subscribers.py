@@ -53,7 +53,7 @@ def sendSignupNotificationEmail(person):
         message += timeSlot.getLabel() + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'),
+            message += translate(_(u'Additional information'),
                                  target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 
@@ -82,7 +82,7 @@ def sendSignupNotificationEmail(person):
         message += translate(_(u'E-Mail'), target_language=lang) + ': ' + person.email + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'
+            message += translate(_(u'Additional information'), target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 
         message += '\nURL: ' + person.absolute_url() + '\n\n'
@@ -134,7 +134,7 @@ def sendWaitingListConfirmationEmail(person):
         message += timeSlot.getLabel() + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'),
+            message += translate(_(u'Additional information'),
                                  target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 
@@ -162,7 +162,7 @@ def sendWaitingListConfirmationEmail(person):
         message += translate(_(u'E-Mail'), target_language=lang) + ': ' + person.email + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'
+            message += translate(_(u'Additional information'), target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 
         message += '\nURL: ' + person.absolute_url() + '\n\n'
@@ -216,7 +216,7 @@ def sendSignOffNotification(person):
         message += timeSlot.getLabel() + '\n\n'
 
         if len(extraInfoStr) > 0:
-            message += translate(_(u'timeslot_label_extraInformation'),
+            message += translate(_(u'Additional information'),
                                  target_language=lang) + '\n'
             message += extraInfoStr + '\n\n'
 

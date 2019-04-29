@@ -238,7 +238,7 @@ class SubmitSelection(BrowserView):
             message += translate(_('You will receive another email as soon as your registration has been confirmed (or rejected).'), target_language=lang) + '\n\n'  # noqa: E501
 
             if len(extraInfoStr) > 0:
-                message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'  # noqa: E501
+                message += translate(_(u'Additional information'), target_language=lang) + '\n'  # noqa: E501
                 message += extraInfoStr + '\n\n'
 
             if len(contactInfo) > 0:
@@ -266,7 +266,7 @@ class SubmitSelection(BrowserView):
             message += translate(_(u'E-Mail'), target_language=lang) + ': ' + self.email + '\n\n'
 
             if len(extraInfoStr) > 0:
-                message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'  # noqa: E501
+                message += translate(_(u'Additional information'), target_language=lang) + '\n'  # noqa: E501
                 message += extraInfoStr + '\n\n'
 
             message += '\nURL: ' + person.absolute_url() + '\n\n'

@@ -6,8 +6,8 @@ from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from unikold.timeslots.utils import emailToPersonId
 from zope.component import createObject
 from zope.component import getUtility
