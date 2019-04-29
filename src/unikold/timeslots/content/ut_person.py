@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from plone import api
 from plone.dexterity.content import Item
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
 from unikold.timeslots.utils import getPersonTitleVocabulary
 from zope import schema
@@ -58,3 +60,13 @@ class UTPerson(Item):
             if value:
                 extraInfo.append(_(field['label']) + ': ' + value)
         return '\n'.join(extraInfo)
+
+
+# set id & title on creation and modification
+def autoSetID(person, event):
+    title = '{0} {1}'.format(person.prename, person.surname)
+    newId = emailToPersonId(person.email)
+    if title != person.title or newId != person.id:
+        person.title = title
+        api.content.rename(obj=person, new_id=newId, safe_id=True)
+        person.reindexObject()

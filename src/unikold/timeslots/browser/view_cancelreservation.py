@@ -4,6 +4,7 @@ from Products.CMFPlone.interfaces import ILanguage
 from Products.Five import BrowserView
 from Products.validation import validation
 from unikold.timeslots import _
+from unikold.timeslots.utils import ploneUserToPersonId
 from z3c.caching.purge import Purge
 from zope.event import notify
 from zope.i18n import translate
@@ -17,7 +18,7 @@ class CancelReservation(BrowserView):
 
     # notification for manager at this point (and not in subscribers.py)
     # since we only want to inform the manager if user signed off on his own
-    def sendCancellationNotification(self, timeSlot, username, fullname,
+    def sendCancellationNotification(self, timeSlot, email, fullname,
                                      extraInfoStr, isOnWaitingList):
         day = timeSlot.aq_parent
         signupSheet = day.aq_parent
@@ -47,7 +48,7 @@ class CancelReservation(BrowserView):
         message += timeSlot.getLabel() + '\n\n'
 
         message += translate(_(u'Name'), target_language=lang) + ': ' + fullname + '\n'
-        message += translate(_(u'E-Mail'), target_language=lang) + ': ' + username + '\n\n'
+        message += translate(_(u'E-Mail'), target_language=lang) + ': ' + email + '\n\n'
 
         if len(extraInfoStr) > 0:
             message += translate(_(u'timeslot_label_extraInformation'), target_language=lang) + '\n'
@@ -71,7 +72,8 @@ class CancelReservation(BrowserView):
         self.request.response.redirect(self.context.absolute_url() + '/@@show-reservations')
 
     def signOffCurrentUserFromSlot(self, slot):
-        username = api.user.get_current().getUserName()
+        curUser = api.user.get_current()
+        personId = ploneUserToPersonId(curUser)
 
         (date, time) = slot.split(' @ ')
         day = self.context.getDay(date)
@@ -81,7 +83,7 @@ class CancelReservation(BrowserView):
         # to be able to include this infromation in the mail to the manager
         timeSlotPath = '/'.join(timeSlot.getPhysicalPath())
         brains = self.context.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', id=username, path=timeSlotPath)
+            portal_type='UTPerson', id=personId, path=timeSlotPath)
         person = brains[0].unrestrictedTraverse(brains[0].getPath())
 
         extraInfoStr = person.getExtraInfoAsString()
@@ -99,4 +101,4 @@ class CancelReservation(BrowserView):
         person.reindexObject()
 
         self.sendCancellationNotification(
-            timeSlot, username, person.Title(), extraInfoStr, isOnWaitingList)
+            timeSlot, person.email, person.Title(), extraInfoStr, isOnWaitingList)

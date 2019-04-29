@@ -5,6 +5,8 @@ from plone.dexterity.content import Container
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import emailToPersonId
+from unikold.timeslots.utils import ploneUserToPersonId
 from zope import schema
 from zope.component import getUtility
 from zope.interface import implementer
@@ -71,9 +73,10 @@ class UTTimeslot(Container):
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
     def getCurrentUserSignUpState(self):
-        username = api.user.get_current().getUserName()
+        curUser = api.user.get_current()
+        personId = ploneUserToPersonId(curUser)
         brains = api.content.find(
-            context=self, portal_type='UTPerson', id=username)
+            context=self, portal_type='UTPerson', id=personId)
 
         if len(brains) == 0:
             return False
@@ -85,10 +88,11 @@ class UTTimeslot(Container):
         return (self.getNumberOfAvailableSlots() == 0
                 and not self.allowWaitingList)
 
-    def isUserSignedUpForThisSlot(self, username):
+    def isUserSignedUpForThisSlot(self, email):
+        personId = emailToPersonId(email)
         brains = api.content.find(
             context=self, portal_type='UTPerson',
-            review_state='signedup', id=username)
+            review_state='signedup', id=personId)
         return len(brains) != 0
 
     def isRegistrationExpired(self):
@@ -99,7 +103,7 @@ class UTTimeslot(Container):
         return '/'.join(self.getPhysicalPath())
 
 
-# set id & title on creation and change
+# set id & title on creation and modification
 def autoSetID(timeslot, event):
     if timeslot.startTime is None or timeslot.endTime is None:
         return

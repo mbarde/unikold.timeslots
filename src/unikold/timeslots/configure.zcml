@@ -54,7 +54,7 @@
       handler=".content.ut_day.autoSetID"
     />
 
-  <!-- set timeslot id & title manually on creation and change -->
+  <!-- set timeslot id & title manually on creation and modification -->
   <subscriber
       for=".content.ut_timeslot.IUTTimeslot
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
@@ -64,6 +64,30 @@
       for=".content.ut_timeslot.IUTTimeslot
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".content.ut_timeslot.autoSetID"
+    />
+
+  <!-- set timeslot id & title manually on creation and modification -->
+  <subscriber
+      for=".content.ut_timeslot.IUTTimeslot
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".content.ut_timeslot.autoSetID"
+    />
+  <subscriber
+      for=".content.ut_timeslot.IUTTimeslot
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".content.ut_timeslot.autoSetID"
+    />
+
+  <!-- set person id & title manually on creation and modification -->
+  <subscriber
+      for=".content.ut_person.IUTPerson
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".content.ut_person.autoSetID"
+    />
+  <subscriber
+      for=".content.ut_person.IUTPerson
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".content.ut_person.autoSetID"
     />
 
   <!-- send out emails on workflow actions for persons

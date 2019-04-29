@@ -5,6 +5,7 @@ from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
+from unikold.timeslots.utils import emailToPersonId
 from zope.component import createObject
 from zope.component import queryUtility
 
@@ -64,11 +65,11 @@ class UTPersonIntegrationTest(unittest.TestCase):
 
     def test_ct_ut_person_adding(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
-        obj = api.content.create(
-            container=self.parent,
-            type='UTPerson',
-            id='ut_person',
-        )
+        obj = self.createPerson(self.parent, self.users[0])
+
+        self.assertEqual(obj.id, emailToPersonId(self.users[0]['email']))
+        title = self.users[0]['prename'] + ' ' + self.users[0]['surname']
+        self.assertEqual(obj.Title(), title)
 
         self.assertTrue(
             IUTPerson.providedBy(obj),
@@ -110,8 +111,17 @@ class UTPersonIntegrationTest(unittest.TestCase):
             self.portal.MailHost.messages[1])
         self.portal.MailHost.messages = []
         self.assertEqual(timeslot.getNumberOfAvailableSlots(), 0)
-
         self.assertWfState('signedup', person)
+
+        self.assertEqual(
+            signupsheet.countSlotsByEmail(self.users[0]['email']),
+            1)
+        self.assertEqual(
+            signupsheet.countSlotsByEmail(self.users[0]['email'], 'signedup'),
+            1)
+        self.assertEqual(
+            signupsheet.countSlotsByEmail(self.users[0]['email'], 'signedoff'),
+            0)
 
     def test_waiting_list(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
@@ -119,17 +129,7 @@ class UTPersonIntegrationTest(unittest.TestCase):
         self.assertTrue(signupsheet.enableAutoMovingUpFromWaitingList)
         self.assertEqual(timeslot.maxCapacity, 1)
 
-        person2 = api.content.create(
-            container=timeslot,
-            type='UTPerson',
-            id='ut_person',
-            safe_id=True,
-            **{
-                'email': self.users[1]['email'],
-                'prename': self.users[1]['prename'],
-                'surname': self.users[1]['surname']
-            }
-        )
+        person2 = self.createPerson(timeslot, self.users[1])
 
         api.content.transition(obj=person, transition='signup')
         api.content.transition(obj=person2, transition='putOnWaitingList')
@@ -191,17 +191,23 @@ class UTPersonIntegrationTest(unittest.TestCase):
             type='UTTimeslot',
             id='ut_timeslot'
         )
-        person = api.content.create(
-            container=timeslot,
-            type='UTPerson',
-            id='ut_person',
-            **{
-                'email': self.users[0]['email'],
-                'prename': self.users[0]['prename'],
-                'surname': self.users[0]['surname']
-            }
-        )
+        person = self.createPerson(timeslot, self.users[0])
         return (signupsheet, day, timeslot, person)
+
+    def createPerson(self, container, data):
+        try:
+            obj = api.content.create(
+                container=container,
+                type='UTPerson',
+                id=data['email'],
+                **data
+            )
+        except AttributeError:
+            # strange behavior caused by autoSetID
+            # object is created but AttributeError is raised
+            obj = getattr(container, emailToPersonId(data['email']))
+
+        return obj
 
     def assertWfState(self, state, object):
         actualState = api.content.get_state(object)

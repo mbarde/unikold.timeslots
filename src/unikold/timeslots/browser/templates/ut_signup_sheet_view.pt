@@ -74,7 +74,7 @@
                                 hideDateTime context/hideDateTime;
                                 isSignupAllowed python: allowSignupForExternals or isUserLogged;
                                 showSlotNames context/showSlotNames;
-                                userAlreadySubmitted python: context.countSlotsByUsername() > 0;
+                                userAlreadySubmitted python: context.countSlotsOfCurrentUser() > 0;
                                 prohibitAnotherSignup python: (userAlreadySubmitted and not context.allowSignupForMultipleSlots);
                                 isSingleTimeSlot python: context.countSlots() == 1;"
                                 >

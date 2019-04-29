@@ -124,7 +124,7 @@ class SubmitSelection(BrowserView):
         allowWaitingList = timeSlot.allowWaitingList
         numberOfAvailableSlots = timeSlot.getNumberOfAvailableSlots()
 
-        if (not allowSignupForMultipleSlots) and self.context.countSlotsByUsername(self.email) > 0:
+        if (not allowSignupForMultipleSlots) and self.context.countSlotsByEmail(self.email) > 0:
             error = _('You are already signed up for a slot in this signup sheet.')
 
         elif timeSlot.isUserSignedUpForThisSlot(self.email):

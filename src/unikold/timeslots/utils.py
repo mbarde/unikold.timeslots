@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.api import get_schema
+from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from zope.component import getUtility
 from zope.schema.vocabulary import SimpleVocabulary
 
 
@@ -40,3 +43,23 @@ def getAllExtraFields(signupSheet):
         result.append(item)
 
     return result
+
+
+# ID of UTPerson objects is based on persons email
+def emailToPersonId(email):
+    normalizer = getUtility(IIDNormalizer)
+    return normalizer.normalize(email)
+
+
+# plone user to personId
+def ploneUserToPersonId(user):
+    if api.portal.set_registry_record('plone.use_email_as_login'):
+        # case: email = username
+        email = user.getUserName()
+    else:
+        try:
+            email = user.getProperty('email')
+        except ValueError:
+            # in case property `email` does not exist
+            email = ''
+    return emailToPersonId(email)

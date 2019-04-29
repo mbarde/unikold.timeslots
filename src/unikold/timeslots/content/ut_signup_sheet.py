@@ -6,8 +6,10 @@ from plone.app.vocabularies.catalog import CatalogSource
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
 from unikold.timeslots.utils import getPersonTitleVocabulary
+from unikold.timeslots.utils import ploneUserToPersonId
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import implementer
@@ -149,32 +151,31 @@ class UTSignupSheet(Container):
         brains = api.content.find(context=self, portal_type='UTTimeslot')
         return len(brains)
 
-    def countSlotsByUsername(self, username=False, review_state=False):
-        if not username:
-            username = self.getCurrentUsername()
+    def countSlotsByEmail(self, email, review_state=False):
+        personId = emailToPersonId(email)
 
         if review_state:
             brains = self.portal_catalog.unrestrictedSearchResults(
-                portal_type='UTPerson', id=username,
+                portal_type='UTPerson', id=personId,
                 review_state=review_state, path=self.getPath())
         else:
             brains = self.portal_catalog.unrestrictedSearchResults(
-                portal_type='UTPerson', id=username, path=self.getPath())
+                portal_type='UTPerson', id=personId, path=self.getPath())
 
         return len(brains)
 
-    def getSlotsByUsername(self, username=False, review_state=False):
+    def getSlotsOfCurrentUser(self, review_state=False):
         if api.user.is_anonymous():
             return []
 
-        if not username:
-            username = self.getCurrentUsername()
+        user = api.user.get_current()
+        personId = ploneUserToPersonId(user)
 
         if not review_state:
             review_state = ''
 
         brains = self.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', id=username,
+            portal_type='UTPerson', id=personId,
             review_state=review_state, path=self.getPath())
 
         slots = []
@@ -188,6 +189,9 @@ class UTSignupSheet(Container):
                 slots.append(timeSlot)
 
         return slots
+
+    def countSlotsOfCurrentUser(self, review_state=False):
+        return len(self.getSlotsOfCurrentUser())
 
     def isCurrentUserLoggedIn(self):
         return not api.user.is_anonymous()

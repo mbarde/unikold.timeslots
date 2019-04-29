@@ -15,7 +15,7 @@
 
     <table class="plain">
 
-      <tal:block tal:define="slots python: context.getSlotsByUsername(False, ['signedup', 'unconfirmed', 'signedoff'])">
+      <tal:block tal:define="slots python: context.getSlotsOfCurrentUser(['signedup', 'unconfirmed', 'signedoff'])">
         <tr>
           <th colspan="2" i18n:translate="">You signed up for the following slots:</th>
         </tr>
@@ -42,7 +42,7 @@
         </tr>
       </tal:block>
 
-      <tal:block tal:define="slots python: context.getSlotsByUsername(False, 'waiting')">
+      <tal:block tal:define="slots python: context.getSlotsOfCurrentUser('waiting')">
         <tr>
           <th colspan="2" i18n:translate="">You are on a waiting list for the following slots:</th>
         </tr>

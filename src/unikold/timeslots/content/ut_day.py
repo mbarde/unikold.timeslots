@@ -47,7 +47,7 @@ class UTDay(Container):
         return timeSlot
 
 
-# set id & title on creation and change
+# set id & title on creation and modification
 def autoSetID(day, event):
     if not hasattr(day, 'date') or day.date is None:
         return
