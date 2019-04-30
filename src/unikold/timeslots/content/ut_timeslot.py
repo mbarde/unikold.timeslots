@@ -85,6 +85,23 @@ class UTTimeslot(Container):
         person = getattr(self, personId)
         return api.content.get_state(person)
 
+    def getPeople(self, sortByStatus=False, filterByStatus=False):
+        if filterByStatus:
+            brains = api.content.find(
+                context=self, portal_type='UTPerson',
+                review_state=filterByStatus, depth=1)
+        else:
+            brains = api.content.find(
+                context=self, portal_type='UTPerson', depth=1)
+
+        people = [brain.getObject() for brain in brains]
+        if sortByStatus:
+            sortOrder = {'signedoff': 3, 'waiting': 2,
+                         'unconfirmed': 1, 'signedup': 0}
+            people.sort(key=lambda p: sortOrder[api.content.get_state(obj=p)])
+
+        return people
+
     def isFull(self):
         return (self.getNumberOfAvailableSlots() == 0
                 and not self.allowWaitingList)

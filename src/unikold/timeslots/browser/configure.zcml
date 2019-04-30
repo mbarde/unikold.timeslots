@@ -74,4 +74,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+      name="manager-summary"
+      template="templates/view_summary.pt"
+      class=".views.ManagerSummaryView"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

@@ -2,6 +2,7 @@
 from collective.easyform.api import get_schema
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from unikold.timeslots import _
 from zope.component import getUtility
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -63,3 +64,15 @@ def ploneUserToPersonId(user):
             # in case property `email` does not exist
             email = ''
     return emailToPersonId(email)
+
+
+def translateReviewState(state):
+    mappings = {
+        'signedup': _(u'Signed Up'),
+        'signedoff': _(u'Signed Off'),
+        'unconfirmed': _(u'Waiting for confirmation'),
+        'waiting': _(u'Waiting List'),
+    }
+    if state not in mappings:
+        return state
+    return mappings[state]

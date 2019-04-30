@@ -4,6 +4,7 @@ from plone.dexterity.browser.view import DefaultView
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
 from unikold.timeslots import _
+from unikold.timeslots.utils import translateReviewState
 
 import re
 
@@ -59,6 +60,16 @@ class ShowReservationsView(BrowserView):
             # load JS resources
             add_resource_on_request(self.request, 'unikold.timeslots')
             return super(ShowReservationsView, self).__call__()
+
+
+class ManagerSummaryView(DefaultView):
+
+    def getReviewState(self, obj):
+        return api.content.get_state(obj)
+
+    def getReviewStateTitle(self, obj):
+        state = api.content.get_state(obj)
+        return translateReviewState(state)
 
 
 class UTDayView(DefaultView):
