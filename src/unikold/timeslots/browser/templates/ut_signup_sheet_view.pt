@@ -127,83 +127,70 @@
                     mKeys python: tuple[1];
                     monthTranslations python: tuple[2]">
 
-    <ul class="nav nav-tabs" tal:condition="python: len(mDays) > 1">
-        <tal:block tal:repeat="month mKeys">
-        <li tal:define="index repeat/month/index;
-                        class python: 'active' if (index == 0) else ('')"
-            tal:attributes="class class"
-        >
-            <a tal:attributes="href python: '#tab-' + str(index)"
-                data-toggle="tab">
-                <span tal:replace="python: monthTranslations[month]"></span>
-                <span tal:replace="python: str( mDays[month][0].date.year )"></span>
-            </a>
-        </li>
-        </tal:block>
-    </ul>
+    <div tal:condition="python: len(mDays) > 1"
+         class="pat-autotoc autotabs"
+         data-pat-autotoc="section:fieldset;levels:legend;">
+      <fieldset tal:repeat="month mKeys">
+        <legend>
+          <span tal:replace="python: monthTranslations[month]"></span>
+          <span tal:replace="python: str( mDays[month][0].date.year )"></span>
+        </legend>
+        <div tal:define="mIndex repeat/month/index;
+                          days python: mDays[month];">
 
-    <div class="tab-content">
-        <tal:block tal:repeat="month mKeys">
-        <div  tal:define="mIndex repeat/month/index;
-                          days python: mDays[month];
-                          class python: 'tab-pane active' if (mIndex == 0) else ('tab-pane')"
-              tal:attributes="id python: 'tab-' + str(mIndex);
-                              class class">
+          <h3 tal:condition="not:days" i18n:translate="">There are no upcoming days for this signup sheet.</h3>
 
-    <h3 tal:condition="not:days" i18n:translate="">There are no upcoming days for this signup sheet.</h3>
+          <h3 i18n:translate="month"></h3>
 
-    <h3 i18n:translate="month"></h3>
+          <div class="panel-group" id="slots-accordion">
+          <tal:block tal:repeat="day days">
+              <div class="panel panel-default"
+                   tal:define="index repeat/day/index;
+                               curMonth python: day.date.strftime('%b');
+                               collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')">
+                <div class="panel-heading">
+                  <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
+                      tal:attributes="href python: '#' + str(mIndex) + '-' + str(index) + '-body'">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span tal:replace="day/Title"></span>
+                  </h4>
+                  <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/edit">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <span i18n:translate="">Edit</span>
+                  </a>
+                  <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/view">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    <span i18n:translate="">View</span>
+                  </a>
+                  <br style="clear:both"/>
+                </div>
 
-    <div class="panel-group" id="slots-accordion">
-    <tal:block tal:repeat="day days">
-        <div class="panel panel-default"
-             tal:define="index repeat/day/index;
-                         curMonth python: day.date.strftime('%b');
-                         collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')">
-          <div class="panel-heading">
-            <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
-                tal:attributes="href python: '#' + str(mIndex) + '-' + str(index) + '-body'">
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-              <span tal:replace="day/Title"></span>
-            </h4>
-            <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/edit">
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-              <span i18n:translate="">Edit</span>
-            </a>
-            <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/view">
-              <i class="fa fa-eye" aria-hidden="true"></i>
-              <span i18n:translate="">View</span>
-            </a>
-            <br style="clear:both"/>
-          </div>
+                <div tal:attributes="id python: str(mIndex) + '-' + str(index) + '-body';
+                                     class collapseClass">
+                  <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th tal:condition="view/showEditLinks"></th>
+                      <th tal:condition="showSlotNames" i18n:translate="">Name</th>
+                      <th i18n:translate="">Time</th>
+                      <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
+                      <th i18n:translate="">Select</th>
+                    </tr>
+                  </thead>
 
-          <div tal:attributes="id python: str(mIndex) + '-' + str(index) + '-body';
-                               class collapseClass">
-            <table class="table table-hover">
-            <thead>
-              <tr>
-                <th tal:condition="view/showEditLinks"></th>
-                <th tal:condition="showSlotNames" i18n:translate="">Name</th>
-                <th i18n:translate="">Time</th>
-                <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
-                <th i18n:translate="">Select</th>
-              </tr>
-            </thead>
-
-            <tal:block tal:define="timeSlots day/getTimeSlots">
-            <tr tal:condition="not:timeSlots">
-              <td colspan="4" i18n:translate="">No slots have been made available for this day yet.</td>
-            </tr>
-            <div metal:use-macro="template/macros/macro-timeslots"></div>
-            </tal:block>
-            </table>
-          </div>
-        </div>
-    </tal:block>
-    </div><!-- accordion container -->
-
-    </div><!-- month tab container -->
-    </tal:block>
+                  <tal:block tal:define="timeSlots day/getTimeSlots">
+                  <tr tal:condition="not:timeSlots">
+                    <td colspan="4" i18n:translate="">No slots have been made available for this day yet.</td>
+                  </tr>
+                  <div metal:use-macro="template/macros/macro-timeslots"></div>
+                  </tal:block>
+                  </table>
+                </div>
+              </div>
+          </tal:block>
+          </div><!-- accordion container -->
+        </div><!-- month tab container -->
+      </fieldset>
     </div>
 
     </tal:standard-view>
