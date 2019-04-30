@@ -102,4 +102,15 @@
     <permission value="Modify portal content"/>
   </action>
 
+  <!-- custom action for manager summary view -->
+  <action
+      action_id="manager-summary"
+      category="object"
+      i18n:attributes="title"
+      title="Manager Summary"
+      url_expr="string:${object_url}/manager-summary"
+      visible="True">
+    <permission value="Modify portal content"/>
+  </action>
+
 </object>
