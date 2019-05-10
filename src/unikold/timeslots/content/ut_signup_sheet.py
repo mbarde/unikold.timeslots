@@ -250,6 +250,13 @@ class UTSignupSheet(Container):
 
         return (result, keys, mTrans)
 
+    def removeAllPersons(self):
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', path=self.getPath())
+        for brain in brains:
+            api.content.delete(obj=brain.getObject(), check_linkintegrity=False)
+        return len(brains)
+
     def getPersonTitleVocabulary(self):
         return getPersonTitleVocabulary()
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from AccessControl.unauthorized import Unauthorized
 from datetime import date
 from unikold.timeslots.content.ut_person import IUTPerson  # NOQA E501
 from unikold.timeslots.testing import UNIKOLD_TIMESLOTS_INTEGRATION_TESTING  # noqa
@@ -40,7 +41,13 @@ class UTPersonIntegrationTest(unittest.TestCase):
         )
         self.parent = self.portal[parent_id]
 
-        self.emailManager = 'manager@plone.org'
+        self.manager = {
+            'username': 'utmanager', 'email': 'manager@plone.org'
+        }
+        api.user.create(
+            email=self.manager['email'], username=self.manager['username'])
+        setRoles(self.portal, self.manager['username'], ['Contributor'])
+
         self.users = [
             {'username': 'plustig', 'email': 'peter@lustig.org',
              'prename': 'Peter', 'surname': 'Lustig'},
@@ -51,6 +58,8 @@ class UTPersonIntegrationTest(unittest.TestCase):
         for user in self.users:
             api.user.create(
                 email=user['email'], username=user['username'])
+
+        self.portal_catalog = api.portal.get_tool('portal_catalog')
 
     def test_ct_ut_person_schema(self):
         fti = queryUtility(IDexterityFTI, name='UTPerson')
@@ -105,7 +114,7 @@ class UTPersonIntegrationTest(unittest.TestCase):
             self.users[0]['email'], ['Waiting', 'List', 'Confirmation'],
             self.portal.MailHost.messages[0])
         self.assertNewMailContains(
-            self.emailManager, ['Waiting', 'List', 'Notification'],
+            self.manager['email'], ['Waiting', 'List', 'Notification'],
             self.portal.MailHost.messages[1])
         self.portal.MailHost.messages = []
         self.assertEqual(timeslot.getNumberOfAvailableSlots(), 1)
@@ -117,7 +126,7 @@ class UTPersonIntegrationTest(unittest.TestCase):
             self.users[0]['email'], ['Registration', 'Confirmation'],
             self.portal.MailHost.messages[0])
         self.assertNewMailContains(
-            self.emailManager, ['Registration', 'Notification'],
+            self.manager['email'], ['Registration', 'Notification'],
             self.portal.MailHost.messages[1])
         self.portal.MailHost.messages = []
         self.assertEqual(timeslot.getNumberOfAvailableSlots(), 0)
@@ -134,7 +143,7 @@ class UTPersonIntegrationTest(unittest.TestCase):
             0)
 
     def test_waiting_list(self):
-        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        login(self.portal, self.manager['username'])
         (signupsheet, day, timeslot, person) = self.createFullStack()
         self.assertTrue(signupsheet.enableAutoMovingUpFromWaitingList)
         self.assertEqual(timeslot.maxCapacity, 1)
@@ -166,6 +175,29 @@ class UTPersonIntegrationTest(unittest.TestCase):
         self.assertEqual(len(signupsheet.getSlotsOfCurrentUser()), 1)
         self.assertEqual(timeslot.getCurrentUserSignUpState(), 'signedup')
         self.assertTrue(timeslot.isUserSignedUpForThisSlot(self.users[1]['email']))
+
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', path=signupsheet.getPath())
+        self.assertEqual(len(brains), 2)
+
+        # user should not be authorized to call removeAllPersons
+        unauthorized = False
+        try:
+            signupsheet.removeAllPersons()
+        except Unauthorized:
+            unauthorized = True
+        self.assertTrue(unauthorized)
+
+        login(self.portal, self.manager['username'])
+        removeCount = signupsheet.removeAllPersons()
+        self.assertEqual(removeCount, 2)
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='UTPerson', path=signupsheet.getPath())
+        self.assertEqual(len(brains), 0)
+
+        login(self.portal, self.users[1]['username'])
+        self.assertEqual(len(signupsheet.getSlotsOfCurrentUser()), 0)
+        self.assertFalse(timeslot.isUserSignedUpForThisSlot(self.users[1]['email']))
 
     def test_ct_ut_person_globally_not_addable(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
@@ -200,7 +232,7 @@ class UTPersonIntegrationTest(unittest.TestCase):
             type='UTSignupSheet',
             id='ut_signup_sheet',
             **{
-                'contactInfo': self.emailManager,
+                'contactInfo': self.manager['email'],
                 'notifyContactInfo': True
             }
         )

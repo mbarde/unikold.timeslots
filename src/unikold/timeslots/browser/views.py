@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from plone import api
 from plone.dexterity.browser.view import DefaultView
+from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
 from unikold.timeslots import _
@@ -62,7 +63,7 @@ class ShowReservationsView(BrowserView):
             return super(ShowReservationsView, self).__call__()
 
 
-class ManagerSummaryView(DefaultView):
+class ManagerSummaryView(BrowserView):
 
     def getReviewState(self, obj):
         return api.content.get_state(obj)
@@ -70,6 +71,19 @@ class ManagerSummaryView(DefaultView):
     def getReviewStateTitle(self, obj):
         state = api.content.get_state(obj)
         return translateReviewState(state)
+
+    def getRemoveAllUrl(self):
+        url = self.context.absolute_url() + '/remove-all-persons'
+        return addTokenToUrl(url)
+
+    def removeAllPersons(self):
+        count = self.context.removeAllPersons()
+        api.portal.show_message(
+            message=_(u'Successfully removed {0} persons.'.format(str(count))),
+            request=self.request, type='info'
+        )
+        return self.request.response.redirect(
+            self.context.absolute_url() + '/manager-summary')
 
 
 class UTDayView(DefaultView):

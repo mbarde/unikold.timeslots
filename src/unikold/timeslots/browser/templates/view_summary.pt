@@ -28,12 +28,20 @@
 
       <hr/>
 
-      <a class="btn btn-danger"
-          tal:attributes="href string:${context/absolute_url}/@@remove-all-people"
-          i18n:translate="timeslot_label_removeAllPeople" style="color:white">
-          Remove all people
-      </a>
+      <a class="btn btn-danger pat-plone-modal" href="#modalRemoveAll"
+         data-pat-plone-modal="width: 400; buttons: .modal-btn;"
+         i18n:translate="">Remove all persons</a>
 
+      <div id="modalRemoveAll" style="display: none">
+        <h1 i18n:translate="">Remove all persons?</h1>
+        <p i18n:translate="">Would you really like to remove all the people from this signup sheet?</p>
+        <p i18n:translate="">All persons, regardless of their signup status, will be deleted. No notification e-mails are sent.</p>
+        <a class="btn btn-danger modal-btn"
+           tal:attributes="href view/getRemoveAllUrl">
+          Remove all persons</a>
+        <a href="#" class="btn btn-warning modal-btn"
+           onclick="window.location=location.pathname">Cancel</a>
+      </div>
       <hr/>
 
       <tal:block define="days python: context.getDays(False)">
@@ -45,7 +53,7 @@
       <tal:days define="dayIndex repeat/day/index;
                         collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')">
           <tal:slots repeat="timeSlot day/getTimeSlots">
-          <div class="panel panel-default" tal:condition="timeSlot/getPeople"
+          <div class="panel panel-default"
                tal:define="slotIndex repeat/timeSlot/index;
                            peopleCount python: len(timeSlot.getPeople())">
             <div class="panel-heading"
