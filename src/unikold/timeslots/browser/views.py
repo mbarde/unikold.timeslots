@@ -37,10 +37,6 @@ class UTSignupSheetView(DefaultView):
         formPath = '/'.join(formObj.getPhysicalPath())
         formView = portal.restrictedTraverse(formPath + '/@@embedded')
 
-        # remove form opening and closing tag, submit button and h-tags with content
-        # (since we want to embed input fields into existing form)
-        # also replace class 'blurrable' since this toggles inline_validation.js
-        # which does not work here
         formHTML = formView()
 
         # remove form controls (submit button)
@@ -52,7 +48,11 @@ class UTSignupSheetView(DefaultView):
             el.getparent().remove(el)
         formHTML = etree.tostring(tree)
 
-        toRemove = ['<form.*?>', '</form.*?>', '<.*name="form_submit".*?>',
+        # remove form opening and closing tag, submit button and h-tags with content
+        # (since we want to embed input fields into existing form)
+        # also replace class 'blurrable' since this toggles inline_validation.js
+        # which does not work here
+        toRemove = ['<form.*?>', '</form.*?>',
                     '<h[1-9]>.*</h[1-9]>', 'blurrable']
         formHTML = re.sub('|'.join(toRemove), '', formHTML)
         return formHTML
