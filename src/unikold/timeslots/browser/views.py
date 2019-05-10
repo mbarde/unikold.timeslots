@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from lxml import etree
 from plone import api
 from plone.dexterity.browser.view import DefaultView
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
+from StringIO import StringIO
 from unikold.timeslots import _
 from unikold.timeslots.utils import translateReviewState
 
@@ -40,6 +42,16 @@ class UTSignupSheetView(DefaultView):
         # also replace class 'blurrable' since this toggles inline_validation.js
         # which does not work here
         formHTML = formView()
+
+        # remove form controls (submit button)
+        parser = etree.HTMLParser()
+        tree = etree.parse(StringIO(formHTML), parser)
+        els = tree.xpath("//div[@class='formControls']")
+        if len(els) > 0:
+            el = els[0]
+            el.getparent().remove(el)
+        formHTML = etree.tostring(tree)
+
         toRemove = ['<form.*?>', '</form.*?>', '<.*name="form_submit".*?>',
                     '<h[1-9]>.*</h[1-9]>', 'blurrable']
         formHTML = re.sub('|'.join(toRemove), '', formHTML)
