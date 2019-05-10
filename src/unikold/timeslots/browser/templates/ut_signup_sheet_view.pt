@@ -89,7 +89,7 @@
   <h2 tal:content="context/Title" />
 
   <div tal:condition="context/text" id="description">
-    <tal:block tal:replace="structure context/text">
+    <tal:block tal:replace="structure view/w/text/render">
     </tal:block>
   </div>
 
