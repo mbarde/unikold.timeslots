@@ -22,10 +22,7 @@
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="UTDay" />
-          <!--
-    <element value="Document" />
-    <element value="File" />
-  -->
+    <element value="EasyForm" />
   </property>
   <!-- Schema, class and security -->
   <property name="add_permission">unikold.timeslots.AddUTSignupSheet</property>

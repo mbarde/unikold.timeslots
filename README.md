@@ -40,10 +40,12 @@ Install unikold.timeslots by adding it to your buildout::
     ...
 
     eggs =
+        collective.easyform
         unikold.timeslots
 
 
-and then running ``bin/buildout``
+and then running ``bin/buildout``.
+
 
 Usage
 ------------
@@ -54,6 +56,7 @@ Usage
 
 Optional: Create `EasyForm` and set as additional form in `UTSignupSheet` settings
 
+**Important**: Ensure MailHost is configured properly (https://docs.plone.org/adapt-and-extend/config/mail.html).
 
 Contribute
 ----------

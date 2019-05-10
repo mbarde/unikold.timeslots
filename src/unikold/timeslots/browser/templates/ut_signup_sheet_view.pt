@@ -127,7 +127,7 @@
                     mKeys python: tuple[1];
                     monthTranslations python: tuple[2]">
 
-    <div tal:condition="python: len(mDays) > 1"
+    <div tal:condition="python: len(mDays) > 0"
          class="pat-autotoc autotabs"
          data-pat-autotoc="section:fieldset;levels:legend;">
       <fieldset tal:repeat="month mKeys">
@@ -249,6 +249,9 @@
 
     <tal:block tal:replace="structure view/renderExtraForm"/>
 
+    <button id="form-buttons-submit" name="form.buttons.submit"
+           class="submit-widget button-field" type="submit"
+           i18n:translate="">Sign up</button>
     </form>
 
     </tal:main-macro>
