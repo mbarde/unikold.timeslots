@@ -90,7 +90,7 @@
             </div>
             <div tal:attributes="id python: str(dayIndex) + '-' + str(slotIndex) + '-body';
                                  class collapseClass">
-              <table class="table table-bordered" tal:define="dictReviewStateClass python: {'signedoff': 'danger', 'signedup': 'success', 'unconfirmed': 'warning', 'waiting': 'info'}">
+              <table class="listing table table-bordered" tal:define="dictReviewStateClass python: {'signedoff': 'danger', 'signedup': 'success', 'unconfirmed': 'warning', 'waiting': 'info'}">
               <tr tal:repeat="person python: timeSlot.getPeople(True)" tal:attributes="class python: dictReviewStateClass.get(view.getReviewState(person), '')" >
                   <td><a tal:content="person/Title" tal:attributes="href person/absolute_url" /></td>
                   <td tal:content="person/email" />

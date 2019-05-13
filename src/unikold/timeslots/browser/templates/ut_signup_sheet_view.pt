@@ -167,7 +167,7 @@
 
                 <div tal:attributes="id python: str(mIndex) + '-' + str(index) + '-body';
                                      class collapseClass">
-                  <table class="table table-hover">
+                  <table class="listing table table-hover">
                   <thead>
                     <tr>
                       <th tal:condition="view/showEditLinks"></th>
@@ -198,7 +198,7 @@
     <tal:hide-date-time-view tal:condition="hideDateTime"
         tal:define="days context/getDays">
     <div class="panel panel-default">
-    <table class="table table-hover">
+    <table class="listing table table-hover">
         <thead>
             <tr>
                 <th tal:condition="view/showEditLinks"></th>
