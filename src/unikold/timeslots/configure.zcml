@@ -42,6 +42,10 @@
       name="unikold.timeslots-hiddenprofiles"
       />
 
+  <!-- extended converter for timedelta fields to make it compatible to
+       timepicker inputs -->
+  <adapter factory=".converter.DayTimeDataConverter" />
+
   <!-- set day id & title manually on creation and change -->
   <subscriber
       for=".content.ut_day.IUTDay

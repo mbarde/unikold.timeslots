@@ -20,15 +20,25 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <tal:widgets tal:define="widgets view/widgets">
-          <tal:widget tal:repeat="widgetTuple widgets/items">
-            <tal:item tal:define="widget python: widgetTuple[1]">
-              <label i18n:translate="" tal:content="widget/label" />
-              <div tal:content="structure widget/render" />
-            </tal:item>
-            <br/>
-          </tal:widget>
-        </tal:widgets>
+        <label tal:content="view/w/startTime/label" i18n:translate=""></label>
+        <div tal:content="context/getStartTime" />
+        <br/>
+
+        <label tal:content="view/w/endTime/label" i18n:translate=""></label>
+        <div tal:content="context/getEndTime" />
+        <br/>
+
+        <label tal:content="view/w/name/label" i18n:translate="" />
+        <div tal:content="structure view/w/name/render" />
+        <br/>
+
+        <label tal:content="view/w/maxCapacity/label" i18n:translate="" />
+        <div tal:content="structure view/w/maxCapacity/render" />
+        <br/>
+
+        <label tal:content="view/w/allowWaitingList/label" i18n:translate="" />
+        <div tal:content="structure view/w/allowWaitingList/render" />
+        <br/>
 
         <tal:persons tal:define="persons context/getPersons"
                      tal:condition="persons">
