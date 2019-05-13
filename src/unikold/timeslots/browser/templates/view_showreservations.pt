@@ -13,7 +13,7 @@
   <p i18n:translate="">To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
   <form id="formCancelTimeslots" method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 
-    <table class="plain">
+    <table class="listing">
 
       <tal:block tal:define="slots python: context.getSlotsOfCurrentUser(['signedup', 'unconfirmed', 'signedoff'])">
         <tr>
@@ -29,7 +29,7 @@
               </span>
               <span tal:condition="python: state == 'signedoff'"
                     i18n:attributes="title" title="Your registration has been canceled">
-                ( <i class="fa fa-exclamation-triangle"></i> <span i18n:translate="signedoff"/> )
+                ( <span aria-hidden="true" class="icon-controlpanel-errorLog"></span> <span i18n:translate="signedoff"/> )
               </span>
             </td>
             <td tal:condition="python: state in ['signedup', 'unconfirmed']">
@@ -64,7 +64,7 @@
 
     <button class="btn btn-danger float-right" type="submit"
             name="cancelSlots" id="btnCancelReservations" style="display:none">
-      <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+      <span aria-hidden="true" class="icon-plone-contentmenu-actions"></span>
       <span i18n:translate="">Cancel Selected Slots</span>
     </button>
   </form>

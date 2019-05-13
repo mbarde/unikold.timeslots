@@ -8,13 +8,13 @@
     <metal:block define-macro="macro-timeslots">
       <tr tal:repeat="timeSlot timeSlots">
         <td tal:condition="view/showEditLinks">
-          <a tal:attributes="href string:${timeSlot/absolute_url}/edit">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"
-              i18n:attributes="title" title="Edit"></i> Edit
+          <a tal:attributes="href string:${timeSlot/absolute_url}/edit"
+             i18n:attributes="title" title="Edit timeslot">
+            <span class="icon-edit" aria-hidden="true"></span>
           </a>
-          <a tal:attributes="href string:${timeSlot/absolute_url}/view">
-            <i class="fa fa-eye" aria-hidden="true"
-              i18n:attributes="title" title="View"></i> View
+          <a tal:attributes="href string:${timeSlot/absolute_url}/view"
+             i18n:attributes="title" title="View timeslot">
+            <span class="icon-view" aria-hidden="true"></span>
           </a>
         </td>
         <td tal:condition="showSlotNames">
@@ -37,7 +37,7 @@
                 </span>
                 <span tal:condition="python: state == 'signedoff'"
                       i18n:attributes="title" title="Your registration has been canceled">
-                  ( <i class="fa fa-exclamation-triangle"></i> <span i18n:translate="signedoff"/> )
+                  ( <span aria-hidden="true" class="icon-controlpanel-errorLog"></span> <span i18n:translate="signedoff"/> )
                 </span>
                 &larr;
             </strong></em>
@@ -82,7 +82,7 @@
   <a  tal:condition="python: isUserLogged and userAlreadySubmitted"
       tal:attributes="href string:${context/absolute_url}/@@show-reservations"
       class="btn btn-default">
-      <i class="fa fa-calendar" aria-hidden="true"></i>
+      <span class="icon-controlpanel-DateAndTime" aria-hidden="true"></span>
       <span i18n:translate="">View My Reservations</span>
   </a>
 
@@ -103,7 +103,7 @@
 
   <dl class="portalMessage info" tal:condition="prohibitAnotherSignup">
     <dd>
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <span aria-hidden="true" class="icon-controlpanel-errorLog"></span>
     <span i18n:translate="">You are already signed up for a slot in this signup sheet and multiple signups are not allowed.</span>
     </dd>
   </dl>
@@ -151,16 +151,18 @@
                 <div class="panel-heading">
                   <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
                       tal:attributes="href python: '#' + str(mIndex) + '-' + str(index) + '-body'">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span class="icon-controlpanel-DateAndTime" aria-hidden="true"></span>
                     <span tal:replace="day/Title"></span>
                   </h4>
-                  <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/edit">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    <span i18n:translate="">Edit</span>
+                  <a tal:condition="view/showEditLinks"
+                     i18n:attributes="title" title="Edit day"
+                     tal:attributes="href string:${day/absolute_url}/edit">
+                    <span class="icon-edit" aria-hidden="true"></span>
                   </a>
-                  <a tal:condition="view/showEditLinks" tal:attributes="href string:${day/absolute_url}/view">
-                    <i class="fa fa-eye" aria-hidden="true"></i>
-                    <span i18n:translate="">View</span>
+                  <a tal:condition="view/showEditLinks"
+                     i18n:attributes="title" title="View day"
+                     tal:attributes="href string:${day/absolute_url}/view">
+                    <span class="icon-view" aria-hidden="true"></span>
                   </a>
                   <br style="clear:both"/>
                 </div>

@@ -89,7 +89,7 @@
   <a  tal:condition="context/isCurrentUserLoggedIn"
       tal:attributes="href string:${context/absolute_url}/@@show-reservations"
      class="btn btn-default">
-      <i class="fa fa-calendar" aria-hidden="true"></i>
+      <span class="icon-controlpanel-DateAndTime"></span>
       <span i18n:translate="">View My Reservations</span>
   </a>
 

@@ -63,7 +63,7 @@
                              countSignedOff python: len(timeSlot.getPeople(False, 'signedoff'));">
               <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
                 tal:attributes="href python: '#' + str(dayIndex) + '-' + str(slotIndex) + '-body'">
-                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="icon-controlpanel-DateAndTime"></span>
                 <tal:item tal:replace="python: day.Title() + ' ' + timeSlot.Title()"/>
                 <span class="label label-success" style="background-color: #5cb85c; color: white"
                       tal:condition="python: countSignedUp > 0"
@@ -96,7 +96,7 @@
                   <td tal:content="person/email" />
                   <td i18n:translate="" tal:content="python: view.getReviewStateTitle(person)" />
                   <td><a tal:attributes="href person/absolute_url"
-                         i18n:attributes="title timeslot_label_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+                         i18n:attributes="title" title="Edit person"><span aria-hidden="true" class="icon-edit"></span></a></td>
               </tr>
               </table>
             </div>
