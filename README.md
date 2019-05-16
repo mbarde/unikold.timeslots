@@ -63,7 +63,6 @@ Contribute
 
 - Issue Tracker: https://github.com/collective/unikold.timeslots/issues
 - Source Code: https://github.com/collective/unikold.timeslots
-- Documentation: https://docs.plone.org/foo/bar
 
 
 Development
