@@ -61,8 +61,8 @@ Optional: Create `EasyForm` and set as additional form in `UTSignupSheet` settin
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/unikold.timeslots/issues
-- Source Code: https://github.com/collective/unikold.timeslots
+- Issue Tracker: https://github.com/mbarde/unikold.timeslots/issues
+- Source Code: https://github.com/mbarde/unikold.timeslots
 
 
 Development
