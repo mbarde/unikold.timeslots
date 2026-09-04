@@ -108,8 +108,9 @@
   <!-- custom action for manager summary view -->
   <action
     action_id="manager-summary"
-    category="object"
+    category="object_buttons"
     i18n:attributes="title"
+    icon_expr="string:gear"
     title="Manager Summary"
     url_expr="string:${object_url}/manager-summary"
     visible="True">
