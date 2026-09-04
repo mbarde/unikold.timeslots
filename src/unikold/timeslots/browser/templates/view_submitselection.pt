@@ -7,8 +7,10 @@
 >
   <body>
     <div metal:fill-slot="main">
-      <tal:main-macro metal:define-macro="main"
-          tal:define="icons python: context.restrictedTraverse('@@iconresolver')">
+      <tal:main-macro
+        metal:define-macro="main"
+        tal:define="icons python: context.restrictedTraverse('@@iconresolver')"
+      >
         <h2>
           <span tal:content="string:${context/Title}"></span> -
           <span i18n:translate="">Sign Up Results</span>
@@ -107,7 +109,9 @@
           onclick="window.history.back()"
           class="btn btn-secondary"
         >
-          <tal:icon replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')" />
+          <tal:icon
+            replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')"
+          />
           <span i18n:translate="">Return to the signup sheet</span>
         </button>
         <a
@@ -115,7 +119,9 @@
           tal:attributes="href string:${context/absolute_url};"
           class="btn btn-secondary"
         >
-          <tal:icon replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')" />
+          <tal:icon
+            replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')"
+          />
           <span i18n:translate="">Return to the signup sheet</span>
         </a>
         <a
@@ -123,7 +129,9 @@
           tal:attributes="href string:${context/absolute_url}/@@show-reservations"
           class="btn btn-secondary"
         >
-          <tal:icon replace="structure python: icons.tag('plone-calendar', tag_class='me-1')" />
+          <tal:icon
+            replace="structure python: icons.tag('plone-calendar', tag_class='me-1')"
+          />
           <span i18n:translate="">View My Reservations</span>
         </a>
       </tal:main-macro>

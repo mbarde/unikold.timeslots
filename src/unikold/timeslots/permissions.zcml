@@ -29,6 +29,11 @@
             title="unikold.timeslots: Add UTSignupSheet"
         />
 
+        <permission
+            id="unikold.timeslots.ManageSchedule"
+            title="unikold.timeslots: Manage Schedule"
+        />
+
     </configure>
 
 </configure>

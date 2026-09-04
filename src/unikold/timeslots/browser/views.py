@@ -65,8 +65,9 @@ class ShowReservationsView(BrowserView):
 
     def __call__(self):
         if api.user.is_anonymous():
+            came_from = self.context.absolute_url() + "/@@show-reservations"
             self.request.response.redirect(
-                self.context.absolute_url() + "/login_form?came_from=./@@show-reservations"
+                api.portal.get().absolute_url() + "/login_form?came_from=" + came_from
             )
         else:
             # load JS resources
