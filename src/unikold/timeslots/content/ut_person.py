@@ -5,6 +5,7 @@ from plone.locking.interfaces import ILockable
 from plone.supermodel import model
 from Products.CMFCore.permissions import ModifyPortalContent
 from unikold.timeslots import _
+from unikold.timeslots.utils import deferRename
 from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
 from unikold.timeslots.utils import getPersonTitleVocabulary
@@ -69,5 +70,6 @@ def autoSetID(person, event):
             lockable.unlock()
         person.title = title
         if newId != person.id:
-            api.content.rename(obj=person, new_id=newId, safe_id=True)
-        person.reindexObject()
+            deferRename(person, newId)
+        else:
+            person.reindexObject()

@@ -6,6 +6,8 @@ from unikold.timeslots import _
 from zope.component import getUtility
 from zope.schema.vocabulary import SimpleVocabulary
 
+import transaction
+
 
 def getPersonTitleVocabulary():
     values = (
@@ -77,6 +79,30 @@ def ploneUserToPersonId(user):
             # in case property `email` does not exist
             email = ""
     return emailToPersonId(email)
+
+
+# Content-type subscribers in this addon (see the various `autoSetID`
+# functions) rename freshly added/modified objects to a computed, human
+# readable id (e.g. based on a date or time range). Doing that rename
+# synchronously - while still inside the IObjectAdded/IObjectModified event
+# notification - can crash code that, right after triggering that event,
+# looks the object up again by its *original* id. This is exactly what
+# OFS' copy/paste machinery does (OFS.CopySupport._pasteObjects calls
+# `self._getOb(id)` again right after `self._setObject(id, ob)` returns),
+# so copying/pasting a UTDay or UTTimeslot raised an AttributeError because
+# the object had already been moved to its new id by then.
+# Deferring the actual rename via a "before commit" hook lets any such
+# caller finish its own work first (using the original id), while the
+# rename still happens within the same transaction, before it is committed.
+def deferRename(obj, newId):
+    transaction.get().addBeforeCommitHook(_renameNow, args=(obj, newId))
+
+
+def _renameNow(obj, newId):
+    if obj.getId() == newId:
+        return
+    api.content.rename(obj=obj, new_id=newId, safe_id=True)
+    obj.reindexObject()
 
 
 def translateReviewState(state):

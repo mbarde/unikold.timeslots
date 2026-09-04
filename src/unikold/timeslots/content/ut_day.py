@@ -6,6 +6,7 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
 from plone.supermodel import model
 from unikold.timeslots import _
+from unikold.timeslots.utils import deferRename
 from zope import schema
 from zope.component import getUtility
 from zope.interface import implementer
@@ -61,5 +62,6 @@ def autoSetID(day, event):
             lockable.unlock()
         day.title = title
         if newId != day.id:
-            api.content.rename(obj=day, new_id=newId, safe_id=True)
-        day.reindexObject()
+            deferRename(day, newId)
+        else:
+            day.reindexObject()
