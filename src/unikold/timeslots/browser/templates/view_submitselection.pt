@@ -52,17 +52,17 @@
                 replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Success', tag_class='statusmessage-icon mb-1 me-2')"
               />
               <strong i18n:translate="">Success</strong>
-              <div class="content">
+              <div class="content pt-3">
                 <p>
                   <span i18n:translate=""
                     >You have been successfully signed up for:</span
-                  ><br /> <span tal:content="result/slotLabel" />
+                  ><br /> <b tal:content="result/slotLabel" />
                 </p>
                 <p tal:condition="view/isEmailValid">
                   <span i18n:translate=""
                     >A confirmation email has been sent to you</span
                   >
-                  (<span tal:replace="view/email"></span>).
+                  (<b tal:content="view/email"></b>).
                 </p>
               </div>
             </div>
