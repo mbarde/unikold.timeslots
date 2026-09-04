@@ -88,6 +88,13 @@ during site creation, or afterwards via *Site Setup > Add-ons*.
 Set `debug-mode on` in `instance/etc/zope.conf` for template auto-reload
 during development (Python changes still need a restart).
 
+Signups and cancellations send notification emails, which fail locally
+without a configured SMTP server (`ConnectionRefusedError`). With
+`debug-mode on` and `Products.PrintingMailHost` installed (part of
+`requirements-dev.txt`), outgoing mail is printed to the instance log
+(`instance/var/log/event.log`) instead of actually being sent - no local
+mail server needed.
+
 ## License
 
 The project is licensed under the GPLv2, see [LICENSE.GPL](LICENSE.GPL).
