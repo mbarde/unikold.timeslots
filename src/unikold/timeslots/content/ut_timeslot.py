@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from DateTime import DateTime
 from plone import api
-from plone.app.z3cform.widget import DatetimeWidget
-from plone.autoform import directives
 from plone.dexterity.content import Container
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
@@ -17,11 +15,9 @@ from zope.interface import implementer
 
 class IUTTimeslot(model.Schema):
 
-    directives.widget("startTime", DatetimeWidget, pattern_options={"date": "false"})
-    startTime = schema.Timedelta(title=_("Start Time"), required=True)
+    startTime = schema.Time(title=_("Start Time"), required=True)
 
-    directives.widget("endTime", DatetimeWidget, pattern_options={"date": "false"})
-    endTime = schema.Timedelta(title=_("End Time"), required=True)
+    endTime = schema.Time(title=_("End Time"), required=True)
 
     name = schema.TextLine(title=_("Name"), description=_("Optional name"), required=False)
 
@@ -34,6 +30,7 @@ class IUTTimeslot(model.Schema):
         description=_(
             "Check if you want to allow signups to waiting list once max capacity is reached"
         ),
+        required=False,
     )
 
 
@@ -112,22 +109,15 @@ class UTTimeslot(Container):
     def getPath(self):
         return "/".join(self.getPhysicalPath())
 
-    def timeDeltaToHoursMinutes(self, delta):
-        hours, remainder = divmod(delta.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        hours = str(int(hours)).zfill(2)
-        minutes = str(int(minutes)).zfill(2)
-        return "{0}:{1}".format(hours, minutes)
-
     def getStartTime(self):
         if self.startTime is None:
             return "00:00"
-        return self.timeDeltaToHoursMinutes(self.startTime)
+        return self.startTime.strftime("%H:%M")
 
     def getEndTime(self):
         if self.endTime is None:
             return "00:00"
-        return self.timeDeltaToHoursMinutes(self.endTime)
+        return self.endTime.strftime("%H:%M")
 
 
 # set id & title on creation and modification
