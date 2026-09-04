@@ -33,54 +33,69 @@ class IUTSignupSheet(model.Schema):
         title=_("Send notification mails to contact info"),
         description=_(
             "Send notifications to the mail address provided in the contact info field on new signups or cancellations"  # noqa: E501
-        ),  # noqa: E501
+        ),
         default=True,
+        required=False,
     )
 
     signupsRequireConfirmation = schema.Bool(
         title=_("Manager has to confirm signups"),
         description=_("Signups have to be confirmed by the manager (can also be rejected)."),
         default=False,
+        required=False,
     )
 
     allowSignupForExternals = schema.Bool(
         title=_("Allow Signup For External User"),
         description=_("Allow signup for users which do not have an university account"),
+        default=False,
+        required=False,
     )
 
     allowSignupForMultipleSlots = schema.Bool(
         title=_("Allow Signup For Multiple Slots"),
         description=_("Allow the user to signup for more than one slot."),
+        default=False,
+        required=False,
     )
 
     enableAutoMovingUpFromWaitingList = schema.Bool(
         title=_("Automatic move up from waiting list"),
         description=_(
             "If a signup is cancelled, the first person on the waiting list (sorted by date) is automatically signed up."  # noqa: E501
-        ),  # noqa: E501
+        ),
         default=True,
+        required=False,
     )
 
     showSlotNames = schema.Bool(
         title=_("Show Individual Time Slot Names"),
         description=_("Whether or not to show individual slot names."),
         default=True,
+        required=False,
     )
 
     hideAvailability = schema.Bool(
-        title=_("Hide availability"), description=_("Hide how many persons can sign up for a slot")
+        title=_("Hide availability"),
+        description=_("Hide how many persons can sign up for a slot"),
+        default=False,
+        required=False,
     )
 
     hideDateTime = schema.Bool(
         title=_("Hide date and time"),
         description=_("For signups that are not bound to a certain time slot"),
+        default=False,
+        required=False,
     )
 
     askForPersonTitle = schema.Bool(
         title=_("Ask for person title"),
         description=_(
-            "Additionally to name and mail address a field for the persons title will be displayed."
-        ),  # noqa: E501
+            "Additionally to name and mail address a field for the persons title will be displayed."  # noqa: E501
+        ),
+        default=False,
+        required=False,
     )
 
     extraFieldsForm = RelationChoice(
@@ -95,7 +110,7 @@ class IUTSignupSheet(model.Schema):
         label=_("Mail settings"),
         description=_(
             "Following placeholders can be used:<br/>$$name$$ -> Full name of user<br/>$$title$$ -> Title of the signup sheet<br/>$$url$$ -> URL of the signup sheet<br/>$$slot$$ -> Date and time of slot (name of slot if date and time hid)<br/>$$data$$ -> Additional data (see 'additional form')"  # noqa: E501
-        ),  # noqa: E501
+        ),
         fields=[
             "emailConfirmationSubject",
             "emailConfirmationContent",
@@ -122,7 +137,7 @@ class IUTSignupSheet(model.Schema):
         title=_("Wait For Confirmation Email Subject"),
         description=_(
             'This email will be send when user registered for a timeslot and a confirmation is required (if field "Manager has to confirm signups" is set).'  # noqa: E501
-        ),  # noqa: E501
+        ),
         required=False,
     )
 

@@ -33,7 +33,7 @@ class IUTTimeslot(model.Schema):
         title=_("Allow Waiting List"),
         description=_(
             "Check if you want to allow signups to waiting list once max capacity is reached"
-        ),  # noqa: E501
+        ),
     )
 
 
