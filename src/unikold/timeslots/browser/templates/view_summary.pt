@@ -5,7 +5,8 @@
 
 <body>
   <div metal:fill-slot="main">
-    <tal:main-macro metal:define-macro="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="icons python: context.restrictedTraverse('@@iconresolver')">
 
       <h2>
         <span tal:replace="string:${context/Title}"/> -
@@ -23,7 +24,7 @@
         <div class="checkbox"><label><input type="checkbox" name="status" value="signedoff"> <span i18n:translate="">Signed off</span></label></div>
         <div class="checkbox"><label><input type="checkbox" name="status" value="waiting"> <span i18n:translate="">Waitinglist</span></label></div>
 
-        <button class="btn btn-primary" type="submit"><i class="fa fa-download"></i> Export</button>
+        <button class="btn btn-primary" type="submit"><tal:icon replace="structure python: icons.tag('download', tag_class='me-1')" /> Export</button>
       </form>
 
       <hr/>
@@ -48,57 +49,63 @@
       <h3 tal:condition="not: days"
           i18n:translate="timeslot_label_noUpcomingDays">There are no upcoming days for this signup sheet.</h3>
 
-      <div class="panel-group" id="slots-accordion">
+      <div class="accordion" id="slots-accordion">
       <tal:block tal:repeat="day days">
       <tal:days define="dayIndex repeat/day/index;
-                        collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')">
+                        isOpen python: len(days) <= 1">
           <tal:slots repeat="timeSlot day/getTimeSlots">
-          <div class="panel panel-default"
+          <div class="accordion-item"
                tal:define="slotIndex repeat/timeSlot/index;
-                           peopleCount python: len(timeSlot.getPeople())">
-            <div class="panel-heading"
+                           peopleCount python: len(timeSlot.getPeople());
+                           bodyId python: str(dayIndex) + '-' + str(slotIndex) + '-body'">
+            <h4 class="accordion-header"
                  tal:define="countSignedUp python: len(timeSlot.getPeople(False, 'signedup'));
                              countUnconfirmed python: len(timeSlot.getPeople(False, 'unconfirmed'));
                              countWaiting python: len(timeSlot.getPeople(False, 'waiting'));
                              countSignedOff python: len(timeSlot.getPeople(False, 'signedoff'));">
-              <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
-                tal:attributes="href python: '#' + str(dayIndex) + '-' + str(slotIndex) + '-body'">
-                <span class="icon-controlpanel-DateAndTime"></span>
+              <button type="button" data-bs-toggle="collapse"
+                tal:attributes="data-bs-target string:#${bodyId};
+                                 aria-controls bodyId;
+                                 aria-expanded python: 'true' if isOpen else 'false';
+                                 class python: 'accordion-button' if isOpen else 'accordion-button collapsed'">
+                <tal:icon replace="structure python: icons.tag('plone-calendar', tag_class='me-1')" />
                 <tal:item tal:replace="python: day.Title() + ' ' + timeSlot.Title()"/>
-                <span class="label label-success" style="background-color: #5cb85c; color: white"
+                <span class="badge bg-success ms-1" style="color: white"
                       tal:condition="python: countSignedUp > 0"
                       tal:content="python: str(countSignedUp) + ' / ' + str(timeSlot.maxCapacity)"
                       title="Signed Up" i18n:attributes="title"
                 />
-                <span class="label label-warning" style="background-color: #f0ad4e; color: white"
+                <span class="badge bg-warning ms-1" style="color: white"
                       tal:condition="python: countUnconfirmed > 0"
                       tal:content="python: str(countUnconfirmed)"
                       title="Waiting for confirmation" i18n:attributes="title"
                 />
-                <span class="label label-info" style="background-color: #2a6496; color: white"
+                <span class="badge bg-info ms-1" style="color: white"
                       tal:condition="python: countWaiting > 0"
                       tal:content="python: str(countWaiting)"
                       title="Waiting List" i18n:attributes="title"
                 />
-                <span class="label label-danger" style="background-color: #a94442; color: white"
+                <span class="badge bg-danger ms-1" style="color: white"
                       tal:condition="python: countSignedOff > 0"
                       tal:content="python: str(countSignedOff)"
                       title="Signed off" i18n:attributes="title"
                 />
-              </h4>
-              <br style="clear:both"/>
-            </div>
-            <div tal:attributes="id python: str(dayIndex) + '-' + str(slotIndex) + '-body';
-                                 class collapseClass">
+              </button>
+            </h4>
+            <div data-bs-parent="#slots-accordion"
+                 tal:attributes="id bodyId;
+                                 class python: 'accordion-collapse collapse show' if isOpen else 'accordion-collapse collapse'">
+              <div class="accordion-body">
               <table class="listing table table-bordered" tal:define="dictReviewStateClass python: {'signedoff': 'danger', 'signedup': 'success', 'unconfirmed': 'warning', 'waiting': 'info'}">
               <tr tal:repeat="person python: timeSlot.getPeople(True)" tal:attributes="class python: dictReviewStateClass.get(view.getReviewState(person), '')" >
                   <td><a tal:content="person/Title" tal:attributes="href person/absolute_url" /></td>
                   <td tal:content="person/email" />
                   <td i18n:translate="" tal:content="python: view.getReviewStateTitle(person)" />
                   <td><a tal:attributes="href person/absolute_url"
-                         i18n:attributes="title" title="Edit person"><span aria-hidden="true" class="icon-edit"></span></a></td>
+                         i18n:attributes="title" title="Edit person"><tal:icon replace="structure python: icons.tag('plone-edit', tag_alt='Edit person')" /></a></td>
               </tr>
               </table>
+              </div>
             </div>
           </div>
           </tal:slots>

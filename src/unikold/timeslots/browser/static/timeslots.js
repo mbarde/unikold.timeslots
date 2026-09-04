@@ -1,15 +1,15 @@
-require([
-  'jquery'
-], function($) {
-  $(document).ready( function() {
-    function checkCancelReservations() {
-      if ( $('input[name=selectedSlot]:checked').val() ) {
-        $('#btnCancelReservations').show();
-      } else {
-        $('#btnCancelReservations').hide();
-      }
+document.addEventListener('DOMContentLoaded', function () {
+  function checkCancelReservations() {
+    var button = document.getElementById('btnCancelReservations');
+    if (!button) {
+      return;
     }
-    checkCancelReservations();
-    $('input[name=selectedSlot]').change( checkCancelReservations );
+    var checked = document.querySelector('input[name="selectedSlot"]:checked');
+    button.style.display = checked ? '' : 'none';
+  }
+
+  checkCancelReservations();
+  document.querySelectorAll('input[name="selectedSlot"]').forEach(function (input) {
+    input.addEventListener('change', checkCancelReservations);
   });
 });

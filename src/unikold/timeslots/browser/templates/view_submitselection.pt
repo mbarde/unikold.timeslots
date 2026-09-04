@@ -7,7 +7,8 @@
 >
   <body>
     <div metal:fill-slot="main">
-      <tal:main-macro metal:define-macro="main">
+      <tal:main-macro metal:define-macro="main"
+          tal:define="icons python: context.restrictedTraverse('@@iconresolver')">
         <h2>
           <span tal:content="string:${context/Title}"></span> -
           <span i18n:translate="">Sign Up Results</span>
@@ -104,25 +105,25 @@
         <button
           tal:condition="view/hasAtLeastOneError"
           onclick="window.history.back()"
-          class="btn btn-default"
+          class="btn btn-secondary"
         >
-          <span class="fa fa-chevron-circle-left"></span>
+          <tal:icon replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')" />
           <span i18n:translate="">Return to the signup sheet</span>
         </button>
         <a
           tal:condition="not: view/hasAtLeastOneError"
           tal:attributes="href string:${context/absolute_url};"
-          class="btn btn-default"
+          class="btn btn-secondary"
         >
-          <span class="fa fa-chevron-circle-left"></span>
+          <tal:icon replace="structure python: icons.tag('arrow-left-circle', tag_class='me-1')" />
           <span i18n:translate="">Return to the signup sheet</span>
         </a>
         <a
           tal:condition="context/isCurrentUserLoggedIn"
           tal:attributes="href string:${context/absolute_url}/@@show-reservations"
-          class="btn btn-default"
+          class="btn btn-secondary"
         >
-          <span class="icon-controlpanel-DateAndTime"></span>
+          <tal:icon replace="structure python: icons.tag('plone-calendar', tag_class='me-1')" />
           <span i18n:translate="">View My Reservations</span>
         </a>
       </tal:main-macro>

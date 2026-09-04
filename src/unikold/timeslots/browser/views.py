@@ -4,7 +4,7 @@ from lxml import etree
 from plone import api
 from plone.dexterity.browser.view import DefaultView
 from plone.protect.utils import addTokenToUrl
-from Products.CMFPlone.resources import add_resource_on_request
+from Products.CMFPlone.resources import add_bundle_on_request
 from Products.Five import BrowserView
 from unikold.timeslots import _
 from unikold.timeslots.utils import translateReviewState
@@ -20,7 +20,7 @@ class UTSignupSheetView(DefaultView):
 
     def __call__(self):
         # load JS resources
-        add_resource_on_request(self.request, "unikold.timeslots")
+        add_bundle_on_request(self.request, "unikold.timeslots")
         return super(UTSignupSheetView, self).__call__()
 
     def showEditLinks(self):
@@ -70,7 +70,7 @@ class ShowReservationsView(BrowserView):
             )
         else:
             # load JS resources
-            add_resource_on_request(self.request, "unikold.timeslots")
+            add_bundle_on_request(self.request, "unikold.timeslots")
             return super(ShowReservationsView, self).__call__()
 
 
