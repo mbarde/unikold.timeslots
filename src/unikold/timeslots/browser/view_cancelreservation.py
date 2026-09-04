@@ -68,7 +68,7 @@ class CancelReservation(BrowserView):
 
     def cancelReservation(self):
         selectedSlots = self.request.get("selectedSlot", None)
-        if type(selectedSlots) is list:
+        if type(selectedSlots) is not list:
             selectedSlots = [selectedSlots]
 
         if selectedSlots != [None]:

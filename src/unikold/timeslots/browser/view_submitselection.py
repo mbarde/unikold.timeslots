@@ -65,7 +65,7 @@ class SubmitSelection(BrowserView):
 
         self.selectedSlots = self.request.get("slotSelection", None)
 
-        if type(self.selectedSlots) is list:
+        if type(self.selectedSlots) is not list:
             self.selectedSlots = [self.selectedSlots]
 
     def isAtLeastOneSlotSelected(self):
