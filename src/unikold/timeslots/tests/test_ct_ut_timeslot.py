@@ -6,6 +6,7 @@ from plone.api.exc import InvalidParameterError
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import createContentInContainer
 from zope.component import createObject
 from zope.component import queryUtility
 
@@ -60,13 +61,16 @@ class UTTimeslotIntegrationTest(unittest.TestCase):
     def test_ct_ut_timeslot_adding(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
         maxCapacity = 42
-        obj = api.content.create(
-            container=self.parent,
-            type='UTTimeslot',
+        # use plone.dexterity's own content-creation helper (rather than
+        # api.content.create()/portal_types.constructContent()) since it
+        # already knows how to safely fetch the object after autoSetID
+        # renames it while it is still being added (see
+        # ut_timeslot.autoSetID)
+        obj = createContentInContainer(
+            self.parent,
+            'UTTimeslot',
             id='ut_timeslot',
-            **{
-                'maxCapacity': maxCapacity
-            }
+            maxCapacity=maxCapacity,
         )
 
         self.assertEqual(obj.getNumberOfAvailableSlots(), maxCapacity)

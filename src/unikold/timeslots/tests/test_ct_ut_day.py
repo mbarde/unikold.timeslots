@@ -5,11 +5,10 @@ from plone.api.exc import InvalidParameterError
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.dexterity.utils import createContentInContainer
 from unikold.timeslots.content.ut_day import IUTDay  # NOQA E501
 from unikold.timeslots.testing import UNIKOLD_TIMESLOTS_INTEGRATION_TESTING  # noqa
 from zope.component import createObject
-from zope.component import getUtility
 from zope.component import queryUtility
 
 import unittest
@@ -63,22 +62,16 @@ class UTDayIntegrationTest(unittest.TestCase):
     def test_ct_ut_day_adding(self):
         setRoles(self.portal, TEST_USER_ID, ['Contributor'])
         today = date.today()
-        try:
-            obj = api.content.create(
-                container=self.parent,
-                type='UTDay',
-                id='ut_day',
-                **{
-                    'date': today
-                }
-            )
-        except AttributeError:
-            # strange behavior caused by autoSetID
-            # object is created but AttributeError is raised
-            title = today.strftime('%d.%m.%Y')
-            normalizer = getUtility(IIDNormalizer)
-            newId = normalizer.normalize(title)
-            obj = getattr(self.parent, newId)
+        # use plone.dexterity's own content-creation helper (rather than
+        # api.content.create()/portal_types.constructContent()) since it
+        # already knows how to safely fetch the object after autoSetID
+        # renames it while it is still being added (see ut_day.autoSetID)
+        obj = createContentInContainer(
+            self.parent,
+            'UTDay',
+            id='ut_day',
+            date=today,
+        )
 
         self.assertTrue(
             IUTDay.providedBy(obj),

@@ -122,7 +122,7 @@ class UTTimeslot(Container):
 
     def isRegistrationExpired(self):
         now = DateTime()
-        return (self.expires <= now)
+        return (self.expires() <= now)
 
     def getPath(self):
         return '/'.join(self.getPhysicalPath())

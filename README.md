@@ -28,17 +28,7 @@ User states:
 
 ## Installation
 
-Install unikold.timeslots by adding it to your buildout::
-
-    [buildout]
-
-    ...
-
-    eggs =
-        collective.easyform
-        unikold.timeslots
-
-and then running `bin/buildout`.
+tbd.
 
 ## Usage
 
@@ -75,6 +65,28 @@ venv/bin/black src/
 venv/bin/flake8 src/
 venv/bin/isort src/
 ```
+
+### Run a local Plone instance
+
+Create a Zope/Plone instance once (creates `instance/`, gitignored, with an
+`admin` user):
+
+```
+venv/bin/mkwsgiinstance -d instance -u admin:admin
+```
+
+Start it:
+
+```
+venv/bin/runwsgi instance/etc/zope.ini
+```
+
+Then open http://localhost:8080 and use "Create a new Plone site" (log in as
+`admin`), adding `unikold.timeslots` (and `collective.easyform`) as add-ons
+during site creation, or afterwards via *Site Setup > Add-ons*.
+
+Set `debug-mode on` in `instance/etc/zope.conf` for template auto-reload
+during development (Python changes still need a restart).
 
 ## License
 
