@@ -52,6 +52,14 @@
     />
 
     <browser:page
+        name="verify-signup-otp"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        class=".view_verifysignupotp.VerifySignupOTP"
+        attribute="verifyOtp"
+        permission="zope2.View"
+    />
+
+    <browser:page
         name="show-reservations"
         for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
         template="templates/view_showreservations.pt"

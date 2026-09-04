@@ -6,6 +6,7 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.validation import validation
 from unikold.timeslots import _
+from unikold.timeslots import otp
 from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import replaceCustomMailPlaceholders
 from z3c.caching.purge import Purge
@@ -17,6 +18,7 @@ from zope.i18n import translate
 class SubmitSelection(BrowserView):
 
     resultTemplate = ZopeTwoPageTemplateFile("templates/view_submitselection.pt")
+    otpTemplate = ZopeTwoPageTemplateFile("templates/view_verifyemail.pt")
 
     def __init__(self, context, request):
         self.context = context
@@ -39,11 +41,85 @@ class SubmitSelection(BrowserView):
         self.surname = self.request.get("inputSurname", "").strip()
         self.email = self.request.get("inputEmail", "").strip()
 
-        if not self.areAnyRequiredFieldsEmpty() and self.isAtLeastOneSlotSelected():
-            for slotIDLabel in self.selectedSlots:
-                self.getSlotAndSignUserUpForIt(slotIDLabel)
+        if self.areAnyRequiredFieldsEmpty() or not self.isAtLeastOneSlotSelected():
+            return self.resultTemplate()
+
+        # anyone who is not currently logged in has to verify they actually
+        # control the email address they entered before their signup is
+        # finalized - even if it happens to match an existing account
+        if self.context.enableEmailVerificationForExternals and api.user.is_anonymous():
+            return self.startEmailVerification()
+
+        for slotIDLabel in self.selectedSlots:
+            self.getSlotAndSignUserUpForIt(slotIDLabel)
 
         return self.resultTemplate()
+
+    def getExtraFieldsData(self):
+        data = {}
+        for fieldName, label in self.extra_fields():
+            data[fieldName] = getattr(self, fieldName, "")
+        return data
+
+    def startEmailVerification(self):
+        self.otpCode = otp.generateOtpCode()
+
+        payload = {
+            "email": self.email,
+            "prename": self.prename,
+            "surname": self.surname,
+            "agreeDataUsage": self.agreeDataUsage,
+            "extraFields": self.getExtraFieldsData(),
+            "selectedSlots": self.selectedSlots,
+            "language": self.currentLanguage,
+        }
+        self.token = otp.createToken(payload, self.otpCode)
+
+        self.sendOtpEmail()
+
+        return self.otpTemplate()
+
+    def sendOtpEmail(self):
+        lang = self.currentLanguage or "en"
+        signupSheet = self.context
+        contactInfo = signupSheet.contactInfo
+
+        subject = "{0} - {1}".format(
+            signupSheet.Title(), translate(_("Your verification code"), target_language=lang)
+        )
+
+        message = (
+            translate(_("Hello"), target_language=lang)
+            + " "
+            + self.prename
+            + " "
+            + self.surname
+            + ",\n\n"
+        )
+        message += (
+            translate(
+                _(
+                    "Please use the following code to verify your email address and "
+                    "complete your signup:"
+                ),
+                target_language=lang,
+            )
+            + "\n\n"
+        )
+        message += self.otpCode + "\n\n"
+        message += translate(_("This code is valid for 15 minutes."), target_language=lang) + "\n\n"
+
+        if len(contactInfo) > 0:
+            message += (
+                translate(_("If you have any questions please contact:"), target_language=lang)
+                + " "
+                + contactInfo
+                + "\n\n"
+            )
+
+        api.portal.send_email(
+            recipient=self.email, sender=contactInfo, subject=subject, body=message
+        )
 
     def getUserInput(self):
         for fieldName, label in self.extra_fields():
@@ -204,12 +280,12 @@ class SubmitSelection(BrowserView):
                 )
 
         # mail to person who signed up to waiting list
-        contactInfo = signupSheet.getContactInfo()
+        contactInfo = signupSheet.contactInfo
         toEmail = self.email
-        fromEmail = signupSheet.getContactInfo()
+        fromEmail = signupSheet.contactInfo
 
-        subject = signupSheet.getEmailWaitForConfirmationSubject()
-        if len(subject) == 0:
+        subject = signupSheet.emailWaitForConfirmationSubject
+        if subject is None or len(subject) == 0:
             subject = "{0} - {1}".format(
                 signupSheet.Title(), translate(_("Wait For Confirmation"), target_language=lang)
             )
@@ -218,8 +294,8 @@ class SubmitSelection(BrowserView):
                 subject, person.Title(), signupSheet.Title(), url, slotTitleLabel, extraInfoStr
             )
 
-        content = signupSheet.getEmailWaitForConfirmationContent()
-        if len(content) > 0:
+        content = signupSheet.emailWaitForConfirmationContent
+        if content is not None and len(content) > 0:
             message = replaceCustomMailPlaceholders(
                 content, person.Title(), signupSheet.Title(), url, slotTitleLabel, extraInfoStr
             )
@@ -260,9 +336,9 @@ class SubmitSelection(BrowserView):
 
         # mail to contact person of the signup sheet
         isEmail = validation.validatorFor("isEmail")
-        if signupSheet.getNotifyContactInfo() and len(contactInfo) > 0 and isEmail(contactInfo):
+        if signupSheet.notifyContactInfo and len(contactInfo) > 0 and isEmail(contactInfo):
             toEmail = contactInfo
-            fromEmail = signupSheet.getContactInfo()
+            fromEmail = signupSheet.contactInfo
 
             subject = "{0} - {1}".format(
                 signupSheet.Title(), translate(_("Wait For Confirmation"), target_language=lang)

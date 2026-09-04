@@ -51,6 +51,15 @@ class IUTSignupSheet(model.Schema):
         required=False,
     )
 
+    enableEmailVerificationForExternals = schema.Bool(
+        title=_("Email verification for external users"),
+        description=_(
+            "Anyone who is not currently logged in has to verify their email address with a one-time code before their signup is completed",  # noqa: E501
+        ),
+        default=True,
+        required=False,
+    )
+
     allowSignupForMultipleSlots = schema.Bool(
         title=_("Allow Signup For Multiple Slots"),
         description=_("Allow the user to signup for more than one slot."),
