@@ -89,15 +89,6 @@ class IUTSignupSheet(model.Schema):
         required=False,
     )
 
-    askForPersonTitle = schema.Bool(
-        title=_("Ask for person title"),
-        description=_(
-            "Additionally to name and mail address a field for the persons title will be displayed."  # noqa: E501
-        ),
-        default=False,
-        required=False,
-    )
-
     extraFieldsForm = RelationChoice(
         title=_("Additional form"),
         description=_("Additional form to be filled in for registration."),

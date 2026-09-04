@@ -336,105 +336,91 @@
           </tal:hide-date-time-view>
 
           <tal:block tal:condition="isSignupAllowed">
-            <div class="field" tal:condition="context/askForPersonTitle">
-              <label
-                for="selectPersonTitle"
-                class="form-label"
-                i18n:translate=""
-                >Title of the person
-                <span
-                  class="required"
-                  title="required"
-                  i18n:attributes="title"
-                  title="Required"
-                  >&nbsp;</span
-                > </label
-              ><br />
-              <select id="selectPersonTitle" name="selectPersonTitle">
-                <option
-                  tal:repeat="option context/getPersonTitleVocabulary"
-                  tal:content="option/value"
-                ></option>
-              </select>
-            </div>
+            <dl class="portalMessage info" id="selectTimeslotInfo">
+              <dd>
+                <span i18n:translate="">Select a timeslot to proceed</span>
+              </dd>
+            </dl>
 
-            <div class="field mb-3">
-              <label
-                for="inputPrename"
-                class="form-label"
-                i18n:translate="Prename"
-                >Your prename
-                <span
-                  class="required"
-                  title="required"
-                  i18n:attributes="title"
-                  title="Required"
-                  >&nbsp;</span
-                > </label
-              ><br />
-              <input
-                id="inputPrename"
-                name="inputPrename"
-                type="text"
-                class="form-control"
-                i18n:attributes="placeholder Prename"
-              />
-            </div>
-            <div class="field mb-3">
-              <label
-                for="inputSurname"
-                class="form-label"
-                i18n:translate="Surname"
-                >Your surname
-                <span
-                  class="required"
-                  title="required"
-                  i18n:attributes="title"
-                  title="Required"
-                  >&nbsp;</span
-                > </label
-              ><br />
-              <input
-                id="inputSurname"
-                name="inputSurname"
-                type="text"
-                class="form-control"
-                i18n:attributes="placeholder Surname"
-              />
-            </div>
-            <div class="field mb-3">
-              <label for="inputEmail" i18n:translate="Your email address"
-                >Your email address
-                <span
-                  class="required"
-                  title="required"
-                  i18n:attributes="title"
-                  title="Required"
-                  >&nbsp;</span
-                > </label
-              ><br />
-              <input
-                id="inputEmail"
-                class="form-control"
-                name="inputEmail"
-                type="email"
-                placeholder="E-Mail"
-              />
-              <input type="hidden" name="isExternal" value="1" />
-            </div>
+            <div id="personalInfoFields" style="display: none">
+              <div class="field mb-3">
+                <label
+                  for="inputPrename"
+                  class="form-label"
+                  i18n:translate="Prename"
+                  >Your prename
+                  <span
+                    class="required"
+                    title="required"
+                    i18n:attributes="title"
+                    title="Required"
+                    >&nbsp;</span
+                  > </label
+                ><br />
+                <input
+                  id="inputPrename"
+                  name="inputPrename"
+                  type="text"
+                  class="form-control"
+                  i18n:attributes="placeholder Prename"
+                />
+              </div>
+              <div class="field mb-3">
+                <label
+                  for="inputSurname"
+                  class="form-label"
+                  i18n:translate="Surname"
+                  >Your surname
+                  <span
+                    class="required"
+                    title="required"
+                    i18n:attributes="title"
+                    title="Required"
+                    >&nbsp;</span
+                  > </label
+                ><br />
+                <input
+                  id="inputSurname"
+                  name="inputSurname"
+                  type="text"
+                  class="form-control"
+                  i18n:attributes="placeholder Surname"
+                />
+              </div>
+              <div class="field mb-3">
+                <label for="inputEmail" i18n:translate="Your email address"
+                  >Your email address
+                  <span
+                    class="required"
+                    title="required"
+                    i18n:attributes="title"
+                    title="Required"
+                    >&nbsp;</span
+                  > </label
+                ><br />
+                <input
+                  id="inputEmail"
+                  class="form-control"
+                  name="inputEmail"
+                  type="email"
+                  placeholder="E-Mail"
+                />
+                <input type="hidden" name="isExternal" value="1" />
+              </div>
 
-            <tal:block tal:replace="structure view/renderExtraForm" />
+              <tal:block tal:replace="structure view/renderExtraForm" />
 
-            <div class="d-grid gap-2">
-              <button
-                id="form-buttons-submit"
-                name="form.buttons.submit"
-                class="submit-widget button-field btn btn-primary"
-                type="submit"
-                i18n:translate=""
-              >
-                Sign up
-              </button>
+              <div class="d-grid gap-2">
+                <button
+                  id="form-buttons-submit"
+                  name="form.buttons.submit"
+                  class="submit-widget button-field btn btn-primary"
+                  type="submit"
+                  i18n:translate=""
+                >
+                  Sign up
+                </button>
+              </div>
             </div>
           </tal:block>
 

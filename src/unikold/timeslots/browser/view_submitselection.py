@@ -108,11 +108,6 @@ class SubmitSelection(BrowserView):
                     translate(_(label), target_language=self.currentLanguage)
                 )
 
-        if self.context.askForPersonTitle and len(self.personTitle) < 1:
-            emptyRequiredFields.append(
-                translate(_("Title of the person"), target_language=self.currentLanguage)
-            )
-
         return emptyRequiredFields
 
     def getSlotAndSignUserUpForIt(self, slotIDLabel):
