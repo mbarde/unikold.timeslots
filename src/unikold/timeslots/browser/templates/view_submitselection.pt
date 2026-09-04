@@ -16,12 +16,16 @@
           <span i18n:translate="">Sign Up Results</span>
         </h2>
 
-        <dl
+        <div
           tal:condition="python: view.areAnyRequiredFieldsEmpty() or not view.isAtLeastOneSlotSelected()"
-          class="portalMessage error"
+          class="portalMessage statusmessage-error alert alert-danger"
+          role="alert"
         >
-          <dt i18n:translate="">Failure</dt>
-          <dd>
+          <tal:icon
+            replace="structure python: icons.tag('plone-statusmessage-error', tag_alt='Failure', tag_class='statusmessage-icon mb-1 me-2')"
+          />
+          <strong i18n:translate="">Failure</strong>
+          <div class="content">
             <span tal:condition="not:view/isAtLeastOneSlotSelected">
               <p i18n:translate="">You need to select at least one slot.</p>
             </span>
@@ -35,14 +39,20 @@
                 </li>
               </ul>
             </div>
-          </dd>
-        </dl>
+          </div>
+        </div>
 
         <div tal:repeat="result view/results">
           <tal:block tal:condition="python: result['status'] == 'signedup'">
-            <dl class="portalMessage info">
-              <dt i18n:translate="">Success</dt>
-              <dd>
+            <div
+              class="portalMessage statusmessage-info alert alert-info"
+              role="alert"
+            >
+              <tal:icon
+                replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Success', tag_class='statusmessage-icon mb-1 me-2')"
+              />
+              <strong i18n:translate="">Success</strong>
+              <div class="content">
                 <p>
                   <span i18n:translate=""
                     >You have been successfully signed up for:</span
@@ -54,14 +64,20 @@
                   >
                   (<span tal:replace="view/email"></span>).
                 </p>
-              </dd>
-            </dl>
+              </div>
+            </div>
           </tal:block>
 
           <tal:block tal:condition="python: result['status'] == 'unconfirmed'">
-            <dl class="portalMessage info">
-              <dt i18n:translate="">Success</dt>
-              <dd>
+            <div
+              class="portalMessage statusmessage-info alert alert-info"
+              role="alert"
+            >
+              <tal:icon
+                replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Success', tag_class='statusmessage-icon mb-1 me-2')"
+              />
+              <strong i18n:translate="">Success</strong>
+              <div class="content">
                 <p>
                   <span i18n:translate=""
                     >Your preliminary signup has been received:</span
@@ -71,14 +87,20 @@
                   You will receive a confirmation email now and a second one
                   when your signup has been confirmed (or rejected).
                 </p>
-              </dd>
-            </dl>
+              </div>
+            </div>
           </tal:block>
 
           <tal:block tal:condition="python: result['status'] == 'waiting'">
-            <dl class="portalMessage info">
-              <dt i18n:translate="">Success</dt>
-              <dd>
+            <div
+              class="portalMessage statusmessage-info alert alert-info"
+              role="alert"
+            >
+              <tal:icon
+                replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Success', tag_class='statusmessage-icon mb-1 me-2')"
+              />
+              <strong i18n:translate="">Success</strong>
+              <div class="content">
                 <p>
                   <span i18n:translate=""
                     >You have been successfully added to the waiting list
@@ -89,18 +111,24 @@
                   You will receive a confirmation email now and second one when
                   a spot opens up.
                 </p>
-              </dd>
-            </dl>
+              </div>
+            </div>
           </tal:block>
 
           <tal:block tal:condition="python: result['status'] == 'error'">
-            <dl class="portalMessage error">
-              <dt i18n:translate="">Failure</dt>
-              <dd>
+            <div
+              class="portalMessage statusmessage-error alert alert-danger"
+              role="alert"
+            >
+              <tal:icon
+                replace="structure python: icons.tag('plone-statusmessage-error', tag_alt='Failure', tag_class='statusmessage-icon mb-1 me-2')"
+              />
+              <strong i18n:translate="">Failure</strong>
+              <div class="content">
                 <p i18n:translate="">The system was unable to register you.</p>
                 <p tal:content="result/error" />
-              </dd>
-            </dl>
+              </div>
+            </div>
           </tal:block>
         </div>
 

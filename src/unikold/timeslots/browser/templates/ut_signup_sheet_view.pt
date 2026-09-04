@@ -146,15 +146,20 @@
           <tal:block tal:replace="structure view/w/text/render"> </tal:block>
         </div>
 
-        <dl class="portalMessage info" tal:condition="prohibitAnotherSignup">
-          <dd>
-            <tal:icon replace="structure python: icons.tag('plone-error')" />
-            <span i18n:translate=""
-              >You are already signed up for a slot in this signup sheet and
-              multiple signups are not allowed.</span
-            >
-          </dd>
-        </dl>
+        <div
+          class="portalMessage statusmessage-info alert alert-info"
+          role="alert"
+          tal:condition="prohibitAnotherSignup"
+        >
+          <tal:icon
+            replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Info:', tag_class='statusmessage-icon mb-1 me-2')"
+          />
+          <strong i18n:translate="">Info:</strong>
+          <span class="content" i18n:translate=""
+            >You are already signed up for a slot in this signup sheet and
+            multiple signups are not allowed.</span
+          >
+        </div>
 
         <br />
 
@@ -184,7 +189,7 @@
           >
             <div
               tal:condition="python: len(mDays) > 0"
-              class="pat-autotoc autotabs"
+              class="pat-autotoc autotabs mb-4"
               data-pat-autotoc="section:fieldset;levels:legend;"
             >
               <fieldset tal:repeat="month mKeys">
@@ -336,11 +341,19 @@
           </tal:hide-date-time-view>
 
           <tal:block tal:condition="isSignupAllowed">
-            <dl class="portalMessage info" id="selectTimeslotInfo">
-              <dd>
-                <span i18n:translate="">Select a timeslot to proceed</span>
-              </dd>
-            </dl>
+            <div
+              class="portalMessage statusmessage-info alert alert-info"
+              role="alert"
+              id="selectTimeslotInfo"
+            >
+              <tal:icon
+                replace="structure python: icons.tag('plone-statusmessage-info', tag_alt='Info:', tag_class='statusmessage-icon mb-1 me-2')"
+              />
+              <strong i18n:translate="">Info:</strong>
+              <span class="content" i18n:translate=""
+                >Select a timeslot to proceed</span
+              >
+            </div>
 
             <div id="personalInfoFields" style="display: none">
               <div class="field mb-3">
@@ -424,19 +437,26 @@
             </div>
           </tal:block>
 
-          <dl class="portalMessage error" tal:condition="not: isSignupAllowed">
-            <dt>
-              <span i18n:translate=""
-                >Signups are only allowed for authenticated users.</span
-              >
-              <a
-                tal:attributes="href string:${context/@@plone_portal_state/portal_url}/login_form?came_from=${context/absolute_url}"
-                class="btn btn-primary"
-                i18n:translate=""
-                >Login</a
-              >
-            </dt>
-          </dl>
+          <div
+            class="portalMessage statusmessage-error alert alert-danger"
+            role="alert"
+            tal:condition="not: isSignupAllowed"
+          >
+            <tal:icon
+              replace="structure python: icons.tag('plone-statusmessage-error', tag_alt='Error:', tag_class='statusmessage-icon mb-1 me-2')"
+            />
+            <strong i18n:translate="">Error:</strong>
+            <span class="content" i18n:translate=""
+              >Signups are only allowed for authenticated users.</span
+            >
+            <br />
+            <a
+              tal:attributes="href string:${context/@@plone_portal_state/portal_url}/login_form?came_from=${context/absolute_url}"
+              class="btn btn-primary mt-2"
+              i18n:translate=""
+              >Login</a
+            >
+          </div>
         </form>
       </tal:main-macro>
     </div>
