@@ -15,30 +15,16 @@ from zope.interface import implementer
 class IUTPerson(model.Schema):
 
     personTitle = schema.Choice(
-        title=_('Salutation'),
-        source=getPersonTitleVocabulary(),
-        required=False
+        title=_("Salutation"), source=getPersonTitleVocabulary(), required=False
     )
 
-    email = schema.TextLine(
-        title=_(u'E-Mail'),
-        required=True
-    )
+    email = schema.TextLine(title=_("E-Mail"), required=True)
 
-    prename = schema.TextLine(
-        title=_(u'Prename'),
-        required=True
-    )
+    prename = schema.TextLine(title=_("Prename"), required=True)
 
-    surname = schema.TextLine(
-        title=_(u'Surname'),
-        required=True
-    )
+    surname = schema.TextLine(title=_("Surname"), required=True)
 
-    note = schema.TextLine(
-        title=_(u'Note'),
-        required=False
-    )
+    note = schema.TextLine(title=_("Note"), required=False)
 
 
 @implementer(IUTPerson)
@@ -50,18 +36,18 @@ class UTPerson(Item):
         extraInfo = []
         fields = getAllExtraFields(self)
         for field in fields:
-            value = getattr(self, field['name'], '')
-            extraInfo.append((_(field['label']), value))
+            value = getattr(self, field["name"], "")
+            extraInfo.append((_(field["label"]), value))
         return extraInfo
 
     def getExtraInfoAsString(self):
         extraInfo = []
         fields = getAllExtraFields(self)
         for field in fields:
-            value = getattr(self, field['name'], False)
+            value = getattr(self, field["name"], False)
             if value:
-                extraInfo.append(_(field['label']) + ': ' + value)
-        return '\n'.join(extraInfo)
+                extraInfo.append(_(field["label"]) + ": " + value)
+        return "\n".join(extraInfo)
 
 
 # set id & title on creation and modification
@@ -69,12 +55,10 @@ def autoSetID(person, event):
     # only managers are allowed to create / modify persons via forms
     if not api.user.has_permission(ModifyPortalContent, obj=person):
         return
-    if person.email is None \
-       or person.prename is None \
-       or person.surname is None:
+    if person.email is None or person.prename is None or person.surname is None:
         return
 
-    title = u'{0} {1}'.format(person.prename, person.surname)
+    title = "{0} {1}".format(person.prename, person.surname)
     newId = emailToPersonId(person.email)
     if title != person.title or newId != person.id:
         lockable = ILockable(person)

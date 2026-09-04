@@ -23,10 +23,10 @@ class UnikoldTimeslotsLayer(PloneSandboxLayer):
         self.loadZCML(package=unikold.timeslots)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'unikold.timeslots:default')
+        applyProfile(portal, "unikold.timeslots:default")
 
-        api.portal.set_registry_record('plone.email_from_address', 'noreply@example.com')
-        api.portal.set_registry_record('plone.email_from_name', u'Plone Site')
+        api.portal.set_registry_record("plone.email_from_address", "noreply@example.com")
+        api.portal.set_registry_record("plone.email_from_name", "Plone Site")
 
 
 UNIKOLD_TIMESLOTS_FIXTURE = UnikoldTimeslotsLayer()
@@ -34,13 +34,13 @@ UNIKOLD_TIMESLOTS_FIXTURE = UnikoldTimeslotsLayer()
 
 UNIKOLD_TIMESLOTS_INTEGRATION_TESTING = IntegrationTesting(
     bases=(UNIKOLD_TIMESLOTS_FIXTURE, MOCK_MAILHOST_FIXTURE),
-    name='UnikoldTimeslotsLayer:IntegrationTesting',
+    name="UnikoldTimeslotsLayer:IntegrationTesting",
 )
 
 
 UNIKOLD_TIMESLOTS_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(UNIKOLD_TIMESLOTS_FIXTURE, MOCK_MAILHOST_FIXTURE),
-    name='UnikoldTimeslotsLayer:FunctionalTesting',
+    name="UnikoldTimeslotsLayer:FunctionalTesting",
 )
 
 
@@ -50,5 +50,5 @@ UNIKOLD_TIMESLOTS_ACCEPTANCE_TESTING = FunctionalTesting(
         REMOTE_LIBRARY_BUNDLE_FIXTURE,
         z2.ZSERVER_FIXTURE,
     ),
-    name='UnikoldTimeslotsLayer:AcceptanceTesting',
+    name="UnikoldTimeslotsLayer:AcceptanceTesting",
 )

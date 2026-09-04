@@ -10,7 +10,7 @@ class HiddenProfiles(object):
     def getNonInstallableProfiles(self):
         """Hide uninstall profile from site-creation and quickinstaller."""
         return [
-            'unikold.timeslots:uninstall',
+            "unikold.timeslots:uninstall",
         ]
 
 
@@ -21,26 +21,26 @@ def post_install(context):
 
 # which types to display in navigation?
 def setup_types_in_navigation():
-    typesInNav = list(api.portal.get_registry_record('plone.displayed_types'))
+    typesInNav = list(api.portal.get_registry_record("plone.displayed_types"))
 
-    whitelist = ['UTSignupSheet']
+    whitelist = ["UTSignupSheet"]
     for typeName in whitelist:
         if typeName not in typesInNav:
             typesInNav.append(typeName)
 
-    blacklist = ['UTDay', 'UTTimeslot', 'UTPerson']
+    blacklist = ["UTDay", "UTTimeslot", "UTPerson"]
     for typeName in blacklist:
         if typeName in typesInNav:
             typesInNav.remove(typeName)
 
-    api.portal.set_registry_record('plone.displayed_types', tuple(typesInNav))
+    api.portal.set_registry_record("plone.displayed_types", tuple(typesInNav))
 
 
 # which types to exclude from search?
 def setup_types_searchable():
-    blacklist = set(api.portal.get_registry_record('plone.types_not_searched'))
-    blacklist.update(['UTDay', 'UTTimeslot', 'UTPerson'])
-    api.portal.set_registry_record('plone.types_not_searched', tuple(blacklist))
+    blacklist = set(api.portal.get_registry_record("plone.types_not_searched"))
+    blacklist.update(["UTDay", "UTTimeslot", "UTPerson"])
+    api.portal.set_registry_record("plone.types_not_searched", tuple(blacklist))
 
 
 def uninstall(context):

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <registry>
   <records prefix="plone.resources/unikold.timeslots"
-           interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+    interface='Products.CMFPlone.interfaces.IResourceRegistry'>
     <value key="js">++plone++unikold.timeslots/timeslots.js</value>
   </records>
 </registry>

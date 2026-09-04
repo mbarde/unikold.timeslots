@@ -10,7 +10,7 @@
 
   <state state_id="signedup" title="Signed Up">
     <description>This person is signed up for the time slot</description>
-    <exit-transition transition_id="signoff"/>
+    <exit-transition transition_id="signoff" />
     <permission-map name="Access contents information"
       acquired="False">
       <permission-role>Owner</permission-role>
@@ -34,9 +34,9 @@
 
   <state state_id="unconfirmed" title="Waiting for confirmation">
     <description>This person has not been confirmed yet</description>
-    <exit-transition transition_id="signup"/>
-    <exit-transition transition_id="signoff"/>
-    <exit-transition transition_id="putOnWaitingList"/>
+    <exit-transition transition_id="signup" />
+    <exit-transition transition_id="signoff" />
+    <exit-transition transition_id="putOnWaitingList" />
     <permission-map name="Access contents information"
       acquired="False">
       <permission-role>Owner</permission-role>
@@ -61,8 +61,8 @@
 
   <state state_id="signedoff" title="Signed off">
     <description>This person has been signed off</description>
-    <exit-transition transition_id="signup"/>
-    <exit-transition transition_id="putOnWaitingList"/>
+    <exit-transition transition_id="signup" />
+    <exit-transition transition_id="putOnWaitingList" />
     <permission-map name="Access contents information"
       acquired="False">
       <permission-role>Owner</permission-role>
@@ -87,8 +87,8 @@
 
   <state state_id="waiting" title="Waiting List">
     <description>This person has been added to the waiting list</description>
-    <exit-transition transition_id="signup"/>
-    <exit-transition transition_id="signoff"/>
+    <exit-transition transition_id="signup" />
+    <exit-transition transition_id="signoff" />
     <permission-map name="Access contents information"
       acquired="False">
       <permission-role>Owner</permission-role>

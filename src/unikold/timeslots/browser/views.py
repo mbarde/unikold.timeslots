@@ -20,22 +20,22 @@ class UTSignupSheetView(DefaultView):
 
     def __call__(self):
         # load JS resources
-        add_resource_on_request(self.request, 'unikold.timeslots')
+        add_resource_on_request(self.request, "unikold.timeslots")
         return super(UTSignupSheetView, self).__call__()
 
     def showEditLinks(self):
-        return api.user.has_permission('unikold.timeslots: Manage Schedule')
+        return api.user.has_permission("unikold.timeslots: Manage Schedule")
 
     def renderExtraForm(self):
         portal = api.portal.get()
 
         form = self.context.extraFieldsForm
         if form is None:
-            return ''
+            return ""
         formObj = form.to_object
 
-        formPath = '/'.join(formObj.getPhysicalPath())
-        formView = portal.restrictedTraverse(formPath + '/@@embedded')
+        formPath = "/".join(formObj.getPhysicalPath())
+        formView = portal.restrictedTraverse(formPath + "/@@embedded")
 
         formHTML = formView()
 
@@ -46,15 +46,14 @@ class UTSignupSheetView(DefaultView):
         if len(els) > 0:
             el = els[0]
             el.getparent().remove(el)
-        formHTML = etree.tostring(tree, encoding='unicode')
+        formHTML = etree.tostring(tree, encoding="unicode")
 
         # remove form opening and closing tag, submit button and h-tags with content
         # (since we want to embed input fields into existing form)
         # also replace class 'blurrable' since this toggles inline_validation.js
         # which does not work here
-        toRemove = ['<form.*?>', '</form.*?>',
-                    '<h[1-9]>.*</h[1-9]>', 'blurrable']
-        formHTML = re.sub('|'.join(toRemove), '', formHTML)
+        toRemove = ["<form.*?>", "</form.*?>", "<h[1-9]>.*</h[1-9]>", "blurrable"]
+        formHTML = re.sub("|".join(toRemove), "", formHTML)
         return formHTML
 
 
@@ -67,11 +66,11 @@ class ShowReservationsView(BrowserView):
     def __call__(self):
         if api.user.is_anonymous():
             self.request.response.redirect(
-                self.context.absolute_url()
-                + '/login_form?came_from=./@@show-reservations')
+                self.context.absolute_url() + "/login_form?came_from=./@@show-reservations"
+            )
         else:
             # load JS resources
-            add_resource_on_request(self.request, 'unikold.timeslots')
+            add_resource_on_request(self.request, "unikold.timeslots")
             return super(ShowReservationsView, self).__call__()
 
 
@@ -85,17 +84,17 @@ class ManagerSummaryView(BrowserView):
         return translateReviewState(state)
 
     def getRemoveAllUrl(self):
-        url = self.context.absolute_url() + '/remove-all-persons'
+        url = self.context.absolute_url() + "/remove-all-persons"
         return addTokenToUrl(url)
 
     def removeAllPersons(self):
         count = self.context.removeAllPersons()
         api.portal.show_message(
-            message=_(u'Successfully removed {0} persons.'.format(str(count))),
-            request=self.request, type='info'
+            message=_("Successfully removed {0} persons.".format(str(count))),
+            request=self.request,
+            type="info",
         )
-        return self.request.response.redirect(
-            self.context.absolute_url() + '/manager-summary')
+        return self.request.response.redirect(self.context.absolute_url() + "/manager-summary")
 
 
 class UTDayView(DefaultView):
@@ -110,11 +109,11 @@ class UTPersonView(DefaultView):
 
     def getCurrentState(self):
         state = api.content.get_state(self.context)
-        if state == 'signedup':
-            return (_(u'Signed Up'), 'bg-success')
-        elif state == 'unconfirmed':
-            return (_(u'Waiting for confirmation'), 'bg-warning')
-        elif state == 'signedoff':
-            return (_(u'Signed off'), 'bg-danger')
-        elif state == 'waiting':
-            return (_(u'Waiting List'), 'bg-info')
+        if state == "signedup":
+            return (_("Signed Up"), "bg-success")
+        elif state == "unconfirmed":
+            return (_("Waiting for confirmation"), "bg-warning")
+        elif state == "signedoff":
+            return (_("Signed off"), "bg-danger")
+        elif state == "waiting":
+            return (_("Waiting List"), "bg-info")

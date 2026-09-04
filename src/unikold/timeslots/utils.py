@@ -8,18 +8,31 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 def getPersonTitleVocabulary():
-    values = ('Frau', 'Frau Dr.', 'Frau Prof. Dr.', 'Frau apl. Prof. Dr.', 'Frau Jun.-Prof. Dr.',
-              'Herr', 'Herr Dr.', 'Herr Prof. Dr.', 'Herr apl. Prof. Dr.', 'Herr Jun.-Prof. Dr.')
+    values = (
+        "Frau",
+        "Frau Dr.",
+        "Frau Prof. Dr.",
+        "Frau apl. Prof. Dr.",
+        "Frau Jun.-Prof. Dr.",
+        "Herr",
+        "Herr Dr.",
+        "Herr Prof. Dr.",
+        "Herr apl. Prof. Dr.",
+        "Herr Jun.-Prof. Dr.",
+    )
     return SimpleVocabulary.fromValues(values)
 
 
-def replaceCustomMailPlaceholders(text, personName, signupSheetTitle,
-                                  signupSheetURL, slotTitle, extraInfoStr):
-    return text.replace('$$name$$', personName) \
-               .replace('$$title$$', signupSheetTitle) \
-               .replace('$$url$$', signupSheetURL) \
-               .replace('$$slot$$', slotTitle) \
-               .replace('$$data$$', extraInfoStr)
+def replaceCustomMailPlaceholders(
+    text, personName, signupSheetTitle, signupSheetURL, slotTitle, extraInfoStr
+):
+    return (
+        text.replace("$$name$$", personName)
+        .replace("$$title$$", signupSheetTitle)
+        .replace("$$url$$", signupSheetURL)
+        .replace("$$slot$$", slotTitle)
+        .replace("$$data$$", extraInfoStr)
+    )
 
 
 def getAllExtraFields(signupSheet):
@@ -37,10 +50,10 @@ def getAllExtraFields(signupSheet):
     for fieldName in schema:
         widget = schema.get(fieldName)
         item = {}
-        item['name'] = fieldName
-        item['label'] = widget.title
-        item['description'] = widget.description
-        item['required'] = widget.required
+        item["name"] = fieldName
+        item["label"] = widget.title
+        item["description"] = widget.description
+        item["required"] = widget.required
         result.append(item)
 
     return result
@@ -54,24 +67,24 @@ def emailToPersonId(email):
 
 # plone user to personId
 def ploneUserToPersonId(user):
-    if api.portal.get_registry_record('plone.use_email_as_login'):
+    if api.portal.get_registry_record("plone.use_email_as_login"):
         # case: email = username
         email = user.getUserName()
     else:
         try:
-            email = user.getProperty('email')
+            email = user.getProperty("email")
         except ValueError:
             # in case property `email` does not exist
-            email = ''
+            email = ""
     return emailToPersonId(email)
 
 
 def translateReviewState(state):
     mappings = {
-        'signedup': _(u'Signed Up'),
-        'signedoff': _(u'Signed Off'),
-        'unconfirmed': _(u'Waiting for confirmation'),
-        'waiting': _(u'Waiting List'),
+        "signedup": _("Signed Up"),
+        "signedoff": _("Signed Off"),
+        "unconfirmed": _("Waiting for confirmation"),
+        "waiting": _("Waiting List"),
     }
     if state not in mappings:
         return state

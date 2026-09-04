@@ -1,73 +1,120 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      metal:use-macro="here/main_template/macros/master"
-      i18n:domain="unikold.timeslots">
-<body>
-
-  <div metal:fill-slot="main" tal:define="timeSlots python: []">
-
-    <metal:block define-macro="macro-timeslots">
-      <tr tal:repeat="timeSlot timeSlots">
-        <td tal:condition="view/showEditLinks">
-          <a tal:attributes="href string:${timeSlot/absolute_url}/edit"
-             i18n:attributes="title" title="Edit timeslot">
-            <span class="icon-edit" aria-hidden="true"></span>
-          </a>
-          <a tal:attributes="href string:${timeSlot/absolute_url}/view"
-             i18n:attributes="title" title="View timeslot">
-            <span class="icon-view" aria-hidden="true"></span>
-          </a>
-        </td>
-        <td tal:condition="showSlotNames">
-          <strong><span tal:content="timeSlot/name" /></strong>
-        </td>
-        <td tal:condition="not: hideDateTime">
-          <span tal:content="timeSlot/getTimeRange" />
-        </td>
-        <td tal:condition="not: hideAvailability">
-          <span tal:content="timeSlot/getNumberOfAvailableSlots" />
-          <span tal:condition="timeSlot/allowWaitingList"> + <span i18n:translate="">Waiting List</span></span>
-        </td>
-        <td align="center" tal:define="state timeSlot/getCurrentUserSignUpState; full timeSlot/isFull">
-          <tal:block tal:condition="python: state in ['unconfirmed', 'signedup', 'signedoff']">
-            <em><strong >
-                &rarr;
-                <span i18n:translate="">Your Slot</span>
-                <span tal:condition="python: state == 'unconfirmed'">
-                  (<span i18n:translate="unconfirmed"/>)
-                </span>
-                <span tal:condition="python: state == 'signedoff'"
-                      i18n:attributes="title" title="Your registration has been canceled">
-                  ( <span aria-hidden="true" class="icon-controlpanel-errorLog"></span> <span i18n:translate="signedoff"/> )
-                </span>
-                &larr;
-            </strong></em>
-          </tal:block>
-          <tal:block tal:condition="python: state == 'waiting'">
-            <em><strong >&rarr; <span i18n:translate="on_waiting_list"></span> &larr;</strong></em>
-          </tal:block>
-
-          <tal:block tal:condition="not:state">
-            <tal:block tal:condition="not:timeSlot/isRegistrationExpired">
-              <tal:block tal:condition="not:full">
-                <input tal:condition="isSingleTimeSlot" type="radio" name="slotSelection"
-                       tal:attributes="value timeSlot/getIDLabel" checked />
-                <input tal:condition="python: not isSingleTimeSlot and allowSignupForMultipleSlots" type="checkbox" name="slotSelection"
-                       tal:attributes="value timeSlot/getIDLabel" />
-                <input tal:condition="python: not isSingleTimeSlot and not allowSignupForMultipleSlots" type="radio" name="slotSelection"
-                       tal:attributes="value timeSlot/getIDLabel" />
-              </tal:block>
-              <span tal:condition="full" i18n:translate="">Full</span>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xml:lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="unikold.timeslots"
+>
+  <body>
+    <div metal:fill-slot="main" tal:define="timeSlots python: []">
+      <metal:block define-macro="macro-timeslots">
+        <tr tal:repeat="timeSlot timeSlots">
+          <td tal:condition="view/showEditLinks">
+            <a
+              tal:attributes="href string:${timeSlot/absolute_url}/edit"
+              i18n:attributes="title"
+              title="Edit timeslot"
+            >
+              <span class="icon-edit" aria-hidden="true"></span>
+            </a>
+            <a
+              tal:attributes="href string:${timeSlot/absolute_url}/view"
+              i18n:attributes="title"
+              title="View timeslot"
+            >
+              <span class="icon-view" aria-hidden="true"></span>
+            </a>
+          </td>
+          <td tal:condition="showSlotNames">
+            <strong><span tal:content="timeSlot/name" /></strong>
+          </td>
+          <td tal:condition="not: hideDateTime">
+            <span tal:content="timeSlot/getTimeRange" />
+          </td>
+          <td tal:condition="not: hideAvailability">
+            <span tal:content="timeSlot/getNumberOfAvailableSlots" />
+            <span tal:condition="timeSlot/allowWaitingList">
+              + <span i18n:translate="">Waiting List</span></span
+            >
+          </td>
+          <td
+            align="center"
+            tal:define="state timeSlot/getCurrentUserSignUpState; full timeSlot/isFull"
+          >
+            <tal:block
+              tal:condition="python: state in ['unconfirmed', 'signedup', 'signedoff']"
+            >
+              <em
+                ><strong>
+                  &rarr;
+                  <span i18n:translate="">Your Slot</span>
+                  <span tal:condition="python: state == 'unconfirmed'">
+                    (<span i18n:translate="unconfirmed" />)
+                  </span>
+                  <span
+                    tal:condition="python: state == 'signedoff'"
+                    i18n:attributes="title"
+                    title="Your registration has been canceled"
+                  >
+                    (
+                    <span
+                      aria-hidden="true"
+                      class="icon-controlpanel-errorLog"
+                    ></span>
+                    <span i18n:translate="signedoff" /> )
+                  </span>
+                  &larr;
+                </strong></em
+              >
             </tal:block>
-            <span tal:condition="timeSlot/isRegistrationExpired"
-              i18n:translate="" i18n:attributes="title" title="Registration expired"
-            >(expired)</span>
-          </tal:block>
-        </td>
-      </tr>
-    </metal:block>
+            <tal:block tal:condition="python: state == 'waiting'">
+              <em
+                ><strong
+                  >&rarr;
+                  <span i18n:translate="on_waiting_list"></span> &larr;</strong
+                ></em
+              >
+            </tal:block>
 
-    <tal:main-macro metal:define-macro="main"
-                    tal:define="isUserLogged context/isCurrentUserLoggedIn;
+            <tal:block tal:condition="not:state">
+              <tal:block tal:condition="not:timeSlot/isRegistrationExpired">
+                <tal:block tal:condition="not:full">
+                  <input
+                    tal:condition="isSingleTimeSlot"
+                    type="radio"
+                    name="slotSelection"
+                    tal:attributes="value timeSlot/getIDLabel"
+                    checked
+                  />
+                  <input
+                    tal:condition="python: not isSingleTimeSlot and allowSignupForMultipleSlots"
+                    type="checkbox"
+                    name="slotSelection"
+                    tal:attributes="value timeSlot/getIDLabel"
+                  />
+                  <input
+                    tal:condition="python: not isSingleTimeSlot and not allowSignupForMultipleSlots"
+                    type="radio"
+                    name="slotSelection"
+                    tal:attributes="value timeSlot/getIDLabel"
+                  />
+                </tal:block>
+                <span tal:condition="full" i18n:translate="">Full</span>
+              </tal:block>
+              <span
+                tal:condition="timeSlot/isRegistrationExpired"
+                i18n:translate=""
+                i18n:attributes="title"
+                title="Registration expired"
+                >(expired)</span
+              >
+            </tal:block>
+          </td>
+        </tr>
+      </metal:block>
+
+      <tal:main-macro
+        metal:define-macro="main"
+        tal:define="isUserLogged context/isCurrentUserLoggedIn;
                                 allowSignupForExternals context/allowSignupForExternals;
                                 allowSignupForMultipleSlots context/allowSignupForMultipleSlots;
                                 hideAvailability context/hideAvailability;
@@ -77,186 +124,299 @@
                                 userAlreadySubmitted python: context.countSlotsOfCurrentUser() > 0;
                                 prohibitAnotherSignup python: (userAlreadySubmitted and not context.allowSignupForMultipleSlots);
                                 isSingleTimeSlot python: context.countSlots() == 1;"
-                                >
+      >
+        <a
+          tal:condition="python: isUserLogged and userAlreadySubmitted"
+          tal:attributes="href string:${context/absolute_url}/@@show-reservations"
+          class="btn btn-default"
+        >
+          <span class="icon-controlpanel-DateAndTime" aria-hidden="true"></span>
+          <span i18n:translate="">View My Reservations</span>
+        </a>
 
-  <a  tal:condition="python: isUserLogged and userAlreadySubmitted"
-      tal:attributes="href string:${context/absolute_url}/@@show-reservations"
-      class="btn btn-default">
-      <span class="icon-controlpanel-DateAndTime" aria-hidden="true"></span>
-      <span i18n:translate="">View My Reservations</span>
-  </a>
+        <h2 tal:content="context/Title" />
 
-  <h2 tal:content="context/Title" />
+        <div tal:condition="context/text" id="description">
+          <tal:block tal:replace="structure view/w/text/render"> </tal:block>
+        </div>
 
-  <div tal:condition="context/text" id="description">
-    <tal:block tal:replace="structure view/w/text/render">
-    </tal:block>
-  </div>
+        <dl class="portalMessage error" tal:condition="not: isSignupAllowed">
+          <dt>
+            <span i18n:translate="">To signup for a slot you have to</span>
+            <a
+              tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view"
+              i18n:translate=""
+              >Login</a
+            >
+          </dt>
+        </dl>
 
-  <dl class="portalMessage error" tal:condition="not: isSignupAllowed">
-    <dt>
-    <span i18n:translate="">To signup for a slot you have to</span>
-    <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view"
-    i18n:translate="">Login</a>
-    </dt>
-  </dl>
+        <dl class="portalMessage info" tal:condition="prohibitAnotherSignup">
+          <dd>
+            <span aria-hidden="true" class="icon-controlpanel-errorLog"></span>
+            <span i18n:translate=""
+              >You are already signed up for a slot in this signup sheet and
+              multiple signups are not allowed.</span
+            >
+          </dd>
+        </dl>
 
-  <dl class="portalMessage info" tal:condition="prohibitAnotherSignup">
-    <dd>
-    <span aria-hidden="true" class="icon-controlpanel-errorLog"></span>
-    <span i18n:translate="">You are already signed up for a slot in this signup sheet and multiple signups are not allowed.</span>
-    </dd>
-  </dl>
+        <br />
 
-  <br />
+        <tal:block tal:condition="context/contactInfo">
+          <span i18n:translate=""
+            >If you have any questions please contact:</span
+          >
+          <a
+            tal:attributes="href python: 'mailto:' + context.contactInfo"
+            tal:content="python: context.getContactInfoAsSentence()"
+            >mailto</a
+          >
+          <br /><br />
+        </tal:block>
 
-    <tal:block tal:condition="context/contactInfo">
-    <span
-          i18n:translate="">If you have any questions please contact:</span>
-    <a  tal:attributes="href python: 'mailto:' + context.contactInfo"
-        tal:content="python: context.getContactInfoAsSentence()">mailto</a>
-    <br /><br />
-    </tal:block>
-
-    <form method="post" id="formSubmitTimeslots"
-          tal:attributes="action string:${context/absolute_url}/@@submit-user-selection;">
-
-    <tal:standard-view tal:condition="not: hideDateTime"
-        tal:define="tuple context/getDaysGroupedByMonth;
+        <form
+          method="post"
+          id="formSubmitTimeslots"
+          tal:attributes="action string:${context/absolute_url}/@@submit-user-selection;"
+        >
+          <tal:standard-view
+            tal:condition="not: hideDateTime"
+            tal:define="tuple context/getDaysGroupedByMonth;
                     mDays python: tuple[0];
                     mKeys python: tuple[1];
-                    monthTranslations python: tuple[2]">
+                    monthTranslations python: tuple[2]"
+          >
+            <div
+              tal:condition="python: len(mDays) > 0"
+              class="pat-autotoc autotabs"
+              data-pat-autotoc="section:fieldset;levels:legend;"
+            >
+              <fieldset tal:repeat="month mKeys">
+                <legend>
+                  <span tal:replace="python: monthTranslations[month]"></span>
+                  <span
+                    tal:replace="python: str( mDays[month][0].date.year )"
+                  ></span>
+                </legend>
+                <div
+                  tal:define="mIndex repeat/month/index;
+                          days python: mDays[month];"
+                >
+                  <h3 tal:condition="not:days" i18n:translate="">
+                    There are no upcoming days for this signup sheet.
+                  </h3>
 
-    <div tal:condition="python: len(mDays) > 0"
-         class="pat-autotoc autotabs"
-         data-pat-autotoc="section:fieldset;levels:legend;">
-      <fieldset tal:repeat="month mKeys">
-        <legend>
-          <span tal:replace="python: monthTranslations[month]"></span>
-          <span tal:replace="python: str( mDays[month][0].date.year )"></span>
-        </legend>
-        <div tal:define="mIndex repeat/month/index;
-                          days python: mDays[month];">
+                  <h3 i18n:translate="month"></h3>
 
-          <h3 tal:condition="not:days" i18n:translate="">There are no upcoming days for this signup sheet.</h3>
-
-          <h3 i18n:translate="month"></h3>
-
-          <div class="panel-group" id="slots-accordion">
-          <tal:block tal:repeat="day days">
-              <div class="panel panel-default"
-                   tal:define="index repeat/day/index;
+                  <div class="panel-group" id="slots-accordion">
+                    <tal:block tal:repeat="day days">
+                      <div
+                        class="panel panel-default"
+                        tal:define="index repeat/day/index;
                                curMonth python: day.date.strftime('%b');
-                               collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')">
-                <div class="panel-heading">
-                  <h4 class="panel-title accordion-toggle" data-toggle="collapse" data-parent="#slots-accordion"
-                      tal:attributes="href python: '#' + str(mIndex) + '-' + str(index) + '-body'">
-                    <span class="icon-controlpanel-DateAndTime" aria-hidden="true"></span>
-                    <span tal:replace="day/Title"></span>
-                  </h4>
-                  <a tal:condition="view/showEditLinks"
-                     i18n:attributes="title" title="Edit day"
-                     tal:attributes="href string:${day/absolute_url}/edit">
-                    <span class="icon-edit" aria-hidden="true"></span>
-                  </a>
-                  <a tal:condition="view/showEditLinks"
-                     i18n:attributes="title" title="View day"
-                     tal:attributes="href string:${day/absolute_url}/view">
-                    <span class="icon-view" aria-hidden="true"></span>
-                  </a>
-                  <br style="clear:both"/>
+                               collapseClass python: 'panel-collapse collapse' if ( len(days) > 1 ) else ('panel-collapse collapse in')"
+                      >
+                        <div class="panel-heading">
+                          <h4
+                            class="panel-title accordion-toggle"
+                            data-toggle="collapse"
+                            data-parent="#slots-accordion"
+                            tal:attributes="href python: '#' + str(mIndex) + '-' + str(index) + '-body'"
+                          >
+                            <span
+                              class="icon-controlpanel-DateAndTime"
+                              aria-hidden="true"
+                            ></span>
+                            <span tal:replace="day/Title"></span>
+                          </h4>
+                          <a
+                            tal:condition="view/showEditLinks"
+                            i18n:attributes="title"
+                            title="Edit day"
+                            tal:attributes="href string:${day/absolute_url}/edit"
+                          >
+                            <span class="icon-edit" aria-hidden="true"></span>
+                          </a>
+                          <a
+                            tal:condition="view/showEditLinks"
+                            i18n:attributes="title"
+                            title="View day"
+                            tal:attributes="href string:${day/absolute_url}/view"
+                          >
+                            <span class="icon-view" aria-hidden="true"></span>
+                          </a>
+                          <br style="clear: both" />
+                        </div>
+
+                        <div
+                          tal:attributes="id python: str(mIndex) + '-' + str(index) + '-body';
+                                     class collapseClass"
+                        >
+                          <table class="listing table table-hover">
+                            <thead>
+                              <tr>
+                                <th tal:condition="view/showEditLinks"></th>
+                                <th
+                                  tal:condition="showSlotNames"
+                                  i18n:translate=""
+                                >
+                                  Name
+                                </th>
+                                <th i18n:translate="">Time</th>
+                                <th
+                                  tal:condition="not: hideAvailability"
+                                  i18n:translate=""
+                                >
+                                  Available
+                                </th>
+                                <th i18n:translate="">Select</th>
+                              </tr>
+                            </thead>
+
+                            <tal:block tal:define="timeSlots day/getTimeSlots">
+                              <tr tal:condition="not:timeSlots">
+                                <td colspan="4" i18n:translate="">
+                                  No slots have been made available for this day
+                                  yet.
+                                </td>
+                              </tr>
+                              <div
+                                metal:use-macro="template/macros/macro-timeslots"
+                              ></div>
+                            </tal:block>
+                          </table>
+                        </div>
+                      </div>
+                    </tal:block>
+                  </div>
+                  <!-- accordion container -->
                 </div>
+                <!-- month tab container -->
+              </fieldset>
+            </div>
+          </tal:standard-view>
 
-                <div tal:attributes="id python: str(mIndex) + '-' + str(index) + '-body';
-                                     class collapseClass">
-                  <table class="listing table table-hover">
-                  <thead>
-                    <tr>
-                      <th tal:condition="view/showEditLinks"></th>
-                      <th tal:condition="showSlotNames" i18n:translate="">Name</th>
-                      <th i18n:translate="">Time</th>
-                      <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
-                      <th i18n:translate="">Select</th>
-                    </tr>
-                  </thead>
-
-                  <tal:block tal:define="timeSlots day/getTimeSlots">
-                  <tr tal:condition="not:timeSlots">
-                    <td colspan="4" i18n:translate="">No slots have been made available for this day yet.</td>
+          <tal:hide-date-time-view
+            tal:condition="hideDateTime"
+            tal:define="days context/getDays"
+          >
+            <div class="panel panel-default">
+              <table class="listing table table-hover">
+                <thead>
+                  <tr>
+                    <th tal:condition="view/showEditLinks"></th>
+                    <th tal:condition="showSlotNames" i18n:translate="">
+                      Name
+                    </th>
+                    <th tal:condition="not: hideAvailability" i18n:translate="">
+                      Available
+                    </th>
+                    <th i18n:translate="">Select</th>
                   </tr>
-                  <div metal:use-macro="template/macros/macro-timeslots"></div>
-                  </tal:block>
-                  </table>
-                </div>
-              </div>
-          </tal:block>
-          </div><!-- accordion container -->
-        </div><!-- month tab container -->
-      </fieldset>
+                </thead>
+                <tbody>
+                  <tal:days repeat="day days">
+                    <tal:slots define="timeSlots day/getTimeSlots">
+                      <div
+                        metal:use-macro="template/macros/macro-timeslots"
+                      ></div>
+                    </tal:slots>
+                  </tal:days>
+                </tbody>
+              </table>
+            </div>
+          </tal:hide-date-time-view>
+
+          <div class="field" tal:condition="context/askForPersonTitle">
+            <label for="selectPersonTitle" i18n:translate=""
+              >Title of the person
+              <span
+                class="required"
+                title="required"
+                i18n:attributes="title"
+                title="Required"
+                >&nbsp;</span
+              > </label
+            ><br />
+            <select id="selectPersonTitle" name="selectPersonTitle">
+              <option
+                tal:repeat="option context/getPersonTitleVocabulary"
+                tal:content="option/value"
+              ></option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="inputPrename" i18n:translate="Prename"
+              >Your prename
+              <span
+                class="required"
+                title="required"
+                i18n:attributes="title"
+                title="Required"
+                >&nbsp;</span
+              > </label
+            ><br />
+            <input
+              id="inputPrename"
+              name="inputPrename"
+              type="text"
+              i18n:attributes="placeholder Prename"
+            />
+          </div>
+          <div class="field">
+            <label for="inputSurname" i18n:translate="Surname"
+              >Your surname
+              <span
+                class="required"
+                title="required"
+                i18n:attributes="title"
+                title="Required"
+                >&nbsp;</span
+              > </label
+            ><br />
+            <input
+              id="inputSurname"
+              name="inputSurname"
+              type="text"
+              i18n:attributes="placeholder Surname"
+            />
+          </div>
+          <div class="field">
+            <label for="inputEmail" i18n:translate="Your email address"
+              >Your email address
+              <span
+                class="required"
+                title="required"
+                i18n:attributes="title"
+                title="Required"
+                >&nbsp;</span
+              > </label
+            ><br />
+            <input
+              id="inputEmail"
+              class="form-control"
+              name="inputEmail"
+              type="email"
+              placeholder="E-Mail"
+            />
+            <input type="hidden" name="isExternal" value="1" />
+          </div>
+
+          <tal:block tal:replace="structure view/renderExtraForm" />
+
+          <button
+            id="form-buttons-submit"
+            name="form.buttons.submit"
+            class="submit-widget button-field"
+            type="submit"
+            i18n:translate=""
+          >
+            Sign up
+          </button>
+        </form>
+      </tal:main-macro>
     </div>
-
-    </tal:standard-view>
-
-    <tal:hide-date-time-view tal:condition="hideDateTime"
-        tal:define="days context/getDays">
-    <div class="panel panel-default">
-    <table class="listing table table-hover">
-        <thead>
-            <tr>
-                <th tal:condition="view/showEditLinks"></th>
-                <th tal:condition="showSlotNames" i18n:translate="">Name</th>
-                <th tal:condition="not: hideAvailability" i18n:translate="">Available</th>
-                <th i18n:translate="">Select</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tal:days repeat="day days">
-                <tal:slots define="timeSlots day/getTimeSlots">
-                    <div metal:use-macro="template/macros/macro-timeslots"></div>
-                </tal:slots>
-            </tal:days>
-        </tbody>
-    </table>
-    </div>
-    </tal:hide-date-time-view>
-
-    <div class="field" tal:condition="context/askForPersonTitle">
-      <label for="selectPersonTitle" i18n:translate="">Title of the person
-        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
-      </label><br/>
-      <select id="selectPersonTitle" name="selectPersonTitle">
-        <option tal:repeat="option context/getPersonTitleVocabulary" tal:content="option/value"></option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="inputPrename" i18n:translate="Prename">Your prename
-        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
-      </label><br/>
-      <input id="inputPrename" name="inputPrename" type="text" i18n:attributes="placeholder Prename" />
-    </div>
-    <div class="field">
-      <label for="inputSurname" i18n:translate="Surname">Your surname
-        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
-      </label><br/>
-      <input id="inputSurname" name="inputSurname" type="text" i18n:attributes="placeholder Surname" />
-    </div>
-    <div class="field">
-      <label for="inputEmail" i18n:translate="Your email address">Your email address
-        <span class="required" title="required" i18n:attributes="title" title="Required">&nbsp;</span>
-      </label><br/>
-      <input id="inputEmail" class="form-control" name="inputEmail" type="email" placeholder="E-Mail" />
-      <input type="hidden" name="isExternal" value="1"/>
-    </div>
-
-    <tal:block tal:replace="structure view/renderExtraForm"/>
-
-    <button id="form-buttons-submit" name="form.buttons.submit"
-           class="submit-widget button-field" type="submit"
-           i18n:translate="">Sign up</button>
-    </form>
-
-    </tal:main-macro>
-  </div>
-</body>
+  </body>
 </html>

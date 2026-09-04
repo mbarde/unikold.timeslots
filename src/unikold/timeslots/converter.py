@@ -12,8 +12,8 @@ class DayTimeDataConverter(TimedeltaDataConverter):
     # inputs from timepicker can have a strange format (i.e. 10:00 00:00)
     # we need to format it in a datetime compatible way
     def toFieldValue(self, value):
-        if ' ' in value:
-            splitted = value.split(' ')
+        if " " in value:
+            splitted = value.split(" ")
             value = splitted[0]
         return super(DayTimeDataConverter, self).toFieldValue(value)
 

@@ -17,36 +17,23 @@ from zope.interface import implementer
 
 class IUTTimeslot(model.Schema):
 
-    directives.widget(
-        'startTime', DatetimeWidget, pattern_options={'date': 'false'})
-    startTime = schema.Timedelta(
-        title=_('Start Time'),
-        required=True
-    )
+    directives.widget("startTime", DatetimeWidget, pattern_options={"date": "false"})
+    startTime = schema.Timedelta(title=_("Start Time"), required=True)
 
-    directives.widget(
-        'endTime', DatetimeWidget, pattern_options={'date': 'false'})
-    endTime = schema.Timedelta(
-        title=_(u'End Time'),
-        required=True
-    )
+    directives.widget("endTime", DatetimeWidget, pattern_options={"date": "false"})
+    endTime = schema.Timedelta(title=_("End Time"), required=True)
 
-    name = schema.TextLine(
-        title=_(u'Name'),
-        description=_(u'Optional name'),
-        required=False
-    )
+    name = schema.TextLine(title=_("Name"), description=_("Optional name"), required=False)
 
     maxCapacity = schema.Int(
-        title=_(u'Max capacity'),
-        description=_(u'The max number of people'),
-        required=True,
-        default=1
+        title=_("Max capacity"), description=_("The max number of people"), required=True, default=1
     )
 
     allowWaitingList = schema.Bool(
-        title=_(u'Allow Waiting List'),
-        description=_(u'Check if you want to allow signups to waiting list once max capacity is reached')  # noqa: E501
+        title=_("Allow Waiting List"),
+        description=_(
+            "Check if you want to allow signups to waiting list once max capacity is reached"
+        ),  # noqa: E501
     )
 
 
@@ -59,24 +46,25 @@ class UTTimeslot(Container):
         if signupSheet.hideDateTime:
             return self.getName()
         else:
-            return u'{0} @ {1}'.format(parentDay.Title(), self.Title())
+            return "{0} @ {1}".format(parentDay.Title(), self.Title())
 
     def getIDLabel(self):
         parentDay = self.aq_parent
-        return u'{0} @ {1}'.format(parentDay.id, self.id)
+        return "{0} @ {1}".format(parentDay.id, self.id)
 
     def getTimeRange(self):
-        return u'{0} - {1}'.format(
-            str(self.getStartTime()), str(self.getEndTime()))
+        return "{0} - {1}".format(str(self.getStartTime()), str(self.getEndTime()))
 
     def getPersons(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', path=self.getPath())
+            portal_type="UTPerson", path=self.getPath()
+        )
         return [brain.getObject() for brain in brains]
 
     def getNumberOfAvailableSlots(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', review_state='signedup', path=self.getPath())
+            portal_type="UTPerson", review_state="signedup", path=self.getPath()
+        )
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
@@ -95,53 +83,50 @@ class UTTimeslot(Container):
     def getPeople(self, sortByStatus=False, filterByStatus=False):
         if filterByStatus:
             brains = api.content.find(
-                context=self, portal_type='UTPerson',
-                review_state=filterByStatus, depth=1)
+                context=self, portal_type="UTPerson", review_state=filterByStatus, depth=1
+            )
         else:
-            brains = api.content.find(
-                context=self, portal_type='UTPerson', depth=1)
+            brains = api.content.find(context=self, portal_type="UTPerson", depth=1)
 
         people = [brain.getObject() for brain in brains]
         if sortByStatus:
-            sortOrder = {'signedoff': 3, 'waiting': 2,
-                         'unconfirmed': 1, 'signedup': 0}
+            sortOrder = {"signedoff": 3, "waiting": 2, "unconfirmed": 1, "signedup": 0}
             people.sort(key=lambda p: sortOrder[api.content.get_state(obj=p)])
 
         return people
 
     def isFull(self):
-        return (self.getNumberOfAvailableSlots() == 0
-                and not self.allowWaitingList)
+        return self.getNumberOfAvailableSlots() == 0 and not self.allowWaitingList
 
     def isUserSignedUpForThisSlot(self, email):
         personId = emailToPersonId(email)
         brains = self.portal_catalog.unrestrictedSearchResults(
-            portal_type='UTPerson', review_state='signedup',
-            id=personId, path=self.getPath())
+            portal_type="UTPerson", review_state="signedup", id=personId, path=self.getPath()
+        )
         return len(brains) != 0
 
     def isRegistrationExpired(self):
         now = DateTime()
-        return (self.expires() <= now)
+        return self.expires() <= now
 
     def getPath(self):
-        return '/'.join(self.getPhysicalPath())
+        return "/".join(self.getPhysicalPath())
 
     def timeDeltaToHoursMinutes(self, delta):
         hours, remainder = divmod(delta.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         hours = str(int(hours)).zfill(2)
         minutes = str(int(minutes)).zfill(2)
-        return '{0}:{1}'.format(hours, minutes)
+        return "{0}:{1}".format(hours, minutes)
 
     def getStartTime(self):
         if self.startTime is None:
-            return '00:00'
+            return "00:00"
         return self.timeDeltaToHoursMinutes(self.startTime)
 
     def getEndTime(self):
         if self.endTime is None:
-            return '00:00'
+            return "00:00"
         return self.timeDeltaToHoursMinutes(self.endTime)
 
 
