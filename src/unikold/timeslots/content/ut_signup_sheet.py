@@ -8,7 +8,6 @@ from plone.supermodel import model
 from unikold.timeslots import _
 from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
-from unikold.timeslots.utils import getPersonTitleVocabulary
 from unikold.timeslots.utils import ploneUserToPersonId
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
@@ -267,9 +266,6 @@ class UTSignupSheet(Container):
         for brain in brains:
             api.content.delete(obj=brain.getObject(), check_linkintegrity=False)
         return len(brains)
-
-    def getPersonTitleVocabulary(self):
-        return getPersonTitleVocabulary()
 
     def getExtraFields(self):
         return getAllExtraFields(self)

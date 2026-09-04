@@ -4,25 +4,8 @@ from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from unikold.timeslots import _
 from zope.component import getUtility
-from zope.schema.vocabulary import SimpleVocabulary
 
 import transaction
-
-
-def getPersonTitleVocabulary():
-    values = (
-        "Frau",
-        "Frau Dr.",
-        "Frau Prof. Dr.",
-        "Frau apl. Prof. Dr.",
-        "Frau Jun.-Prof. Dr.",
-        "Herr",
-        "Herr Dr.",
-        "Herr Prof. Dr.",
-        "Herr apl. Prof. Dr.",
-        "Herr Jun.-Prof. Dr.",
-    )
-    return SimpleVocabulary.fromValues(values)
 
 
 def replaceCustomMailPlaceholders(

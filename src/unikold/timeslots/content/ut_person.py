@@ -8,16 +8,11 @@ from unikold.timeslots import _
 from unikold.timeslots.utils import deferRename
 from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
-from unikold.timeslots.utils import getPersonTitleVocabulary
 from zope import schema
 from zope.interface import implementer
 
 
 class IUTPerson(model.Schema):
-
-    personTitle = schema.Choice(
-        title=_("Salutation"), source=getPersonTitleVocabulary(), required=False
-    )
 
     email = schema.TextLine(title=_("E-Mail"), required=True)
 

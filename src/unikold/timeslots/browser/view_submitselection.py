@@ -7,7 +7,6 @@ from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.validation import validation
 from unikold.timeslots import _
 from unikold.timeslots.utils import emailToPersonId
-from unikold.timeslots.utils import getPersonTitleVocabulary
 from unikold.timeslots.utils import replaceCustomMailPlaceholders
 from z3c.caching.purge import Purge
 from zope.component import getMultiAdapter
@@ -34,10 +33,6 @@ class SubmitSelection(BrowserView):
         self.currentLanguage = portal_state.language()
 
         self.getUserInput()
-
-        self.personTitle = self.request.get("selectPersonTitle", "").strip()
-        if len(self.personTitle) > 0 and self.personTitle not in getPersonTitleVocabulary():
-            self.personTitle = ""
 
         self.agreeDataUsage = len(self.request.get("agreeDataUsage", "").strip()) > 0
         self.prename = self.request.get("inputPrename", "").strip()
@@ -165,7 +160,6 @@ class SubmitSelection(BrowserView):
         personId = emailToPersonId(self.email)
         newPerson = type_info._constructInstance(container, personId)
 
-        newPerson.personTitle = self.personTitle
         newPerson.email = self.email
         newPerson.title = "{0} {1}".format(self.prename, self.surname)
         newPerson.prename = self.prename
