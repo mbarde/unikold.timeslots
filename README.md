@@ -1,15 +1,13 @@
-
-unikold.timeslots
-=================
+# unikold.timeslots
 
 Dexterity based re-implementation of https://github.com/collective/uwosh.timeslot with extended functionalities.
+
 > uwosh.timeslot offers a simple way to allow users of a Plone site to
-register for events (for example: training sessions or office hours).
+> register for events (for example: training sessions or office hours).
 
-Originally this was an extension of `uwosh.timeslot` for usage in the CMS of the [University of Koblenz -Landau]([http://uni-koblenz-landau.de](http://uni-koblenz-landau.de/)).
+Originally this was an extension of `uwosh.timeslot` for usage in the CMS of the [University of Koblenz -Landau](<[http://uni-koblenz-landau.de](http://uni-koblenz-landau.de/)>).
 
-Features
---------
+## Features
 
 - Define date based timeslots users can sign up to
 - Logged in users can watch and manage their signups
@@ -18,20 +16,17 @@ Features
 - Dynamically extend signup form with EasyForm ([https://github.com/collective/collective.easyform](https://github.com/collective/collective.easyform))
 
 User states:
+
 1. `unconfirmed`: Manager hast to confirm signup
 2. `signedup`: User is signed up
 3. `signedoff`: User is not signed up
 4. `waiting`: User is on waiting list (moves up when another signup is cancelled)
 
+## Dependecies
 
-Dependecies
---------
+- [https://github.com/collective/collective.easyform](https://github.com/collective/collective.easyform)
 
-* [https://github.com/collective/collective.easyform](https://github.com/collective/collective.easyform)
-
-
-Installation
-------------
+## Installation
 
 Install unikold.timeslots by adding it to your buildout::
 
@@ -43,12 +38,9 @@ Install unikold.timeslots by adding it to your buildout::
         collective.easyform
         unikold.timeslots
 
+and then running `bin/buildout`.
 
-and then running ``bin/buildout``.
-
-
-Usage
-------------
+## Usage
 
 1. Create `UTSignupSheet`
 2. Add `UTDay`
@@ -58,32 +50,32 @@ Optional: Create `EasyForm` and set as additional form in `UTSignupSheet` settin
 
 **Important**: Ensure MailHost is configured properly (https://docs.plone.org/adapt-and-extend/config/mail.html).
 
-Contribute
-----------
+## Contribute
 
 - Issue Tracker: https://github.com/mbarde/unikold.timeslots/issues
 - Source Code: https://github.com/mbarde/unikold.timeslots
 
+## Development
 
-Development
-----------
-
-Setup in project folder:
+### Setup
 
 ```
-virtualenv --clear -p python2.7 venv
+uv venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-buildout bootstrap
-bin/buildout -n -c buildout.cfg code-analysis:return-status-codes=True code-analysis:flake8-max-line-length=100
+uv pip install -e .
+uv pip install -r requirements-dev.txt
 ```
 
-Run tests: `bin/test`
+### Test, lint & format
 
-Run static code analysis (flake8): `bin/code-analysis`
+```
+venv/bin/pytest
+venv/bin/pytest -k name_of_a_test
+venv/bin/black src/
+venv/bin/flake8 src/
+venv/bin/isort src/
+```
 
+## License
 
-License
--------
-
-The project is licensed under the GPLv2.
+The project is licensed under the GPLv2, see [LICENSE.GPL](LICENSE.GPL).

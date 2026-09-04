@@ -72,7 +72,7 @@ class UTTimeslot(Container):
     def getPersons(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
             portal_type='UTPerson', path=self.getPath())
-        return map(lambda x: x.getObject(), brains)
+        return [brain.getObject() for brain in brains]
 
     def getNumberOfAvailableSlots(self):
         brains = self.portal_catalog.unrestrictedSearchResults(
@@ -161,5 +161,6 @@ def autoSetID(timeslot, event):
                 return
             lockable.unlock()
         timeslot.title = title
-        api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
+        if newId != timeslot.id:
+            api.content.rename(obj=timeslot, new_id=newId, safe_id=True)
         timeslot.reindexObject()

@@ -64,5 +64,6 @@ def autoSetID(day, event):
                 return
             lockable.unlock()
         day.title = title
-        api.content.rename(obj=day, new_id=newId, safe_id=True)
+        if newId != day.id:
+            api.content.rename(obj=day, new_id=newId, safe_id=True)
         day.reindexObject()

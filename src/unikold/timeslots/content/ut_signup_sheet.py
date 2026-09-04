@@ -245,8 +245,7 @@ class UTSignupSheet(Container):
                 # but for translation use month code (like 'Mar')
                 mTrans[key] = _(day.date.strftime('%b'))
 
-        keys = result.keys()
-        keys.sort()
+        keys = sorted(result.keys())
 
         return (result, keys, mTrans)
 

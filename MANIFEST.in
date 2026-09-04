@@ -1,4 +1,0 @@
-graft src/unikold
-graft docs
-include *.rst
-global-exclude *.pyc

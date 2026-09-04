@@ -214,6 +214,9 @@ class UTPersonIntegrationTest(unittest.TestCase):
             message = self.portal.MailHost.messages[0]
             clearAll = True
 
+        if isinstance(message, bytes):
+            message = message.decode('utf-8')
+
         self.assertIn('To: {0}'.format(recipient), message)
 
         for content in contents:

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+from io import StringIO
 from lxml import etree
 from plone import api
 from plone.dexterity.browser.view import DefaultView
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.Five import BrowserView
-from StringIO import StringIO
 from unikold.timeslots import _
 from unikold.timeslots.utils import translateReviewState
 
@@ -46,7 +46,7 @@ class UTSignupSheetView(DefaultView):
         if len(els) > 0:
             el = els[0]
             el.getparent().remove(el)
-        formHTML = etree.tostring(tree)
+        formHTML = etree.tostring(tree, encoding='unicode')
 
         # remove form opening and closing tag, submit button and h-tags with content
         # (since we want to embed input fields into existing form)

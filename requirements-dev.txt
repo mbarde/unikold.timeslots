@@ -1,0 +1,13 @@
+pytest
+pytest-plone
+pytest-cov
+plone.app.robotframework
+plone.app.testing>=6.0
+setuptools<81
+zope.pytestlayer>=8.0
+
+# Formatting / code style
+isort
+black
+flake8
+flake8-isort

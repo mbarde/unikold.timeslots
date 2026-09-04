@@ -4,90 +4,83 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="unikold.timeslots">
 
-  <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
-  <include package="z3c.jbot" file="meta.zcml" />
-  <browser:jbot
-      directory="overrides"
-      layer="unikold.timeslots.interfaces.IUnikoldTimeslotsLayer"
-      />
+    <!-- Publish static files -->
+    <plone:static
+        name="unikold.timeslots"
+        type="plone"
+        directory="static"
+    />
 
-  <!-- Publish static files -->
-  <plone:static
-      name="unikold.timeslots"
-      type="plone"
-      directory="static"
-      />
+    <browser:page
+        name="view"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        class=".views.UTSignupSheetView"
+        template="templates/ut_signup_sheet_view.pt"
+        permission="zope2.View"
+    />
 
-  <browser:page
-      name="view"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      class=".views.UTSignupSheetView"
-      template="templates/ut_signup_sheet_view.pt"
-      permission="zope2.View"
-      />
+    <browser:page
+        name="view"
+        for="unikold.timeslots.content.ut_day.IUTDay"
+        class=".views.UTDayView"
+        template="templates/ut_day_view.pt"
+        permission="cmf.ManagePortal"
+    />
 
-  <browser:page
-      name="view"
-      for="unikold.timeslots.content.ut_day.IUTDay"
-      class=".views.UTDayView"
-      template="templates/ut_day_view.pt"
-      permission="cmf.ManagePortal"
-      />
+    <browser:page
+        name="view"
+        for="unikold.timeslots.content.ut_timeslot.IUTTimeslot"
+        class=".views.UTTimeslotView"
+        template="templates/ut_timeslot_view.pt"
+        permission="cmf.ManagePortal"
+    />
 
-  <browser:page
-      name="view"
-      for="unikold.timeslots.content.ut_timeslot.IUTTimeslot"
-      class=".views.UTTimeslotView"
-      template="templates/ut_timeslot_view.pt"
-      permission="cmf.ManagePortal"
-      />
+    <browser:page
+        name="view"
+        for="unikold.timeslots.content.ut_person.IUTPerson"
+        class=".views.UTPersonView"
+        template="templates/ut_person_view.pt"
+        permission="cmf.ManagePortal"
+    />
 
-  <browser:page
-      name="view"
-      for="unikold.timeslots.content.ut_person.IUTPerson"
-      class=".views.UTPersonView"
-      template="templates/ut_person_view.pt"
-      permission="cmf.ManagePortal"
-      />
+    <browser:page
+        name="submit-user-selection"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        class=".view_submitselection.SubmitSelection"
+        attribute="submitUserSelection"
+        permission="zope2.View"
+    />
 
-  <browser:page
-      name="submit-user-selection"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      class=".view_submitselection.SubmitSelection"
-      attribute="submitUserSelection"
-      permission="zope2.View"
-      />
+    <browser:page
+        name="show-reservations"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        template="templates/view_showreservations.pt"
+        class=".views.ShowReservationsView"
+        permission="zope2.View"
+    />
 
-  <browser:page
-      name="show-reservations"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      template="templates/view_showreservations.pt"
-      class=".views.ShowReservationsView"
-      permission="zope2.View"
-      />
+    <browser:page
+        name="cancel-reservation"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        class=".view_cancelreservation.CancelReservation"
+        attribute="cancelReservation"
+        permission="zope2.View"
+    />
 
-  <browser:page
-      name="cancel-reservation"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      class=".view_cancelreservation.CancelReservation"
-      attribute="cancelReservation"
-      permission="zope2.View"
-      />
+    <browser:page
+        name="manager-summary"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        template="templates/view_summary.pt"
+        class=".views.ManagerSummaryView"
+        permission="cmf.ManagePortal"
+    />
 
-  <browser:page
-      name="manager-summary"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      template="templates/view_summary.pt"
-      class=".views.ManagerSummaryView"
-      permission="cmf.ManagePortal"
-      />
-
-  <browser:page
-      name="remove-all-persons"
-      for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
-      class=".views.ManagerSummaryView"
-      attribute="removeAllPersons"
-      permission="cmf.ManagePortal"
-      />
+    <browser:page
+        name="remove-all-persons"
+        for="unikold.timeslots.content.ut_signup_sheet.IUTSignupSheet"
+        class=".views.ManagerSummaryView"
+        attribute="removeAllPersons"
+        permission="cmf.ManagePortal"
+    />
 
 </configure>

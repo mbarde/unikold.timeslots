@@ -246,8 +246,8 @@ class SubmitSelection(BrowserView):
 
             message += url + '\n\n'
 
-        mailHost = self.context.MailHost
-        mailHost.secureSend(message, toEmail, fromEmail, subject, charset='utf-8')
+        api.portal.send_email(recipient=toEmail, sender=fromEmail,
+                              subject=subject, body=message)
 
         # mail to contact person of the signup sheet
         isEmail = validation.validatorFor('isEmail')
@@ -271,8 +271,8 @@ class SubmitSelection(BrowserView):
 
             message += '\nURL: ' + person.absolute_url() + '\n\n'
 
-            mailHost = self.context.MailHost
-            mailHost.secureSend(message, toEmail, fromEmail, subject, charset='utf-8')
+            api.portal.send_email(recipient=toEmail, sender=fromEmail,
+                                  subject=subject, body=message)
 
     def hasAtLeastOneError(self):
         for result in self.results:

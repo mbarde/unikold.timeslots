@@ -3,6 +3,7 @@ from plone import api
 from plone.dexterity.content import Item
 from plone.locking.interfaces import ILockable
 from plone.supermodel import model
+from Products.CMFCore.permissions import ModifyPortalContent
 from unikold.timeslots import _
 from unikold.timeslots.utils import emailToPersonId
 from unikold.timeslots.utils import getAllExtraFields
@@ -66,7 +67,7 @@ class UTPerson(Item):
 # set id & title on creation and modification
 def autoSetID(person, event):
     # only managers are allowed to create / modify persons via forms
-    if not api.user.has_permission('cmf.ModifyPortalContent', obj=person):
+    if not api.user.has_permission(ModifyPortalContent, obj=person):
         return
     if person.email is None \
        or person.prename is None \
@@ -83,5 +84,6 @@ def autoSetID(person, event):
                 return
             lockable.unlock()
         person.title = title
-        api.content.rename(obj=person, new_id=newId, safe_id=True)
+        if newId != person.id:
+            api.content.rename(obj=person, new_id=newId, safe_id=True)
         person.reindexObject()
